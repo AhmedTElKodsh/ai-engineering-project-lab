@@ -19,15 +19,18 @@ slice is deliberately local and deterministic:
   one strict expected failure that exposes the baseline's paraphrase weakness;
 - pytest, Ruff, and GitHub Actions checks.
 
-The next learner checkpoint is to explain the recorded paraphrase failure and predict whether
-embeddings—not an LLM—are the smallest useful improvement.
+The live learner checkpoint is recorded only in [LEARNING.md](LEARNING.md). When project
+orientation is incomplete, the mentor begins with a plain-language quest rather than code or
+tool names.
 
 ## Continue with the mentor
 
 From this repository, invoke `$project-mentor` with “continue,” “review my attempt,” or a named
 project question. The mentor reads [the agent context](project-context.md),
 [current learning state](LEARNING.md), and the active project before guiding one checkpoint at
-a time. The learner writes the important implementation; the mentor asks, hints, reviews,
+a time. It assumes no AI-engineering vocabulary until the learner demonstrates it, introduces
+one necessary term at a time, and resets to a concrete example when the learner is confused.
+The learner writes the important implementation; the mentor explains, asks, hints, reviews,
 verifies, and records evidence.
 
 ## Quick start

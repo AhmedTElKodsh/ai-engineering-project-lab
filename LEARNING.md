@@ -3,7 +3,8 @@ learner: Ahmed
 weekly_pace: 5-7 hours
 active_project: projects/grounded_support_assistant
 active_slice: 0-transparent-baseline
-status: ready
+active_checkpoint: quest-orientation
+status: in_progress
 last_verified_code_commit: 26d479e550a0918a592a138592f81146e8db66e5
 ---
 
@@ -20,8 +21,9 @@ next checkpoint; project specifications remain in their project README.
   not to use them.
 - Learn theory just in time and only to the depth required by the current engineering decision.
 - Work at roughly 5–7 focused hours per week.
-- Assume intermediate Python; teach model APIs, tool calling, retrieval, evaluation, training,
-  serving, and operations through their project slices.
+- Treat Python experience and AI-engineering familiarity separately. Introduce AI-engineering
+  ideas in plain language until the learner demonstrates the relevant vocabulary and mental
+  model.
 - Prefer learner-written implementation with prediction, hints, review, verification, and
   reflection over AI-generated project completion.
 - When provider work begins, prefer accessible low-cost routes such as OpenRouter or Groq unless
@@ -30,8 +32,12 @@ next checkpoint; project specifications remain in their project README.
 ## Current position
 
 - **Project:** Grounded Support Assistant
-- **Slice:** 0 — transparent lexical baseline
-- **State:** Baseline published; learner diagnosis has not yet been submitted.
+- **Slice:** 0 — inherited transparent baseline
+- **Checkpoint:** Quest orientation
+- **State:** An inherited baseline is published, but the learner has not yet completed the
+  project briefing or demonstrated its purpose and success conditions.
+- **Learner familiarity:** Project context and AI-engineering vocabulary are unassessed. Begin
+  in plain language and introduce one necessary term at a time.
 - **Known limitation:** Exact-token retrieval misses the semantic paraphrase case and produces
   one strict expected failure.
 - **Blocker:** None.
@@ -58,9 +64,10 @@ next checkpoint; project specifications remain in their project README.
 
 | Date | Project/slice | Evidence | Learner note | Outcome |
 |---|---|---|---|---|
-| 2026-08-04 | Grounded Support Assistant / Slice 0 | 19/20 evaluation cases, 2 contract tests, commit `26d479e`, hosted CI success | Awaiting the learner's failure diagnosis | Baseline ready with 1 strict expected failure |
+| 2026-08-04 | Grounded Support Assistant / reference baseline | 19/20 evaluation cases, 2 contract tests, commit `26d479e`, hosted CI success | No learner comprehension evidence yet | Inherited baseline ready; quest orientation pending |
 
 ## Next checkpoint
 
-Explain why “I forgot my secret; how can I regain access?” makes the lexical baseline abstain,
-then predict whether embeddings or an LLM are the smallest justified improvement and why.
+After a plain-language project quest briefing, explain why the support assistant should refuse to
+answer when the approved handbook does not contain the answer. No coding or AI vocabulary is
+required yet.

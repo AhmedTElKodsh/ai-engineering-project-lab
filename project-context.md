@@ -72,9 +72,8 @@ This file records the unobvious rules AI agents must follow in this project. It 
   criterion.
 - Preserve runnable baseline evidence during comparison. After recording the decision, Git may
   preserve discarded code instead of leaving duplicate implementations active.
-- Follow the active project sequence: lexical baseline; Sentence Transformers with FAISS;
-  LangChain recreation; Qdrant and reranking; FastAPI after behavior is accepted; LiteLLM when
-  a second provider or gateway policy creates a reason.
+- Follow the active project's sequence in its README; do not duplicate or override that sequence
+  here.
 - Preserve Pydantic contracts unless a separately documented requirement changes them.
 - Keep FastAPI handlers thin using ordinary functions; do not create service interfaces or
   dependency layers without a second implementation or test seam.
@@ -107,7 +106,9 @@ This file records the unobvious rules AI agents must follow in this project. It 
   and cost for provider-backed slices.
 - Every non-trivial branch or parser change leaves the smallest runnable regression check.
 - Do not substitute coverage percentage for meaningful acceptance and evaluation cases.
-- Record fresh checkpoint commands, results, commit, and remaining limitations in `LEARNING.md`.
+- For implementation checkpoints, record fresh commands, results, tested tree or commit, and
+  remaining limitations in `LEARNING.md`. Conceptual checkpoints use the learner's demonstrated
+  explanation instead of invented runtime evidence.
 - Report evaluation-case outcomes separately from total pytest counts, expose expected failures,
   and never describe an xfailed suite as all tests passing.
 
@@ -149,8 +150,10 @@ This file records the unobvious rules AI agents must follow in this project. It 
   isolation—not ceremonially for every edit.
 - Run checks against the exact candidate tree and stop on the first non-zero command; do not
   let a later PowerShell command conceal failure.
-- Record the tested tree and command result in `LEARNING.md`. Reference an implementation SHA
-  only from a later state commit; never create self-referential commit metadata.
+- For implementation checkpoints, record the tested tree and command result in `LEARNING.md`.
+  For conceptual checkpoints, record the learner's demonstrated explanation and no command.
+  Reference an implementation SHA only from a later state commit; never create self-referential
+  commit metadata.
 - Stage only checkpoint files and use Conventional Commit subjects.
 - Do not commit or push learner code without explicit approval. Requested mentor-state and
   documentation updates are separate from learner implementation.

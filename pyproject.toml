@@ -1,0 +1,24 @@
+[project]
+name = "ai-engineering-project-lab"
+version = "0.1.0"
+description = "Guided, project-first practice for production AI engineering"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.10,<3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8,<10",
+    "ruff>=0.9,<1",
+]
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+pythonpath = ["."]
+testpaths = ["projects"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Engineering Project Mentor"
+  short_description: "Guide project-first AI engineering practice"
+  default_prompt: "Use $project-mentor to resume my active project checkpoint interactively."

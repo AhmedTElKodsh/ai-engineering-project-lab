@@ -22,6 +22,14 @@ slice is deliberately local and deterministic:
 The next learner checkpoint is to explain the recorded paraphrase failure and predict whether
 embeddings—not an LLM—are the smallest useful improvement.
 
+## Continue with the mentor
+
+From this repository, invoke `$project-mentor` with “continue,” “review my attempt,” or a named
+project question. The mentor reads [the agent context](project-context.md),
+[current learning state](LEARNING.md), and the active project before guiding one checkpoint at
+a time. The learner writes the important implementation; the mentor asks, hints, reviews,
+verifies, and records evidence.
+
 ## Quick start
 
 ```powershell

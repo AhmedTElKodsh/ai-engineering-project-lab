@@ -11,7 +11,7 @@ PARAMS = [
     pytest.param(
         case,
         id=case["id"],
-        marks=pytest.mark.xfail(reason=case["known_failure"], strict=True),
+        marks=pytest.mark.xfail(reason=case["known_failure"], strict=True, raises=AssertionError),
     )
     if "known_failure" in case
     else pytest.param(case, id=case["id"])

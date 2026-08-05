@@ -38,6 +38,9 @@ next checkpoint; project specifications remain in their project README.
   project briefing or demonstrated its purpose and success conditions.
 - **Learner familiarity:** Project context and AI-engineering vocabulary are unassessed. Begin
   in plain language and introduce one necessary term at a time.
+- **Demonstrated understanding:** None yet.
+- **Support needed:** Plain-language project orientation connecting the approved handbook's
+  boundary to safe refusal.
 - **Known limitation:** Exact-token retrieval misses the semantic paraphrase case and produces
   one strict expected failure.
 - **Blocker:** None.

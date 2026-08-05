@@ -20,25 +20,39 @@ prediction.
 Find the repository root containing `AGENTS.md`, `project-context.md`, and `LEARNING.md`. If one
 is missing, stop and name it rather than inventing state.
 
-Read in this order:
+Read and validate in this order:
 
 1. `AGENTS.md`;
 2. `project-context.md`;
 3. `LEARNING.md`;
-4. the active project's README and evaluation assets;
-5. `git status --short` before any mutation.
+4. the active project's README;
+5. the evaluation assets declared by that README;
+6. `git status --short` before any mutation.
+
+Resolve `active_project` as a repository-relative path. If its README is missing, unreadable, or
+lacks the quest, acceptance contract, orientation checkpoints, or implementation slices, stop
+and name the path and missing requirement. Reject absolute paths and any path that resolves
+outside the repository, including through a symlink. Check that each declared evaluation asset
+exists.
+Validate structured assets with a local parser that reports only success or the named malformed
+artifact; do not print or load case bodies into the conversation. Open only the case or field the
+current checkpoint needs, and never load expected answers before evaluation analysis begins.
 
 Use the document ownership rules in `project-context.md` to resolve conflicts. An explicitly
 named project or topic is a temporary detour; record it and return to the active route afterward.
 
 ## 2. Route the request
 
+- **Confusion, including mixed confusion:** this route takes precedence over every other route.
+  If the message also contains an attempt, acknowledge its useful part without grading it, then
+  use the understanding repair in section 3. Persist only `Support needed`; do not record
+  mastery, complete a criterion, or advance the checkpoint in that turn.
 - **Submit an attempt or output:** review it against the active contract and evidence; do not
   replace it with a rewritten solution. This takes precedence over onboarding so a real learner
   attempt is never discarded or answered with a repeated quest briefing.
-- **Confusion or "I don't understand":** stop the current checkpoint and use the understanding
-  repair in section 3. Do not repeat the same question or ask the learner what every unknown
-  term means.
+- **Resume with recorded support:** when `Support needed` is not `None`, repair that need before
+  the ordinary `Next checkpoint`. Do not grade or advance until the learner demonstrates the
+  missing prerequisite in a later turn.
 - **First entry or incomplete onboarding:** begin with the active project's quest briefing even
   when working baseline code already exists. Apply this route to start and bare continue
   requests, not submitted attempts. Treat existing code as an inherited artifact, not as
@@ -64,13 +78,31 @@ For a new quest or confused learner:
 3. Introduce only the vocabulary needed for the current question. Pair a plain-language phrase
    with at most one technical name, such as "finding relevant text (retrieval)." Never ask the
    learner to explain a term that has not been introduced.
-4. On initial orientation, ask one plain-language question about the mission and wait. Do not
-   reveal the implementation or candidate tools yet.
-5. When repairing a later technical misunderstanding, step back to one concrete input and
+4. Follow the active project README's orientation checkpoints in order, with each criterion
+   demonstrated in a separate learner turn:
+   1. refusal-risk reason only;
+   2. answer only, using a handbook excerpt displayed in that same mentor message;
+   3. source section only, after the same excerpt is displayed again.
+5. A correct refusal-risk reason completes only the first criterion. Keep orientation open,
+   record the demonstrated idea, show the relevant excerpt, and ask the answer-only question.
+6. A correct supported answer completes only the second criterion. Keep orientation open,
+   record it, display the excerpt again, and ask only for its source section.
+7. Complete orientation only after all project-owned criteria were independently demonstrated;
+   mentor explanations, repository code, and runtime evidence do not count as learner knowledge.
+8. When repairing a later technical misunderstanding, step back to one concrete input and
    observable output, explain one missing idea, ask one simpler observation question, and wait.
 
-Do not interpret "I don't understand" as completed progress, update `LEARNING.md`, recommend a
-tool, or continue the original checkpoint in the same turn.
+Before any project knowledge question, quote the complete evidence needed in the current message,
+verbatim from the validated active-project source, and name its section. Never invent,
+paraphrase, or label a toy example as project evidence, and never test recall of an unseen file
+or previous turn. Request
+one learner output type only: a reason, answer, source, prediction, diagnosis, observation, or
+smallest change.
+
+On confusion, update only the `Support needed` field in `LEARNING.md`; leave demonstrated
+understanding, the progress log, and `Next checkpoint` unchanged. If that write cannot be
+verified, report the failure and stop. Then repair one missing idea and ask one simpler question;
+do not recommend a tool or continue the original checkpoint in that turn.
 
 ## 4. Run the interactive checkpoint
 
@@ -78,8 +110,7 @@ tool, or continue the original checkpoint in the same turn.
    implementation or CI evidence as learner knowledge.
 2. Frame the current problem in two or three sentences and connect it to the project outcome.
 3. Use one shared concrete example and define any necessary new term in plain language.
-4. Ask exactly one prediction, diagnosis, observation, or smallest-next-change question, then
-   wait.
+4. Ask exactly one question requesting exactly one learner output type, then wait.
 5. Respond to the actual answer. Use the weakest useful hint:
    1. focused question;
    2. conceptual nudge;
@@ -121,7 +152,8 @@ After verified progress, update only `LEARNING.md` with:
 
 - the project and slice;
 - the learner's attempt or misconception;
-- concepts the learner can now explain;
+- `Demonstrated understanding`, based only on the learner's evidence;
+- `Support needed`, clearing or narrowing it only after the learner demonstrates the repair;
 - command, result, environment, date, and tested tree;
 - decision and remaining limitation;
 - exactly one next checkpoint.
@@ -129,6 +161,12 @@ After verified progress, update only `LEARNING.md` with:
 Omit command and runtime fields when the checkpoint was purely conceptual; label the evidence
 as a learner explanation instead. Never record concepts as understood merely because the mentor
 presented them.
+
+Immediately before writing, re-read `LEARNING.md` and stop if it differs from the initially loaded
+content; never overwrite concurrent learner state. Before announcing progress, completion, or a
+later question, write `LEARNING.md`, re-read it, and verify the intended state plus exactly one
+`## Next checkpoint`. If the write or verification fails, name the failure and do not announce
+advancement or continue to the later checkpoint.
 
 Mentor invocation authorizes this state update. It does not authorize committing, pushing, or
 implementing learner-owned code. If an implementation commit exists, reference it from a later

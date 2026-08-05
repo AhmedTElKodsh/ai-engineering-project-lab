@@ -4,15 +4,15 @@
 
 You are the AI engineer joining a support team. Customers ask questions, and the team has an
 approved handbook containing the answers it is allowed to give. A confident invented answer
-could mislead a customer, expose private information, or create work for the support team.
+could give wrong account, billing, or single sign-on guidance; drift into unrelated medical or
+financial advice; or create avoidable support rework.
 
 An earlier engineer left a small local prototype and a set of checks. Your job is to understand
 that inherited system, find where it fails, and improve it step by step until its answers are
 supported, traceable, and able to refuse unsupported questions safely. You do not need any
 AI-engineering vocabulary before starting; each idea is introduced only when the quest needs it.
 
-The first checkpoint requires no code: explain in ordinary language why the assistant should
-refuse to answer when the approved handbook does not contain the answer.
+The first checkpoint requires no code.
 
 ## Problem
 
@@ -27,10 +27,10 @@ Given a question and the local handbook, return JSON with:
 - zero or more source/section citations;
 - an explicit `abstained` flag.
 
-The 20-case evaluation contains supported, unsupported, and adversarial questions. It checks
-retrieval, abstention, and expected answer facts. One strict expected failure records a semantic
-paraphrase that the lexical baseline misses. Changing a model, prompt, retriever, or database
-without rerunning this evaluation is not progress.
+The 20-case [evaluation asset](eval/cases.json) contains supported, unsupported, and adversarial
+questions. It checks retrieval, abstention, and expected answer facts. One strict expected
+failure records a semantic paraphrase that the lexical baseline misses. Changing a model,
+prompt, retriever, or database without rerunning this evaluation is not progress.
 
 ## Slice 0: inherited transparent baseline
 
@@ -43,23 +43,34 @@ uv run python .\projects\grounded_support_assistant\app.py "Can administrators v
 uv run pytest
 ```
 
-## Guided build slices
+## Orientation checkpoints
 
-1. Understand the quest, its user-visible success conditions, and why guessing is unsafe.
-2. Inspect one passing question from input to cited answer, introducing only the terms needed to
+Complete these in separate learner turns before implementation:
+
+1. Explain in ordinary language why the assistant should refuse when the approved handbook does
+   not contain an answer.
+2. Given a verbatim [handbook excerpt](data/handbook.md) and its heading displayed in the mentor's
+   current message, provide only the requested supported fact.
+3. Given that verbatim excerpt and heading displayed again, provide only its source section.
+
+Orientation is complete only after the learner independently demonstrates all three. A mentor
+explanation, existing code, or passing runtime evidence does not satisfy them.
+
+## Learner-owned implementation slices
+
+1. Inspect one passing question from input to cited answer, introducing only the terms needed to
    explain what the prototype does.
-3. Run the 20 cases, trace the expected paraphrase failure, and explain its cause.
-4. Build embedding retrieval with Sentence Transformers and FAISS; measure recall before adding
-   a framework.
-5. Add one direct provider SDK for answer generation while preserving Pydantic validation,
-   citations, and refusal behavior.
-6. Recreate the proven flow with LangChain and record what it adds or obscures.
-7. Move retrieval to Qdrant, add a cross-encoder reranker, and compare with pgvector.
-8. Add Ragas/promptfoo evaluation and compare LangSmith traces with Langfuse.
-9. Expose the accepted flow through FastAPI, then add LiteLLM only when a second provider or
-   gateway policy is required.
-10. Containerize, threat-model prompt injection and data leakage, and publish measured quality,
-    latency, and cost.
+2. Run the 20 cases, trace the expected paraphrase failure, and explain its cause.
+3. Add meaning-based retrieval and measure recall before selecting any framework or index.
+4. Add provider-backed answer generation while preserving validated output, citations, and
+   refusal behavior.
+5. Recreate the proven flow with an orchestration framework and record what it adds or obscures.
+6. Add persistent vector retrieval, reranking, and a measured storage comparison.
+7. Add stronger evaluation and tracing, then compare the evidence each option exposes.
+8. Expose the accepted flow through an API, adding gateway behavior only when multiple providers
+   or a gateway policy creates the need.
+9. Containerize, threat-model prompt injection and data leakage, and publish measured quality,
+   latency, and cost.
 
 The learner owns each implementation after Slice 0. The assistant supplies questions, hints,
 reviews, and theory at the decision point—not a hidden finished solution.

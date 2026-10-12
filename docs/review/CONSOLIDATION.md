@@ -50,7 +50,7 @@ Full `--all` Git bundles for all six sources were verified and SHA-256 recorded 
 
 [Provenance](PROVENANCE.json) records revisions, labels, backup location and verified bundle digests. Original dirty local practice and secret configuration remain untouched. Local bundle/metadata backups are recoverable independently of GitHub deletion. Keep those backups outside the active tutor surface.
 
-Cleanup status: pending publication/validation. The five superseded GitHub projects are not yet deleted. They will be removed only after the canonical candidate is pushed, verified public and synchronized, with recovery evidence complete. Exact outcome is updated here after the operation; archive status will never be described as deletion.
+Cleanup status on 12 October 2026: the canonical repository is public, pushed and synchronized. The five superseded projects are verified **archived, not deleted**, with descriptions pointing to the canonical workbench. GitHub rejected the deletion API with HTTP 403 because the CLI OAuth token lacks delete_repo; the available browser session is signed out. Completing deletion requires user authentication/authorization through `gh auth refresh -h github.com -s delete_repo`, after which only the five named superseded projects should be deleted. No credential or authorization code should enter chat or Git. All recovery evidence was verified before retirement.
 
 ## Final candidate verification
 
@@ -63,4 +63,4 @@ Validated on 12 October 2026 with locked Python 3.12.14, Pydantic 2.13.4, pytest
 - [State recheck](independent/candidate-state-recheck.md) rejects reused assisted historical cases and finds no remaining material false-credit issue in its scoped review. [Educational recheck](independent/candidate-acceptance-recheck.md) accepts the repaired instructional contract.
 - No provider call, GPU run, deployment, learner assessment or model training was performed. S0 and all competence gates remain unawarded.
 
-Hosted CI and exact remote synchronization are pending publication and will be recorded after verification.
+Implementation commit `022c1d302c52756776c9fce56704ba48a51276c9` passed [hosted CI run 38294401028](https://github.com/AhmedTElKodsh/ai-engineering-project-lab/actions/runs/38294401028). Its local main, origin/main and remote refs/heads/main matched exactly, with a clean candidate checkout. Canonical visibility is PUBLIC and it remains unarchived. The 27 privately preserved local practice files were checked unchanged. This later receipt commit only records publication/retirement evidence; its synchronization and CI are verified separately.

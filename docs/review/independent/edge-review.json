@@ -1,0 +1,68 @@
+{
+  "project_A": [
+    {
+      "location": "tools/validate_workspace.py:181-203",
+      "trigger_condition": "A shared E03/E04 event is followed by an E04-only failure.",
+      "guard_snippet": "is_fresh(event, events, skill_id=skill) if skill else is_fresh(event, events)",
+      "potential_consequence": "Unaffected E03 competence is rejected, blocking an otherwise coherent checkpoint."
+    }
+  ],
+  "project_B": [
+    {
+      "location": "projects/grounded_support_assistant/app.py:104-122",
+      "trigger_condition": "An unsupported requested fact shares at least two tokens with a handbook section.",
+      "guard_snippet": "if not supports_requested_fact(question.text, best.body): return abstention(question.text)",
+      "potential_consequence": "The assistant flags an unsupported interest-rate or medical question as answered."
+    },
+    {
+      "location": "projects/grounded_support_assistant/app.py:77-89",
+      "trigger_condition": "A matching section heading has an empty body.",
+      "guard_snippet": "if title and any(line.strip() for line in body): sections.append(Section(path.name, title, body_text))",
+      "potential_consequence": "The assistant returns an empty answer with a citation and abstained=false."
+    }
+  ],
+  "project_C": [
+    {
+      "location": "skills/commerce-ai-coach/scripts/coach.py:229-231",
+      "trigger_condition": "A manually saved current_task is a JSON array or object.",
+      "guard_snippet": "if current is not None and not isinstance(current, str): report.error(\"current_task must be null or string\"); return report, tasks, progress",
+      "potential_consequence": "Validate/status crash instead of returning the documented structured validation error."
+    },
+    {
+      "location": "skills/commerce-ai-coach/scripts/coach.py:452-480",
+      "trigger_condition": "A prerequisite is recorded done without its required test/review evidence.",
+      "guard_snippet": "if report.errors: emit_validation_failure(report); return 1",
+      "potential_consequence": "Status exits zero and recommends dependent T002 despite two validation errors."
+    },
+    {
+      "location": "projects/commerce-support-copilot/.github/skills/commerce-ai-coach/SKILL.md:16-22",
+      "trigger_condition": "The learner invokes the installed skill in the active project.",
+      "guard_snippet": "Read learning/learner-profile.md, learning/progress-protocol.md, and docs/02-architecture.md; verify each resolved path.",
+      "potential_consequence": "The installed coach cannot load its named learner profile, checkpoint authority, or architecture."
+    },
+    {
+      "location": "skills/commerce-ai-coach/scripts/coach.py:500-551",
+      "trigger_condition": "Standalone init copies the shipped template with uppercase underscore document filenames.",
+      "guard_snippet": "validate_required_documents_and_links(tmp); if validation.errors: return 1; os.rename(tmp, dest_abs)",
+      "potential_consequence": "Init reports success although canonical backlog, architecture, and progress-protocol paths are absent."
+    },
+    {
+      "location": "projects/commerce-support-copilot/learning/progress-protocol.md:70-78",
+      "trigger_condition": "Two coach sessions checkpoint the same task from the same initial progress snapshot.",
+      "guard_snippet": "Acquire one checkpoint writer; re-read and compare revision; merge only active changes; atomically replace and validate readback.",
+      "potential_consequence": "The later valid checkpoint silently erases the other session's independent mastery evidence."
+    },
+    {
+      "location": "projects/commerce-support-copilot/docs/02-architecture.md:75-89",
+      "trigger_condition": "A support employee adds a follow-up message after a read-only case becomes resolved.",
+      "guard_snippet": "Define resolved + employee_message -> analyzing with a new run, or reject messages on resolved cases.",
+      "potential_consequence": "The API accepts a message that has no legal continuation transition."
+    },
+    {
+      "location": "projects/commerce-support-copilot/docs/04-api-and-tool-contracts.md:90-123",
+      "trigger_condition": "The model requests the documented propose_replacement tool.",
+      "guard_snippet": "Expose product_mention and reason_code; inject resolved order_line_id from trusted bound-case context.",
+      "potential_consequence": "The documented tool requires a model-supplied internal ID forbidden by the same contract."
+    }
+  ]
+}

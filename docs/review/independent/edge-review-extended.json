@@ -1,0 +1,100 @@
+{
+  "project_D": [
+    {
+      "location": "Layer1-Final/guides/grade_diagnostic.py:166-201",
+      "trigger_condition": "CSV task returns empty data and empty category statistics without writing JSON.",
+      "guard_snippet": "assert expected_categories_and_aggregates(df, stats) and valid_json_output_exists()",
+      "potential_consequence": "Incomplete data-pipeline competency earns credit and can skip necessary Python remediation."
+    },
+    {
+      "location": "Layer1-Final/guides/grade_diagnostic.py:425-442",
+      "trigger_condition": "Learner defines two tests that raise assertion failures.",
+      "guard_snippet": "for test in all_required_tests: test(); return pass_only_if_all_succeeded",
+      "potential_consequence": "Failing tests earn full credit despite the diagnostic strict failure rule."
+    },
+    {
+      "location": "Layer1-Final/guides/grade_diagnostic.py:616-639",
+      "trigger_condition": "Learner supplies converted checkable filename using the documented grading command.",
+      "guard_snippet": "DIAGNOSTIC_FILE = parse_args().student_file; run_diagnostic()",
+      "potential_consequence": "Grader evaluates the original file instead of the learner completed notebook conversion."
+    },
+    {
+      "location": "Layer1-Final/guides/convert_notebook_to_checkable.py:62-64",
+      "trigger_condition": "Notebook function uses a local result assignment needed by its return statement.",
+      "guard_snippet": "remove_only_top_level_execution_nodes; preserve_all_function_and_class_bodies",
+      "potential_consequence": "Conversion silently deletes learner implementation and creates undefined-name failures during grading."
+    },
+    {
+      "location": "pyproject.toml:44-45",
+      "trigger_condition": "User invokes the installed aitea console command.",
+      "guard_snippet": "aitea = \"src.cli:app\"",
+      "potential_consequence": "Installed entry point imports a nonexistent module and fails before any command runs."
+    },
+    {
+      "location": "src/utils/__init__.py:185-186",
+      "trigger_condition": "JSON serialization or file writing fails after opening an existing persistence file.",
+      "guard_snippet": "serialize_first; write_unique_temporary_file; fsync; atomic_replace_destination",
+      "potential_consequence": "Failed save truncates the previous valid feature or time-tracking data."
+    },
+    {
+      "location": "src/services/tools.py:210-228",
+      "trigger_condition": "JSON-schema input contains booleans or booleans where numbers are required.",
+      "guard_snippet": "if t == \"boolean\": return valid(type(value) is bool); numeric_types_exclude_bool",
+      "potential_consequence": "Valid booleans fail validation while booleans bypass integer and number contracts."
+    },
+    {
+      "location": "src/agents/simple_agent.py:395,435-438",
+      "trigger_condition": "Provider requests continuation when the configured final iteration is reached.",
+      "guard_snippet": "increment_iteration_before_budget_check; complete_if_iteration >= max_iterations",
+      "potential_consequence": "Agent performs an extra full iteration and exceeds its advertised provider-call budget."
+    },
+    {
+      "location": "src/agents/simple_agent.py:395",
+      "trigger_condition": "Reflection contains INCOMPLETE and ends with CONTINUE.",
+      "guard_snippet": "decision = reflection.rstrip().splitlines()[-1]; should_complete = decision == \"COMPLETE\"",
+      "potential_consequence": "Unfinished agent task is marked complete after the first iteration."
+    }
+  ],
+  "project_E": [
+    {
+      "location": "reference/milestone-1-finagent/app.py:413-425",
+      "trigger_condition": "Unsupported question contains a word found in approved ticker evidence.",
+      "guard_snippet": "if not evidence_supports_requested_fact(request.question, selected): return abstained",
+      "potential_consequence": "Unanswerable finance question is labeled supported with irrelevant citations and no abstention."
+    },
+    {
+      "location": "reference/milestone-1-finagent/app.py:428-443",
+      "trigger_condition": "Provider returns fabricated answer text paired with an approved citation.",
+      "guard_snippet": "validate_claim_support(answer, evidence); otherwise return provider_error_or_abstention",
+      "potential_consequence": "Cited fabrication is presented as supported evidence despite passing the structured-output gate."
+    },
+    {
+      "location": "reference/milestone-1-finagent/app.py:483-498; curriculum/main-track/06-capstone-projects/week-03-integration-build/workbench.py:399-415",
+      "trigger_condition": "Client sends fewer bytes than declared or leaves a request incomplete.",
+      "guard_snippet": "set_connection_deadline_before_parsing; require len(body) == declared_length",
+      "potential_consequence": "Incomplete frame can succeed; unfinished reads retain server workers without a deadline."
+    }
+  ],
+  "project_F": [
+    {
+      "location": "curriculum/1st_Milestone/http_api.py:50-53,115",
+      "trigger_condition": "Client opens a connection and sends incomplete HTTP headers.",
+      "guard_snippet": "class WorkIntakeHandler(BaseHTTPRequestHandler): timeout = CLIENT_READ_TIMEOUT_SECONDS",
+      "potential_consequence": "Single-request teaching server hangs before its body timeout and never reaches learner code."
+    }
+  ],
+  "supplement_B": [
+    {
+      "location": "app/main.py:88-101",
+      "trigger_condition": "Provider exception or output validation error contains internal details or echoed input.",
+      "guard_snippet": "public_detail = stable_error_code; retain_only_redacted_diagnostics_for_private_logs",
+      "potential_consequence": "Public error responses reveal provider details or model input despite the non-leaking test claim."
+    },
+    {
+      "location": "app/main.py:59,89,106",
+      "trigger_condition": "Windows redirected stdout uses cp1252 while handling a ticket request.",
+      "guard_snippet": "logger.info(\"Sending structured request\"); use_encoding_safe_error_logging",
+      "potential_consequence": "Emoji logging raises UnicodeEncodeError again inside the handler and bypasses the intended HTTP error."
+    }
+  ]
+}

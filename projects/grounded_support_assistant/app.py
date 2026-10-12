@@ -7,9 +7,10 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 CORPUS_PATH = Path(__file__).with_name("data") / "handbook.md"
+REFUSAL = "I cannot answer this from the support handbook."
 WORD = re.compile(r"[a-z0-9]+")
 STOPWORDS = {
     "a",
@@ -47,19 +48,27 @@ class SupportQuestion(BaseModel):
 
 
 class Citation(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
-    source: str
-    section: str
+    source: str = Field(min_length=1)
+    section: str = Field(min_length=1)
 
 
 class GroundedAnswer(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
-    question: str
-    answer: str
+    question: str = Field(min_length=1)
+    answer: str = Field(min_length=1)
     citations: list[Citation]
     abstained: bool
+
+    @model_validator(mode="after")
+    def check_result_invariants(self) -> GroundedAnswer:
+        if self.abstained and (self.citations or self.answer != REFUSAL):
+            raise ValueError("Abstention requires the standard refusal and no citations")
+        if not self.abstained and not self.citations:
+            raise ValueError("A retrieved answer requires at least one source citation")
+        return self
 
 
 @dataclass(frozen=True)
@@ -84,6 +93,8 @@ def load_sections(path: Path = CORPUS_PATH) -> list[Section]:
 
     if title:
         sections.append(Section(path.name, title, " ".join(body)))
+    if any(not section.title or not section.body for section in sections):
+        raise ValueError("Handbook sections require nonblank headings and content")
     if not sections:
         raise ValueError(f"No level-two sections found in {path}")
     return sections
@@ -95,11 +106,9 @@ def tokens(text: str) -> set[str]:
 
 def answer_question(question: SupportQuestion, path: Path = CORPUS_PATH) -> GroundedAnswer:
     query_tokens = tokens(question.text)
-    if not query_tokens:
-        raise ValueError("Question must contain a searchable term")
 
     sections = load_sections(path)
-    # ponytail: exact-token overlap is the baseline ceiling; replace it after measured failures.
+    # Relevance is not supportedness; measured challenge failures remain visible in evaluation.
     scores = [
         (len(query_tokens & tokens(f"{section.title} {section.body}")), section)
         for section in sections
@@ -109,7 +118,7 @@ def answer_question(question: SupportQuestion, path: Path = CORPUS_PATH) -> Grou
     if score < 2:
         return GroundedAnswer(
             question=question.text,
-            answer="I cannot answer this from the support handbook.",
+            answer=REFUSAL,
             citations=[],
             abstained=True,
         )

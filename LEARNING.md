@@ -1,76 +1,32 @@
----
-learner: Ahmed
-weekly_pace: 5-7 hours
-active_project: projects/grounded_support_assistant
-active_slice: 0-transparent-baseline
-active_checkpoint: quest-orientation
-status: in_progress
-last_verified_code_commit: 26d479e550a0918a592a138592f81146e8db66e5
----
-
 # Learning State
 
-This file is the resumable state for `$project-mentor`. It records completed evidence and one
-next checkpoint; project specifications remain in their project README.
+Generated from learning/route.json and learning/evidence.jsonl. Do not edit this view.
 
-## Mission and learner profile
+Learner: Ahmed. Pace: 10 hours/week, five two-hour sessions. CPU first.
+Active project: projects/grounded_support_assistant
+Active stage: S0
+Evidence revision: 7290c3b17ad235346b4ba6bf4e25e3397d79849b5db5d4921b9bd47de230e6b6
 
-- Become job-ready as an AI engineer by building and defending recurring real-world project
-  cases, not by collecting framework tutorials.
-- Practice common tools deeply enough to configure, debug, evaluate, compare, and explain when
-  not to use them.
-- Learn theory just in time and only to the depth required by the current engineering decision.
-- Work at roughly 5–7 focused hours per week.
-- Treat Python experience and AI-engineering familiarity separately. Introduce AI-engineering
-  ideas in plain language until the learner demonstrates the relevant vocabulary and mental
-  model.
-- Prefer learner-written implementation with prediction, hints, review, verification, and
-  reflection over AI-generated project completion.
-- When provider work begins, prefer accessible low-cost routes such as OpenRouter or Groq unless
-  project evidence or the learner selects another provider.
+## Carried-forward context
 
-## Current position
+- In the configuration-test detour, distinguish exact Python/Pydantic identifiers and case-sensitive text: _env_file, not _get_file; "Field required" differs from "field required". In model-call work distinguish a client library from provider-owned model IDs, verify IDs before rebuilding, and distinguish .env files from process environment; load configuration before reading GROQ_API_KEY. These are support notes, not verified capability failures or completed skills.
 
-- **Project:** Grounded Support Assistant
-- **Slice:** 0 — inherited transparent baseline
-- **Checkpoint:** Quest orientation
-- **State:** An inherited baseline is published, but the learner has not yet completed the
-  project briefing or demonstrated its purpose and success conditions.
-- **Learner familiarity:** Project context and AI-engineering vocabulary are unassessed. Begin
-  in plain language and introduce one necessary term at a time.
-- **Demonstrated understanding:** None yet.
-- **Support needed:** Plain-language project orientation connecting the approved handbook's
-  boundary to safe refusal.
-- **Known limitation:** Exact-token retrieval misses the semantic paraphrase case and produces
-  one strict expected failure.
-- **Blocker:** None.
+## Stage evidence
 
-## Latest verified evidence
+| Stage | Status |
+|---|---|
+| S0 | not_started |
+| S1 | not_started |
+| S2 | not_started |
+| S3 | not_started |
+| S4 | not_started |
+| S5 | not_started |
+| S6 | not_started |
+| S7 | not_started |
+| S8 | not_started |
 
-| Date | Proof | Tree/commit | Command or run | Result |
-|---|---|---|---|---|
-| 2026-08-04 | Local | `26d479e` | `uv lock --check`; Ruff; `uv run pytest -rxX -q`; CLI query | 19/20 evaluation cases passed; 1 strict expected failure; 2 contract tests passed; lint, format, lock, and CLI succeeded |
-| 2026-08-04 | Hosted CI | `26d479e` | [GitHub Actions run 30909751250](https://github.com/AhmedTElKodsh/ai-engineering-project-lab/actions/runs/30909751250) | Success |
-
-## Decisions carried forward
-
-- Keep this portfolio lab separate from the from-scratch curriculum.
-- Use AI Engineering Hub as an MIT-licensed idea catalogue; copy no code, prose, notebooks, or
-  assets without explicit attribution and licence handling.
-- Start every case with a transparent baseline and fixed evaluation.
-- Use two framework gates: measured gaps for production adoption and bounded roadmap exercises
-  for learning comparisons.
-- Treat local, CI, live-provider, GPU, deployment, and production evidence as different claims.
-- Preserve learner ownership and require runtime evidence before mastery or completion claims.
-
-## Progress log
-
-| Date | Project/slice | Evidence | Learner note | Outcome |
-|---|---|---|---|---|
-| 2026-08-04 | Grounded Support Assistant / reference baseline | 19/20 evaluation cases, 2 contract tests, commit `26d479e`, hosted CI success | No learner comprehension evidence yet | Inherited baseline ready; quest orientation pending |
+Repository tests, inherited code and maintainer work do not certify learner competence.
 
 ## Next checkpoint
 
-After a plain-language project quest briefing, explain why the support assistant should refuse to
-answer when the approved handbook does not contain the answer. No coding or AI vocabulary is
-required yet.
+Repair the carried-forward configuration/model-call confusion, frame the quest, then try a fresh small document task.

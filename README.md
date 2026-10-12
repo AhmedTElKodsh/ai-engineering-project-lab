@@ -1,68 +1,51 @@
-# AI Engineering Project Lab
+# AI Engineering Workbench
 
-Build the recurring systems an AI engineer is hired to deliver, then learn each tool at
-the moment the project creates a reason for it.
+One cumulative, learner-owned project: grow a grounded support assistant from intermediate Python into evaluated RAG and bounded agents, then build its small language-model laboratory from raw math and random weights.
 
-This is not a collection of framework demos. Each case starts with a small baseline and a
-fixed evaluation. A library earns its place only when it improves quality, reliability,
-cost, latency, safety, or maintainability.
+**Pace:** two hours/day, five days/week. **Required hardware:** CPU. The GTX 1050 Ti is optional and unverified. **Current learner state:** S0 unresolved; no new competence is awarded by repository consolidation.
 
-## Current project
+Start with the [project plan](docs/learning-path/00-START-HERE.md), [current checkpoint](LEARNING.md), and [project quest](projects/grounded_support_assistant/README.md). Ask `$project-mentor` to resume one meaningful action at a time. The assistant and model laboratory are components of this same workbench, sharing data provenance, interfaces and evaluation discipline.
 
-[Grounded Support Assistant](projects/grounded_support_assistant/) is active. Its first
-slice is deliberately local and deterministic:
+## The route
 
-- a bounded Markdown knowledge base;
-- Pydantic contracts for the question, answer, citations, and abstention;
-- a transparent lexical retrieval baseline;
-- 20 supported, unsupported, and adversarial cases with answer-fact assertions, including
-  one strict expected failure that exposes the baseline's paraphrase weakness;
-- pytest, Ruff, and GitHub Actions checks.
+| Stage | Cumulative outcome | Focused hours |
+|---|---|---:|
+| S0 | Frame the problem and diagnose Python through a fresh document task | 4–6 |
+| S1 | Build a reliable document-search CLI; demonstrate intermediate Python | 26–38 |
+| S2 | Validate model output; build and evaluate RAG | 36–52 |
+| S3 | Own a bounded tool/agent loop, approval and an educational MCP bridge | 20–30 |
+| S4 | Implement count baselines, probability, vectors and gradient learning | 50–70 |
+| S5 | Write manual gradients/backprop and a small neural network | 45–65 |
+| S6 | Write tokenization and a complete causal transformer architecture | 60–85 |
+| S7 | Train from random weights; evaluate, checkpoint, reload and generate | 45–70 |
+| S8 | Compare/integrate models, harden the assistant and study tiny adaptation | 20–30 |
 
-The live learner checkpoint is recorded only in [LEARNING.md](LEARNING.md). When project
-orientation is incomplete, the mentor begins with a plain-language quest rather than code or
-tool names.
+The plan totals 306–446 focused hours; with a 20% reserve, about 37–54 study weeks at ten hours/week. These are estimates, not measured learner timings. Re-estimate after actual diagnostic and compute evidence. The [detailed roadmap](docs/learning-path/02-PROJECT-ROADMAP.md) owns acceptance behavior; [route.json](learning/route.json) owns stage IDs, dependencies and budget facts.
 
-## Continue with the mentor
+The final model is a complete **small decoder-only language model**, with learner-written architecture and lifecycle. First prove gradients and a small network manually, then use tensor/autograd machinery for practical CPU training. Calling a hosted LLM, fine-tuning pretrained weights, or completing a toy forward block does not satisfy this endpoint. See the [model build specification](docs/learning-path/05-LLM-BUILD-SPEC.md).
 
-From this repository, invoke `$project-mentor` with “continue,” “review my attempt,” or a named
-project question. The mentor reads [the agent context](project-context.md),
-[current learning state](LEARNING.md), and the active project before guiding one checkpoint at
-a time. It assumes no AI-engineering vocabulary until the learner demonstrates it, introduces
-one necessary term at a time, and resets to a concrete example when the learner is confused.
-The learner writes the important implementation; the mentor explains, asks, hints, reviews,
-verifies, and records evidence.
-
-## Quick start
+## Run the inherited baseline
 
 ```powershell
-git clone https://github.com/AhmedTElKodsh/ai-engineering-project-lab.git
-Set-Location .\ai-engineering-project-lab
-uv sync
-uv run python .\projects\grounded_support_assistant\app.py "How long is an export link valid?"
-uv run pytest
-uv run ruff check .
+uv sync --locked --all-groups
+uv run python scripts/learning_state.py status
+uv run python projects/grounded_support_assistant/app.py "How long is an export link valid?"
+uv run pytest -rxX -q
 ```
 
-No API key is required for the current slice.
+No API key, GPU, model download or network call is needed to run the baseline after environment setup. It retrieves English handbook sections using token overlap. The original evaluation has twenty cases and a declared paraphrase failure. Newly exposed unsupported and multi-intent cases are tracked separately; citation and lexical relevance alone do not establish answer support. This is inherited reference code to inspect and improve, not a finished reliable assistant or learner achievement.
 
-## The learning loop
+## Find the right document
 
-1. Define the user problem and acceptance cases.
-2. Build the cheapest transparent baseline.
-3. Measure it and diagnose a concrete gap.
-4. Learn only the theory needed to choose the next technique.
-5. Add one tool, compare it with the baseline, and keep or remove it on evidence.
-6. Harden the boundary, evaluation, observability, security, and deployment.
-7. Publish the result, trade-offs, and reproducible commands.
+| Need | Owner |
+|---|---|
+| Session method and gradual help | [Learning method](docs/learning-path/01-LEARNING-METHOD.md), [mentor skill](.agents/skills/project-mentor/SKILL.md) |
+| Required skills and ownership gates | [Skills and mastery](docs/learning-path/03-SKILLS-AND-MASTERY.md) |
+| First twenty sessions | [First four weeks](docs/learning-path/04-FIRST-FOUR-WEEKS.md) |
+| Reference lesson bridges | [Curriculum map](docs/learning-path/06-CURRICULUM-MAP-AND-STATE.md) |
+| Safe factual progress recording | [Evidence protocol](learning/PROTOCOL.md) |
+| Selected primitive exercises | [Mechanism shelf](resources/README.md) |
+| Review of the six source repositories and merge choices | [Consolidation report](docs/review/CONSOLIDATION.md) |
+| Versions, validation and contributor rules | [Project context](project-context.md) |
 
-At 5–7 hours per week, the [roadmap](ROADMAP.md) favors durable mastery over artificial
-weekly deadlines. [TOOLING.md](TOOLING.md) records which tools deserve deep practice,
-one bounded comparison, or deliberate deferral. [REFERENCES.md](REFERENCES.md) records
-the external idea sources and license boundary.
-
-## What counts as portfolio proof
-
-A screenshot is not completion. A finished case has runnable tests, a versioned evaluation
-set, measured before/after results, failure analysis, architecture and tool decisions,
-security and cost notes, and a reproducible deployment or local run.
+Only this route, one installed mentor and one factual event log are active. Historical state is labelled under archive; full source histories and unpublished local experiments are privately backed up. Superseded repository handling and its exact status are recorded in the consolidation report.

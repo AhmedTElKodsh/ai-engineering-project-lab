@@ -1,82 +1,34 @@
-# Project 1: Grounded Support Assistant
+# Grounded Support Assistant and Model Laboratory
 
 ## Quest briefing
 
-You are the AI engineer joining a support team. Customers ask questions, and the team has an
-approved handbook containing the answers it is allowed to give. A confident invented answer
-could give wrong account, billing, or single sign-on guidance; drift into unrelated medical or
-financial advice; or create avoidable support rework.
+You join a support team with an approved handbook. Your job is to build software that finds useful passages, answers only what the sources support, and refuses or asks for clarification when necessary. Wrong account/billing guidance creates rework and user harm. Start with a small local corpus; no AI vocabulary or provider account is assumed.
 
-An earlier engineer left a small local prototype and a set of checks. Your job is to understand
-that inherited system, find where it fails, and improve it step by step until its answers are
-supported, traceable, and able to refuse unsupported questions safely. You do not need any
-AI-engineering vocabulary before starting; each idea is introduced only when the quest needs it.
+The inherited prototype is a starting observation. The learner has not yet demonstrated its purpose or implementation. First explain the refusal risk, then use a displayed [handbook excerpt](data/handbook.md) to identify a supported fact and its source. Actual clear evidence can satisfy these ideas across as many turns as needed; existing code or a mentor explanation does not satisfy them.
 
-The first checkpoint requires no code.
+## Current behavior and limitations
 
-## Problem
+The app ranks English sections by exact non-stopword overlap and returns one whole section when at least two terms match. JSON contains question, answer, citations and abstained. The [original evaluation asset](eval/cases.json) has twenty cases: nineteen currently pass and one paraphrase is a strict expected failure. The [new challenge set](eval/challenges.json) captures unsupported overlap, multiple intents and injection-like phrasing found by independent review. Those failures are deliberate visible improvement work, not proof of reliable supported answers.
 
-Support teams need fast answers from approved documentation, but an assistant must cite its
-source and abstain when the documentation does not support an answer.
-
-## Acceptance contract
-
-Given a question and the local handbook, return JSON with:
-
-- the question and answer;
-- zero or more source/section citations;
-- an explicit `abstained` flag.
-
-The 20-case [evaluation asset](eval/cases.json) contains supported, unsupported, and adversarial
-questions. It checks retrieval, abstention, and expected answer facts. One strict expected
-failure records a semantic paraphrase that the lexical baseline misses. Changing a model,
-prompt, retriever, or database without rerunning this evaluation is not progress.
-
-## Slice 0: inherited transparent baseline
-
-The current implementation ranks handbook sections by exact non-stopword token overlap. It is
-intentionally too simple to be the final system; its job is to establish the contract, data,
-evaluation, and failure-analysis habit before an LLM hides mistakes behind fluent text.
+A source citation indicates the returned passage's origin; it does not establish that it answers every requested fact. This baseline has no semantic model, authority-bearing tool, provider or full RAG generation. Its corpus language is English; nonmatching language input should produce abstention, and multilingual retrieval is later scope. Do not call lexical search a trained LLM.
 
 ```powershell
-uv run python .\projects\grounded_support_assistant\app.py "Can administrators view my password?"
-uv run pytest
+uv run python projects/grounded_support_assistant/app.py "How long is an export link valid?"
+uv run pytest projects/grounded_support_assistant -rxX -q
 ```
 
-## Orientation checkpoints
+## Cumulative learner-owned releases
 
-Complete these in separate learner turns before implementation:
+The single [S0–S8 roadmap](../../docs/learning-path/02-PROJECT-ROADMAP.md) owns the sequence. S1 adds the learner's CLI/data/modules/error/test skills; S2 adds model output boundaries, provenance and evaluated RAG; S3 adds explicit workflow, a bounded agent and tool approval; S4–S7 build the internal [model laboratory](model/README.md); S8 compares adapters and reliability.
 
-1. Explain in ordinary language why the assistant should refuse when the approved handbook does
-   not contain an answer.
-2. Given a verbatim [handbook excerpt](data/handbook.md) and its heading displayed in the mentor's
-   current message, provide only the requested supported fact.
-3. Given that verbatim excerpt and heading displayed again, provide only its source section.
+Share meaningful provenance and held-out evaluation practices. The tiny model may supply bounded text completion through the same adapter, but it is not assumed suitable for factual support answers. Keep the more capable model or retrieval baseline when measured evidence favors it.
 
-Orientation is complete only after the learner independently demonstrates all three. A mentor
-explanation, existing code, or passing runtime evidence does not satisfy them.
+## Tool-authority requirements at S3
 
-## Learner-owned implementation slices
+Tools are search_documents, read_passage and draft_note. Names/arguments are allowlisted; trusted application context supplies actor, corpus and any internal object IDs. An untrusted model proposal cannot authorize a write. Bind approval to exact target/arguments/hash and an independent approver, revalidate before execution, and reject replay, stale versions, traversal, unknown IDs and changed parameters. A resolved task either explicitly rejects follow-up or starts a new bound run; it never silently accepts a message with no legal state transition.
 
-1. Inspect one passing question from input to cited answer, introducing only the terms needed to
-   explain what the prototype does.
-2. Run the 20 cases, trace the expected paraphrase failure, and explain its cause.
-3. Add meaning-based retrieval and measure recall before selecting any framework or index.
-4. Add provider-backed answer generation while preserving validated output, citations, and
-   refusal behavior.
-5. Recreate the proven flow with an orchestration framework and record what it adds or obscures.
-6. Add persistent vector retrieval, reranking, and a measured storage comparison.
-7. Add stronger evaluation and tracing, then compare the evidence each option exposes.
-8. Expose the accepted flow through an API, adding gateway behavior only when multiple providers
-   or a gateway policy creates the need.
-9. Containerize, threat-model prompt injection and data leakage, and publish measured quality,
-   latency, and cost.
+Start with local simulated effects. Test bounded steps/timeouts and restart, duplicate action IDs, failed writes and unknown outcomes. Claims about real deployment or side effects need separate observed evidence.
 
-The learner owns each implementation after Slice 0. The assistant supplies questions, hints,
-reviews, and theory at the decision point—not a hidden finished solution.
+## Evaluation hygiene
 
-## Inspiration and originality
-
-This project adapts the document-question-answering pattern from AI Engineering Hub's Simple
-RAG Workflow and GitHub RAG projects recorded in [REFERENCES.md](../../REFERENCES.md). Its
-implementation, data, evaluation, and learning exercises are original.
+Keep development cases separate from unseen transfer and final held-out data. Split by source/document before generating related examples, fit vocab/statistics on training only, and compare against a frozen baseline. Report supported/unsupported and multilingual limitations, raw errors, latency and cost. Test a meaningful mutation or counterexample; a green suite that also accepts a broken guard does not protect that guard.

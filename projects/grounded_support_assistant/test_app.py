@@ -4,7 +4,14 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from projects.grounded_support_assistant.app import GroundedAnswer, SupportQuestion, answer_question
+from projects.grounded_support_assistant.app import (
+    REFUSAL,
+    Citation,
+    GroundedAnswer,
+    SupportQuestion,
+    answer_question,
+    load_sections,
+)
 
 CASES = json.loads((Path(__file__).with_name("eval") / "cases.json").read_text(encoding="utf-8"))
 PARAMS = [
@@ -47,3 +54,56 @@ def test_answer_contract_rejects_unknown_fields() -> None:
             abstained=False,
             confidence=1.0,
         )
+
+
+@pytest.mark.parametrize(
+    "fields",
+    [
+        {"answer": "", "citations": [], "abstained": False},
+        {"answer": "Text.", "citations": [], "abstained": False},
+        {"answer": "Unapproved claim.", "citations": [], "abstained": True},
+        {"answer": REFUSAL, "citations": [{"source": "a", "section": "b"}], "abstained": True},
+    ],
+)
+def test_result_rejects_contradictory_states(fields: dict) -> None:
+    with pytest.raises(ValidationError):
+        GroundedAnswer(question="Question?", **fields)
+
+
+def test_citation_rejects_blank_source() -> None:
+    with pytest.raises(ValidationError):
+        Citation(source="  ", section="Known")
+
+
+def test_empty_handbook_section_is_rejected(tmp_path: Path) -> None:
+    corpus = tmp_path / "handbook.md"
+    corpus.write_text("## Empty\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="nonblank"):
+        load_sections(corpus)
+
+
+@pytest.mark.parametrize("question", ["كيف أغير كلمة المرور؟", "...", "the and what"])
+def test_no_english_query_terms_abstain(question: str) -> None:
+    result = answer_question(SupportQuestion(text=question))
+    assert result.abstained and result.answer == REFUSAL and not result.citations
+
+
+CHALLENGES = json.loads((Path(__file__).with_name("eval") / "challenges.json").read_text())
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        pytest.param(
+            case,
+            id=case["id"],
+            marks=pytest.mark.xfail(reason=case["reason"], strict=True, raises=AssertionError),
+        )
+        for case in CHALLENGES
+    ],
+)
+def test_review_challenges_remain_visible(case: dict) -> None:
+    result = answer_question(SupportQuestion(text=case["question"]))
+    assert result.abstained is case["abstained"]
+    for fact in case.get("required_facts", []):
+        assert fact.casefold() in result.answer.casefold()

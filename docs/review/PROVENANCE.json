@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-11",
+  "backup_root": "D:\\AI Projects\\Learning\\.consolidation-2026-10-11\\backups",
+  "sources": [
+    {
+      "repository": "ai-engineering-project-lab-v3",
+      "sha": "5ed9fa74cd455ef533f467136ed501067afc99c8",
+      "snapshot": "D:\\AI Projects\\Learning\\.consolidation-2026-10-11\\blind\\project_A",
+      "tracked_files": 370,
+      "bundle": {
+        "bytes": 1014447,
+        "sha256": "04b6c7a8079996e9d7307566fd1263a80f545174c25a3447ce5d0e271d4feefe",
+        "verified": true
+      }
+    },
+    {
+      "repository": "ai-engineering-project-lab",
+      "sha": "74eef136f6360eaaefddce7219c66136797aeee0",
+      "snapshot": "D:\\AI Projects\\Learning\\.consolidation-2026-10-11\\blind\\project_B",
+      "tracked_files": 21,
+      "bundle": {
+        "bytes": 51444,
+        "sha256": "aacda09f4bd07b2a8cea72a2e907a31f7988057d48b36aac0e588447b2c275f9",
+        "verified": true
+      }
+    },
+    {
+      "repository": "AI-Engineering-Project-Lab-V4",
+      "sha": "7869005861a15d59b025342aba89ca02702298b8",
+      "snapshot": "D:\\AI Projects\\Learning\\.consolidation-2026-10-11\\blind\\project_C",
+      "tracked_files": 2251,
+      "bundle": {
+        "bytes": 850720,
+        "sha256": "4d7ace87e07b829df3fbc8bca2670fc62a28c51c69d735995a1a55023f783784",
+        "verified": true
+      }
+    },
+    {
+      "repository": "hands-on-ai-engineering",
+      "sha": "a786a721170e2c2f1d301a82abe49b7d68ceb077",
+      "snapshot": "D:\\AI Projects\\Learning\\.consolidation-2026-10-11\\blind\\project_D",
+      "tracked_files": 3134,
+      "bundle": {
+        "bytes": 119792160,
+        "sha256": "c97c2fb96695dd6f5b555217ee816aa535cc31c89a60198216779ff32d2a1438",
+        "verified": true
+      }
+    },
+    {
+      "repository": "ai-engineering-library",
+      "sha": "e1700c1d75c8d507a936c0edade981cbd01a4544",
+      "snapshot": "D:\\AI Projects\\Learning\\.consolidation-2026-10-11\\blind\\project_E",
+      "tracked_files": 446,
+      "bundle": {
+        "bytes": 120250889,
+        "sha256": "d72e36efb089298f927defadec9b987054973a34a985df4077e3d85cba62193f",
+        "verified": true
+      }
+    },
+    {
+      "repository": "AI-Engineering-Library-V2.0",
+      "sha": "d9cc460fcb3838c8e4c80517b91d4e951c9fcf86",
+      "snapshot": "D:\\AI Projects\\Learning\\.consolidation-2026-10-11\\blind\\project_F",
+      "tracked_files": 1349,
+      "bundle": {
+        "bytes": 8024416,
+        "sha256": "de4be7f542cc1a0a099c09dcc55e652af643a90ab6f927b39d9a3414fe83d829",
+        "verified": true
+      }
+    }
+  ],
+  "learner_work_backup": "local-working-tree",
+  "excluded_secret_file": ".env",
+  "curriculum_reference_commit": "7157ca74a135fad2165f680ec4b4e592f075ec21",
+  "review_completed_date": "2026-10-12",
+  "selected_refinement": {
+    "repository": "ai-engineering-project-lab-v3",
+    "ref": "refine/supportops-workbench-20260915",
+    "sha": "2a92b0fbed8244f6378fdd7d4eb3cbdc066ecad6",
+    "retained": "resources/extraction-fixtures"
+  }
+}

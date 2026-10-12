@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "purpose": "Visible synthetic development cases, not observed model results or held-out assessments.",
+  "coordinate_system": "original_python_str_code_points_start_inclusive_end_exclusive",
+  "cases": [
+    {"id":"SUP-001","kind":"baseline","path":"notes/note_001_baseline.txt","language":"en","pair_id":"PAIR-001","expected":{"order_reference":"1042","damage_reported":true,"requested_resolution":"replacement"},"spans":[{"field":"order_reference","start":6,"end":10,"quote":"1042"},{"field":"damage_reported","start":55,"end":61,"quote":"broken"}]},
+    {"id":"SUP-002","kind":"absent_fields","path":"notes/note_002_absent_fields.txt","language":"en","pair_id":null,"expected":{"order_reference":null,"damage_reported":true,"requested_resolution":"replacement"},"spans":[{"field":"damage_reported","start":25,"end":31,"quote":"broken"}]},
+    {"id":"SUP-003","kind":"negation","path":"notes/note_003_negation.txt","language":"en","pair_id":null,"expected":{"order_reference":"1042","damage_reported":false,"requested_resolution":"information"},"spans":[{"field":"order_reference","start":6,"end":10,"quote":"1042"},{"field":"damage_reported","start":37,"end":47,"quote":"not broken"}]},
+    {"id":"SUP-004","kind":"uncertainty","path":"notes/note_004_uncertainty.txt","language":"en","pair_id":null,"expected":{"order_reference":"1042","damage_reported":null,"requested_resolution":"information"},"spans":[{"field":"order_reference","start":6,"end":10,"quote":"1042"},{"field":"damage_reported","start":38,"end":52,"quote":"may be missing"}]},
+    {"id":"SUP-005","kind":"chronology","path":"notes/note_005_chronology.txt","language":"en","pair_id":null,"expected":{"order_reference":"1042","damage_reported":true,"requested_resolution":"replacement","promised_day":"Tuesday","reported_arrival_day":"Thursday"},"spans":[{"field":"order_reference","start":6,"end":10,"quote":"1042"},{"field":"damage_reported","start":71,"end":77,"quote":"broken"}]},
+    {"id":"SUP-006","kind":"instruction_like","path":"notes/note_006_instruction_like.txt","language":"en","pair_id":null,"expected":{"order_reference":"1042","damage_reported":true,"requested_resolution":"replacement"},"spans":[{"field":"order_reference","start":6,"end":10,"quote":"1042"},{"field":"damage_reported","start":26,"end":32,"quote":"broken"}]},
+    {"id":"SUP-007","kind":"arabic","path":"notes/note_007_arabic.txt","language":"ar","pair_id":"PAIR-001","expected":{"order_reference":"1042","damage_reported":true,"requested_resolution":"replacement"},"spans":[{"field":"order_reference","start":10,"end":14,"quote":"1042"},{"field":"damage_reported","start":32,"end":38,"quote":"مكسورٌ"}]}
+  ]
+}

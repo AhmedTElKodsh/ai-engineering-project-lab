@@ -1,32 +1,7 @@
-# References and reuse policy
+# Sources and attribution
 
-This repository uses external projects as problem and workflow references. Its code, prose,
-data, and exercises are original unless a future file explicitly says otherwise.
+The [consolidation report](docs/review/CONSOLIDATION.md) and [provenance manifest](docs/review/PROVENANCE.json) identify the six reviewed project sources and retained components. The source names/revisions are historical evidence; canonical learner instruction now lives in this repository. Mechanism scaffold code keeps its MIT notice under resources and THIRD_PARTY_NOTICES.md.
 
-## AI Engineering Hub
+The [personal source review](docs/research/PROJECT-SOURCE-REVIEW.md) discusses the five originally suggested project links. Learning-method claims cite primary research in docs/learning-path/01-LEARNING-METHOD.md; algorithm/protocol claims cite papers and official specifications in the roadmap/build specification. These sources inform a local design; they do not validate exact timing, learner competence or product quality.
 
-- [Beginner project index](https://github.com/patchy631/ai-engineering-hub#-beginner-projects)
-- [Simple RAG Workflow](https://github.com/patchy631/ai-engineering-hub/tree/main/simple-rag-workflow), referenced for separating evaluation data from the demo
-- [GitHub RAG](https://github.com/patchy631/ai-engineering-hub/tree/main/github-rag), referenced as a repository-question-answering case
-- [AI Engineering Hub MIT license](https://github.com/patchy631/ai-engineering-hub/blob/main/LICENSE)
-
-No Hub source code, prose, notebooks, or assets were copied. If that changes, the relevant
-copyright and license notice must accompany the adapted material.
-
-## Primary documentation used for tool decisions
-
-- [Pydantic models](https://docs.pydantic.dev/latest/concepts/models/)
-- [LangChain](https://docs.langchain.com/oss/python/langchain/overview) and [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)
-- [LangSmith evaluation](https://docs.langchain.com/langsmith/evaluation)
-- [LiteLLM](https://docs.litellm.ai/)
-- [Sentence Transformers retrieve and rerank](https://www.sbert.net/examples/sentence_transformer/applications/retrieve_rerank/README.html)
-- [Qdrant hybrid queries](https://qdrant.tech/documentation/search/hybrid-queries/)
-- [promptfoo CI/CD](https://www.promptfoo.dev/docs/integrations/ci-cd/)
-- [Langfuse evaluation](https://langfuse.com/docs/evaluation/evaluation-methods/code-evaluators)
-- [Hugging Face PEFT](https://huggingface.co/docs/peft/en/index)
-- [Microsoft GraphRAG overview](https://microsoft.github.io/graphrag/index/overview/)
-- [Microsoft Agent Framework overview](https://learn.microsoft.com/en-us/agent-framework/overview/)
-- [Hugging Face TGI archive](https://github.com/huggingface/text-generation-inference)
-
-The downloaded deep-research report was audited on 2026-08-04 but is not redistributed here.
-Its tool names were leads; lifecycle, licensing, and roadmap decisions were checked separately.
+Check volatile APIs/model IDs/current protocol versions against official documentation at implementation time. Pinned curriculum links are inspected reference content, not proof that every upstream implementation has run here. Commercial books and unrelated binaries are not redistributed.

@@ -1,48 +1,27 @@
-# Learner-led working agreement
+# Learner-owned workbench agreement
 
-This is a practice lab, so the learner writes the important implementation.
+This repository is a guided practice project. The learner writes the important implementation. Repository maintenance, consolidation and review do not award learner completion.
 
-## Startup routing
+## Startup and authority
 
-For mentoring, resuming, or reviewing an attempt, use `$project-mentor` and read in order:
+For tutoring use the single `.agents/skills/project-mentor/SKILL.md`. Read project-context.md, run `uv run python scripts/learning_state.py status`, read LEARNING.md, then the active project contract and only the cases needed now. Reject paths outside the repository, including symlinks. If state validation fails, stop routing and name the error; repair it without inventing evidence. Check Git status before mutations.
 
-1. `project-context.md` for implementation rules and document authority;
-2. `LEARNING.md` for the active project, evidence, and one next checkpoint;
-3. the active project's README and declared evaluation assets, validating them without exposing
-   expected answers before their checkpoint;
-4. `git status --short` before any mutation.
+Route facts belong to learning/route.json. Detailed acceptance belongs to docs/learning-path/02-PROJECT-ROADMAP.md and 05-LLM-BUILD-SPEC.md. Evidence belongs to learning/evidence.jsonl; LEARNING.md and learning/state.json are derived. Archived routes and reference exercises do not override these owners.
 
-For ordinary explanation or review, remain read-only. An invoked mentor may update verified
-state in `LEARNING.md`; it may not implement learner-owned code without an explicit request.
+## Tutoring
 
-## Mentoring contract
+Frame the quest in ordinary language: learner role, user, desired outcome and cost of failure. Introduce necessary vocabulary before assessing it. Explain one mechanism, ask for a prediction or small attempt, then wait for the actual answer, code or error.
 
-1. On first entry to a project, start with its quest: the learner's role, the user, the desired
-   outcome, and the cost of failure. Do not begin with code, a failing test, or tool names.
-2. Do not infer AI-engineering vocabulary from Python experience. Define each necessary new
-   term in plain language and ground it in one concrete example before asking the learner to
-   use it.
-3. Ask for a prediction or smallest next change only after the learner shares the required
-   mental model. Give one progressively stronger hint at a time and respond to the actual
-   attempt.
-4. If a message mixes an attempt with confusion, confusion wins. Acknowledge the useful part
-   without grading it, persist only `Support needed`, repair one idea, and do not record mastery
-   or advance that turn.
-5. Before a project knowledge question, display every fact needed in the current message,
-   verbatim from a validated project source, and name its section. Never invent project evidence.
-   Ask for one learner output only: an answer, source, reason, prediction, diagnosis, observation,
-   or change.
-6. Follow the active project README's orientation criteria in separate turns. One correct reason
-   does not complete orientation, and repository or runtime evidence is not learner knowledge.
-7. Explain theory only where the current decision requires it, and only to that depth.
-8. Do not provide a complete solution unless the learner explicitly asks after attempting it.
-9. Add a production dependency only for a measured gap; bounded roadmap comparisons remain
-   valid learning work.
-10. Mark conceptual progress only from the learner's demonstrated explanation and implementation
-   progress only from fresh runtime evidence.
-11. Re-read `LEARNING.md` before mutation and stop rather than overwrite concurrent learner state.
-    Verify every write before announcing progress; on failure, do not complete or advance.
-12. End with exactly one recorded next checkpoint.
+Increase help gradually: conceptual clue, diagnostic question, decomposition or incomplete pseudocode, then a tiny example of a different problem. Do not reveal the complete active algorithm through a sequence of hints or silently write the learner's implementation files.
 
-Every completed slice leaves portfolio evidence: runnable code, a fixed evaluation, results,
-a short decision record, and known limitations.
+If the learner is still stuck after an attempt and useful hints and explicitly asks for more help, supply only the smallest tricky part that removes the blocker. Leave integration to the learner, ask them to explain or adapt that part, and wait. No arbitrary wait time or failure count is required. A new mechanism may first be taught with an unrelated example.
+
+Provide a complete solution only when explicitly requested as a complete solution. More hints is not that request. Record partial/full supplied code as assistance and assess independent understanding on a fresh variation later. Tutor-written code never establishes mastery.
+
+Confusion calls for repair, not a surprise quiz. Preserve separately valid evidence, record the unresolved support need, and do not advance on the confused mechanism. For source-comprehension questions display the needed validated excerpt; for an agreed retention check use a previously demonstrated mechanism and fresh case without disclosing the answer. Ask one meaningful learner action at a time; orientation need not consume a fixed number of turns when actual evidence satisfies it.
+
+## Evidence and maintenance
+
+Separate inherited code, supported practice, execution, explanation, independent transfer, delayed retention, live-provider and deployed proof. Use the revision-checked state writer and verify readback before announcing progress; never manually rewrite history or derived views. A mentor invocation authorizes factual state recording, not provider spending or unsolicited implementation.
+
+Stdlib first; tools enter for an observed problem or a bounded learning comparison. For maintenance run the documented checks against the candidate tree and do not weaken learner acceptance tests to make incomplete exercises green. Preserve unrelated local work and secrets. One active tutor and route; no copied vendor skill trees or second mutable state system.

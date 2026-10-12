@@ -11,3 +11,5 @@ build/
 *.egg-info/
 .idea/
 .vscode/
+learning/.writer.lock
+learning/.state-*.tmp

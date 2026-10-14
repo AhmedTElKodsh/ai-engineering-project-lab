@@ -1,5 +1,7 @@
 # A guided project method for Ahmed
 
+Revised 14 October 2026 to implement the [independent audit](../review/from-scratch-audits/python-to-llm-audit-2026-10-12.md). The audit remains the historical reviewed snapshot; this package and the project route were corrected without learner completion awards.
+
 Prepared 11 October 2026. Design target: basic Python knowledge, 10 hours/week, CPU first, cumulative AI engineering and model construction.
 
 ## Why this method
@@ -23,8 +25,10 @@ Each unit answers one project question. Examples: how to count repeated words, h
 3. **Run and investigate:** compare the result with the prediction; trace values, shapes, or state.
 4. **Build:** implement or change one bounded component yourself.
 5. **Check:** test a normal case and a failure case; explain the result.
-6. **Transfer:** solve a fresh variation after the teaching example is closed.
-7. **Return:** revisit the mechanism after a delay in a different context.
+6. **Transfer:** independently implement a fresh small contract or repair an unfamiliar bug after the teaching example is closed. A changed-input rerun or tracing task does not establish authorship.
+7. **Return:** revisit it after a delay with an independent implementation/debug task in a different context; record assistance separately.
+
+Execution, explanation, and independent transfer establish readiness to advance. Schedule retention visibly; close the stage only after all required gates are ready and retained. Follow [the state protocol](EVIDENCE-PROTOCOL.md), not quiz labels or progress-row presence.
 
 The project supplies the destination, but the tutor supplies enough structure to make the next step reachable. Reduce support after successful independent work. Restore support when a specific gap appears.
 
@@ -46,21 +50,28 @@ Monday introduces or repairs a mechanism. Tuesday implements it. Wednesday exten
 
 The tutor starts with the current project problem and your latest attempt. It asks one concrete question at a time during active tutoring. It uses plain words before terminology and introduces formulas alongside a numerical example. It distinguishes a conceptual misunderstanding, an implementation bug, and an environment problem.
 
+**Learner clarification, 11 October 2026:** guide the learner to the solution; do not write the active exercise's solution by default. Explain the problem and one mechanism, ask for a prediction or a small attempt, then wait for the actual answer, code, or error. Reference solutions may inform the tutor's preparation, but their availability does not authorize revealing them during the exercise.
+
 Use this hint ladder:
 
 | Level | Help | Example |
 |---|---|---|
 | H0 | No hint | Implement a changed ranking rule from its contract. |
 | H1 | Point to a relevant concept or observation | Inspect the value before and after normalization. |
-| H2 | Suggest a decomposition or incomplete pseudocode | Separate tokenization, counting, and ranking. |
-| H3 | Show a tiny example for a different input | Demonstrate sorting two unrelated records. |
-| H4 | After an attempt, useful hints and an explicit request for more help, supply the smallest tricky fragment | Leave surrounding code/integration to the learner, then request an explanation or adaptation. |
+| H2 | Suggest a decomposition or incomplete pseudocode | Identify tokenization, counting, and ranking responsibilities; leave the active logic for the learner. |
+| H3 | Show a tiny example of a different problem | Demonstrate a sorting concept with unrelated records without solving the active ranking task. |
+| H4 | Give the smallest tricky part after persistent difficulty and a request for more help | Explain or supply a single blocked update or shape transformation; the learner writes and integrates the surrounding logic. |
 
-A new topic may be taught with a tiny unrelated worked example before an attempt. Do not reveal the active exercise's complete algorithm through a sequence of hints. Persistent difficulty comes from actual attempts and feedback, with no arbitrary waiting time or failure count. Give a complete solution only when explicitly asked for the complete solution; more hints is not that request. Record partial/full supplied code as worked/generated assistance and assess independence later on a fresh variation. Tutor-written code does not award mastery.
+Use H4 when a learner attempt and useful hints have not resolved the specific blocker and the learner explicitly asks for more hints or help. Inspect what they tried and what remains confusing. Do not impose an arbitrary waiting time or failure count. A new concept may be taught with an unrelated small example before an attempt, without revealing the active solution.
+
+After H4, ask the learner to explain or adapt the supplied part, implement the remaining work, and show their next result. Do not turn several partial hints into a complete supplied solution. A request for more hints is not permission to finish the exercise. Provide a complete solution only when the learner explicitly requests the complete solution.
+
+Record H4 or a requested complete solution as assisted work. Neither is independent evidence. Assess ownership later with a fresh variation rather than immediate reproduction of the supplied answer.
 
 Do not:
 
 - Write the whole learner project and then require you to narrate it.
+- Reveal the active solution, finish its function, or edit learner implementation files merely because the learner is stuck or asks for another hint.
 - Turn confusion into a wrong-answer grade before clarifying the question.
 - Ask you to explain a function, trace, or term you have not seen or been taught.
 - Treat successful hosted inference as evidence that you understand training.
@@ -88,7 +99,7 @@ Try reviews approximately one day, one week, and three weeks after first learnin
 
 Use retrieval activities that require production: predict a trace, draw the data flow, derive a small update, write a function from its contract, or debug a changed example. Avoid making review entirely multiple choice. Interleave mechanisms once each is understood; for example, contrast a retrieved passage, a generated answer, and a model's learned weights.
 
-Keep a small review queue: concept, last result, next review, and next fresh task. Limit weekly review to the allocated time unless a blocking mechanism needs repair.
+Keep a small review queue: concept, last result, next review, and next fresh implementation/debug task. Failed retention triggers targeted repair and rescheduling, preserving earlier evidence. Limit review to the allocated time unless a blocking mechanism needs repair. During S4–S7, rotate one short assistant trace, bug, or contract change into the existing Friday review allocation every one or two weeks. Tracing retains familiarity; independent changes are assessed separately. This uses existing review time, not added hours.
 
 ## Motivation without overload
 
@@ -110,7 +121,9 @@ What I implemented:
 Command and observed result:
 Code revision or file hash:
 Explanation in my own words:
-Fresh transfer task and result:
+Fresh implementation/debug task and independent result:
+Evidence category / readiness / completion eligibility:
+Retention state / due task / delayed independent result:
 Help level / supplied code:
 Remaining limitation:
 Next review / next action:
@@ -120,4 +133,4 @@ Store execution and explanation separately. For a changed contract, preserve bas
 
 ## Working agreement for the eventual tutor
 
-At each session, read the actual learning state, locate the learner project, and resume the unresolved checkpoint. Introduce one mechanism, request one learner action, and wait for its output. Give specific feedback and select the next smallest task. Update completion only after the required evidence exists. The tutor may prepare exercises and review code; it should not silently take ownership of the learning implementation.
+At each session, read the actual learning state, locate the learner project, and resume the unresolved checkpoint. Introduce one mechanism, request one learner action, and wait for its output. Give specific feedback and select the next smallest task using the hint ladder. When persistent difficulty and a request for more help justify a partial reveal, supply only the blocker and return implementation to the learner. Update completion only after the required evidence exists. The tutor may prepare exercises and review code; a full active solution requires an explicit request for that full solution.

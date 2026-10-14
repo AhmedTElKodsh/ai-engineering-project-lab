@@ -1,5 +1,7 @@
 # Specification for the learner-built language model
 
+Revised 14 October 2026 to implement the [independent audit](../review/from-scratch-audits/python-to-llm-audit-2026-10-12.md). The audit remains the historical reviewed snapshot; this package and the project route were corrected without learner completion awards.
+
 Prepared 11 October 2026. Required scope for S5–S8. This is a build contract, not implemented code or a claim of current model performance.
 
 ## Outcome and authorship
@@ -30,7 +32,7 @@ A full tensor-autograd engine and manually derived gradients for every transform
 6. **Output:** final normalization and projection to vocabulary logits. Weight tying is optional and its parameter-count effect must be reported.
 7. **Loss:** mean negative log probability of target tokens, with explicit padding/mask policy if variable-length batches are introduced.
 8. **Training:** seeded initialization, learning rate, batch/step limits, gradient reset, backward/update, periodic validation, finite-value checks.
-9. **Checkpoint:** model, optimizer, configuration, tokenizer identity, split identity, step, and relevant random-generator states.
+9. **Checkpoint:** model, optimizer, configuration, tokenizer identity, split identity, step, and relevant random-generator states. Shuffled/streaming batch paths also preserve the permutation/cursor; save scheduler state only if a scheduler exists. Resume testing must exercise the actual next-batch path in a fresh process.
 10. **Inference:** evaluation mode, bounded autoregressive loop, greedy and temperature/top-k sampling, context policy, EOS handling, decode policy.
 11. **Report:** architecture, training conditions, compatible baselines, held-out metrics, samples, failure analysis, and limitations.
 
@@ -86,10 +88,10 @@ BPE byte fallback supports arbitrary UTF-8 input for encoding. Arbitrary sampled
 | V1 token/data integrity | Round trip under declared normalization; deterministic ties in merges; save/load equivalence; byte/Unicode cases; boundaries and splits preserved. |
 | V2 architectural correctness | Correct shapes and finite outputs; masked future probabilities zero; changing future tokens leaves earlier logits unchanged in evaluation mode. |
 | V3 actual learning | Nonzero finite gradients; parameters change after update; one-batch loss can be reduced substantially on a tiny fixture. |
-| V4 lifecycle | Save/load logits agree in evaluation mode; interrupted/resumed run agrees with controlled reference within a declared tolerance; generation terminates. |
+| V4 lifecycle | Save/load logits agree in evaluation mode; fresh-process interrupted/resumed run agrees with controlled reference within a declared tolerance, including next batch IDs/cursor and updates; generation terminates. |
 | V5 generalization | Held-out loss compared with frozen baselines; final test untouched during tuning; sample failures and limitations reported. |
 | V6 learner understanding | Independently trace token IDs → logits → loss → update → next token and repair one new bug. |
-| V7 adaptation literacy | Fine-tune a copy of the tiny model on prompt/response examples with prompt loss masked; verify a small LoRA projection's frozen/trainable parameter behavior; compare held-out behavior with the base model. |
+| V7 adaptation literacy | Fine-tune a copy using actual loss-derived updates with the first response target correctly aligned; skip/reject and count zero-supervised-target cases after truncation. Verify initial LoRA/base output equality with one random/one zero factor, then actual adapter updates while base weights stay fixed; compare held-out behavior. |
 
 Use at least five meaningful tests in each substantial learner module; tests for masks, shared gradients, token boundaries, and checkpoint mismatch are more useful than tests that merely repeat a formula from the implementation.
 
@@ -117,3 +119,27 @@ Use owned checkpoint files only; do not load arbitrary serialized files from str
 - A short independent explanation of one training step and one generated token.
 
 The model card describes a small language model trained by the learner. S8 includes bounded SFT and LoRA mechanism experiments for breadth; adaptation is adopted in the assistant only if the comparison supports it. A later scale-up, larger-model instruction tuning, RLHF experiment, or accelerated implementation is a new scope decision with its own evidence and budget.
+
+## Exact scoring and reference boundaries
+
+For the first byte-baseline comparison, insert document-boundary controls as context
+and score original content targets once under a fixed context/stride. Include final
+partial tails; exclude padding and inserted BOS/EOS controls from the main score.
+EOS prediction may be a separate reported diagnostic. Overlapping windows may supply
+context but cannot double-count targets. Sum actual target NLL and divide by the
+number of scored targets; perplexity is exp of that mean under the same tokenizer.
+Test unequal counts: NLL totals 2/1 target and 12/3 targets combine to 14/4 = 3.5.
+For BPB, use content-only NLL/(ln(2) * scored original UTF-8 content bytes), after
+the declared normalization and excluding controls/padding. Save target masks/policy.
+
+[The corrected tokenizer reference](../../from-scratch/lessons/10-llms-from-scratch/02-building-a-tokenizer/docs/en.md)
+covers Unicode with stdlib and explicit control opt-in; it remains an educational
+reference without persistence/production-vocabulary compatibility. The mapped
+pretraining backward is partial, SFT updates are random noise, and evaluation
+probabilities are simulated. Exclude those routines from numerical training parity
+and model-quality claims. For the learner graph, verify gradient/update participation
+for every intended trainable module and both tied-embedding uses. Qualification of
+a reference is not a claim that its algorithm was repaired into complete training.
+
+Structural readiness can precede successful held-out quality and delayed retention.
+Record these independently under [the evidence protocol](EVIDENCE-PROTOCOL.md).

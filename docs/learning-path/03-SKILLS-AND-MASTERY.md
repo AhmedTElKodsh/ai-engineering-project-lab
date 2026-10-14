@@ -1,10 +1,12 @@
 # Skills, diagnostic, and mastery evidence
 
+Revised 14 October 2026 to implement the [independent audit](../review/from-scratch-audits/python-to-llm-audit-2026-10-12.md). The audit remains the historical reviewed snapshot; this package and the project route were corrected without learner completion awards.
+
 Prepared 11 October 2026. This is an exercise specification, not completed assessment evidence.
 
 ## Diagnose Python inside the first project
 
-Use a 60–90 minute first attempt, followed by guided repair and a fresh check in S0. These are low-stakes observations; basic knowledge is self-reported, and precise gaps have not yet been demonstrated.
+Use up to 60–90 minutes for selective probes, guided repair, and a fresh check in S0. Start with counting/explanation and one file or mutation probe. Stop sampling when a specific blocking mechanism appears and teach that gap. Observe the remaining areas in the project slices that actually use them; unsampled means unobserved, not failed or mastered. These are low-stakes observations; basic knowledge is self-reported, and precise gaps have not yet been demonstrated.
 
 | Task | Observe | A useful starting criterion |
 |---|---|---|
@@ -18,7 +20,7 @@ Use a 60–90 minute first attempt, followed by guided repair and a fresh check 
 
 Record each task as **independent**, **with hints**, or **needs a bridge**, with the actual result. Do not turn the total into a course level or award progress automatically.
 
-If the task is unfamiliar rather than a known skill, introduce a small teaching example first. The assessment variation must differ from that example. A syntax lookup is allowed; assistant-authored implementation is not independent evidence.
+If the task is unfamiliar rather than a known skill, introduce a small teaching example of a different problem first. Guide the active task through the [hint ladder](01-LEARNING-METHOD.md#tutor-conduct). Only after an attempt, useful hints, persistent difficulty, and a request for more help may the tutor supply the smallest tricky part. A complete solution requires an explicit request for a complete solution. Record partial or full supplied code as assistance. The assessment variation must differ from the teaching example or supplied part. A syntax lookup is allowed; assistant-authored implementation is not independent evidence.
 
 ## Python progression
 
@@ -75,9 +77,9 @@ Use these levels per capability, rather than one score for the whole learner:
 | M3: Independent transfer | Solve a fresh small task or diagnose a new fault without supplied code. |
 | M4: Retained and integrated | Repeat after a delay and use the mechanism in another project context. |
 
-Stage readiness requires M3 on the introduced mechanisms and permits advancement while delayed retention is pending. Retained completion requires M4 on a different fresh case without AI hints/solutions, with disclosed syntax references allowed. Assisted integration or revisit is useful practice and does not by itself grant retained completion. Exact expectations are agreed before the exit task; the rubric is a local mentoring policy, not a standardized qualification.
+**Ready to advance** requires execution, explanation, and M3 on introduced mechanisms. **Retention pending** carries a dated fresh task; **retained** requires a delayed independent implementation/debug pass for M4. **Closed** requires every core/live/quality gate ready and retained. A failed review triggers targeted repair while other reachable work continues. A complicated integration may still need help. Exact expectations are agreed before the exit task; the rubric is a local mentoring policy, not a standardized qualification.
 
-## Critical exit tasks
+## Critical readiness tasks and separate closure obligations
 
 | Gate | Fresh learner task | Failure that prevents closure |
 |---|---|---|
@@ -108,10 +110,12 @@ Date / project / slice:
 Learner-authored artifact and revision:
 Execution command and result:
 Explanation:
-Fresh transfer task:
+Fresh independent implementation/debug task:
+Evidence category / eligible scope:
+Ready to advance / retention pending / retained / closed:
 Support supplied:
 Retention check date/result:
 Remaining gap and next action:
 ```
 
-The original six-question lesson quizzes remain part of full curriculum lesson completion. Project transfer tasks add evidence; they do not alter quiz schemas or automatically close mapped lessons.
+[The evidence protocol](EVIDENCE-PROTOCOL.md) stores attempts, exact-stage focused bridges, eligible full completion, and project gates separately. A quiz is recognition evidence and cannot assign M3/M4, erase skills, select a different numeric phase, or trigger automatic whole-phase restart. New-input behavior alone does not establish independent construction. The original six-question lesson quizzes remain part of full curriculum lesson completion. Project transfer tasks add evidence; they do not alter quiz schemas or automatically close mapped lessons.

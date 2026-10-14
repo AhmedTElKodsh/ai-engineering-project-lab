@@ -1,0 +1,1701 @@
+diff --git a/phases/00-setup-and-tooling/01-dev-environment/code/verify.ts b/phases/00-setup-and-tooling/01-dev-environment/code/verify.ts
+index 8166d6fc..41e50722 100644
+--- a/phases/00-setup-and-tooling/01-dev-environment/code/verify.ts
++++ b/phases/00-setup-and-tooling/01-dev-environment/code/verify.ts
+@@ -2,7 +2,9 @@
+ // Probes node version + presence of git, python3, cargo, deno; mirrors verify.py.
+ // Refs: https://nodejs.org/api/process.html  https://nodejs.org/api/child_process.html
+ 
++// @ts-ignore -- Node built-in; this dependency-free setup lesson omits @types/node.
+ import { execFileSync } from "node:child_process";
++// @ts-ignore -- Node built-in; this dependency-free setup lesson omits @types/node.
+ import process from "node:process";
+ 
+ type ProbeFn = () => { ok: boolean; detail?: string };
+diff --git a/phases/00-setup-and-tooling/07-docker-for-ai/code/Dockerfile b/phases/00-setup-and-tooling/07-docker-for-ai/code/Dockerfile
+index 038020e6..bb87788d 100644
+--- a/phases/00-setup-and-tooling/07-docker-for-ai/code/Dockerfile
++++ b/phases/00-setup-and-tooling/07-docker-for-ai/code/Dockerfile
+@@ -42,6 +42,9 @@ RUN python -m pip install --no-cache-dir \
+     accelerate \
+     safetensors
+ 
++RUN python -m pip install --no-cache-dir --ignore-installed blinker \
++    && python -m pip install --no-cache-dir flask
++
+ WORKDIR /workspace
+ 
+ VOLUME ["/workspace", "/models"]
+diff --git a/phases/00-setup-and-tooling/07-docker-for-ai/docs/en.md b/phases/00-setup-and-tooling/07-docker-for-ai/docs/en.md
+index 14966bb1..eeb8bded 100644
+--- a/phases/00-setup-and-tooling/07-docker-for-ai/docs/en.md
++++ b/phases/00-setup-and-tooling/07-docker-for-ai/docs/en.md
+@@ -216,8 +216,8 @@ Run it:
+ 
+ ```bash
+ docker run --rm -it --gpus all \
+-    -v $(pwd):/workspace \
+-    -v ~/models:/models \
++    -v "$(pwd):/workspace" \
++    -v "$HOME/models:/models" \
+     ai-dev python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')"
+ ```
+ 
+@@ -225,8 +225,8 @@ Run Jupyter inside the container:
+ 
+ ```bash
+ docker run --rm -it --gpus all \
+-    -v $(pwd):/workspace \
+-    -v ~/models:/models \
++    -v "$(pwd):/workspace" \
++    -v "$HOME/models:/models" \
+     -p 8888:8888 \
+     ai-dev jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+ ```
+diff --git a/phases/00-setup-and-tooling/09-data-management/outputs/prompt-data-helper.md b/phases/00-setup-and-tooling/09-data-management/outputs/prompt-data-helper.md
+index 32dff713..c6867bea 100644
+--- a/phases/00-setup-and-tooling/09-data-management/outputs/prompt-data-helper.md
++++ b/phases/00-setup-and-tooling/09-data-management/outputs/prompt-data-helper.md
+@@ -1,3 +1,4 @@
++
+ ---
+ name: prompt-data-helper
+ description: Find and load the right dataset for an AI/ML task
+diff --git a/phases/10-llms-from-scratch/02-building-a-tokenizer/code/main.py b/phases/10-llms-from-scratch/02-building-a-tokenizer/code/main.py
+index 15700ae0..f1c8548f 100644
+--- a/phases/10-llms-from-scratch/02-building-a-tokenizer/code/main.py
++++ b/phases/10-llms-from-scratch/02-building-a-tokenizer/code/main.py
+@@ -1,28 +1,27 @@
++# Lesson: phases/10-llms-from-scratch/02-building-a-tokenizer/docs/en.md
++# Educational byte-BPE reference, implemented with Python standard library.
++# Source: https://arxiv.org/abs/1508.07909 (subword merge algorithm).
++# All valid Unicode text is covered; normalization is an explicit choice.
++# Control spellings remain ordinary text unless explicitly allowed by the caller.
+ import re
+ import unicodedata
+ from collections import Counter
+ 
+-
+-try:
+-    import regex
+-    GPT2_PATTERN = regex.compile(
+-        r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+-    )
+-except ImportError:
+-    GPT2_PATTERN = re.compile(
+-        r"""'(?:[sdmt]|ll|ve|re)| ?[a-zA-Z]+| ?[0-9]+| ?[^\s\w]+|\s+(?!\S)|\s+"""
+-    )
++# Unicode-aware and exhaustive; this is not the GPT-2 production regex.
++PRETOKEN_PATTERN = re.compile(
++    r"'(?:[sdmt]|ll|ve|re)| ?[^\W\d_]+| ?\d+| ?[^\s\w]+|\w+|\s+"
++)
+ 
+ 
+ def pre_tokenize(text):
+-    return [match.group() for match in GPT2_PATTERN.finditer(text)]
++    return [match.group() for match in PRETOKEN_PATTERN.finditer(text)]
+ 
+ 
+ def apply_merge(byte_seq, pair, new_id):
+     merged = []
+     i = 0
+     while i < len(byte_seq):
+-        if i < len(byte_seq) - 1 and byte_seq[i] == pair[0] and byte_seq[i + 1] == pair[1]:
++        if i + 1 < len(byte_seq) and (byte_seq[i], byte_seq[i + 1]) == pair:
+             merged.append(new_id)
+             i += 2
+         else:
+@@ -34,19 +33,21 @@ def apply_merge(byte_seq, pair, new_id):
+ class SpecialTokenHandler:
+     def __init__(self):
+         self.special_tokens = {}
+-        self.pattern = None
+ 
+     def add_token(self, token_str, token_id):
+         self.special_tokens[token_str] = token_id
+-        escaped = [re.escape(t) for t in sorted(self.special_tokens.keys(), key=len, reverse=True)]
+-        self.pattern = re.compile("|".join(escaped))
+ 
+-    def split_with_specials(self, text):
+-        if not self.pattern:
++    def split_with_specials(self, text, allowed_special=()):
++        if isinstance(allowed_special, (str, bytes)):
++            raise ValueError("allowed_special must be a collection of registered spellings")
++        allowed = set(allowed_special)
++        if not allowed <= self.special_tokens.keys():
++            raise ValueError("allowed_special contains an unregistered control spelling")
++        if not allowed:
+             return [(text, False)]
+-        parts = []
+-        last_end = 0
+-        for match in self.pattern.finditer(text):
++        pattern = re.compile("|".join(re.escape(t) for t in sorted(allowed, key=lambda t: (-len(t), t))))
++        parts, last_end = [], 0
++        for match in pattern.finditer(text):
+             if match.start() > last_end:
+                 parts.append((text[last_end:match.start()], False))
+             parts.append((match.group(), True))
+@@ -57,202 +58,92 @@ class SpecialTokenHandler:
+ 
+ 
+ class ProductionTokenizer:
+-    def __init__(self):
++    """Historical class name; educational BPE, not production-model compatible.
++
++    Default normalization is identity. NFC/NFKC change the declared round trip.
++    Valid Unicode strings encode to UTF-8; arbitrary sampled bytes decode with
++    replacement. Invalid token IDs fail rather than disappearing silently.
++    """
++    def __init__(self, normalization=None):
++        if normalization not in {None, "NFC", "NFKC"}:
++            raise ValueError("normalization must be None, NFC, or NFKC")
++        self.normalization = normalization
+         self.merges = {}
+         self.vocab = {i: bytes([i]) for i in range(256)}
+         self.special_handler = SpecialTokenHandler()
+         self.next_id = 256
+ 
+     def normalize(self, text):
+-        return unicodedata.normalize("NFKC", text)
++        return unicodedata.normalize(self.normalization, text) if self.normalization else text
+ 
+     def train(self, text, num_merges):
+-        text = self.normalize(text)
+-        chunks = pre_tokenize(text)
+-        chunk_bytes = [list(chunk.encode("utf-8")) for chunk in chunks]
+-
++        if type(num_merges) is not int or num_merges < 0:
++            raise ValueError("num_merges must be a non-negative integer")
++        if self.merges or self.special_handler.special_tokens:
++            raise ValueError("train a fresh tokenizer before registering controls")
++        chunks = [list(chunk.encode("utf-8")) for chunk in pre_tokenize(self.normalize(text))]
+         for i in range(num_merges):
+-            pairs = Counter()
+-            for seq in chunk_bytes:
+-                for j in range(len(seq) - 1):
+-                    pairs[(seq[j], seq[j + 1])] += 1
++            pairs = Counter(pair for seq in chunks for pair in zip(seq, seq[1:]))
+             if not pairs:
+                 break
+-            best = max(pairs, key=pairs.get)
++            best = min(pairs, key=lambda pair: (-pairs[pair], pair))
+             new_id = self.next_id
+             self.next_id += 1
+             self.merges[best] = new_id
+             self.vocab[new_id] = self.vocab[best[0]] + self.vocab[best[1]]
+-            chunk_bytes = [apply_merge(seq, best, new_id) for seq in chunk_bytes]
+-            merged_display = self.vocab[new_id]
+-            print(f"Merge {i + 1}: ({best[0]}, {best[1]}) -> {new_id} = {merged_display}")
++            chunks = [apply_merge(seq, best, new_id) for seq in chunks]
++            print(f"Merge {i + 1}: {best} -> {new_id} = {self.vocab[new_id]}")
+ 
+     def add_special_token(self, token_str):
++        if not isinstance(token_str, str) or not token_str or self.normalize(token_str) != token_str:
++            raise ValueError("a control spelling must be non-empty and unchanged by normalization")
++        if token_str in self.special_handler.special_tokens:
++            return self.special_handler.special_tokens[token_str]
+         token_id = self.next_id
+         self.next_id += 1
+         self.special_handler.add_token(token_str, token_id)
+         self.vocab[token_id] = token_str.encode("utf-8")
+         return token_id
+ 
+-    def encode(self, text):
+-        text = self.normalize(text)
+-        parts = self.special_handler.split_with_specials(text)
++    def encode(self, text, *, allowed_special=()):
+         all_ids = []
+-        for part_text, is_special in parts:
++        for part_text, is_special in self.special_handler.split_with_specials(self.normalize(text), allowed_special):
+             if is_special:
+                 all_ids.append(self.special_handler.special_tokens[part_text])
+             else:
+                 for chunk in pre_tokenize(part_text):
+-                    byte_seq = list(chunk.encode("utf-8"))
++                    seq = list(chunk.encode("utf-8"))
+                     for pair, new_id in self.merges.items():
+-                        byte_seq = apply_merge(byte_seq, pair, new_id)
+-                    all_ids.extend(byte_seq)
++                        seq = apply_merge(seq, pair, new_id)
++                    all_ids.extend(seq)
+         return all_ids
+ 
++    def get_token_bytes(self, token_id):
++        if type(token_id) is not int or token_id not in self.vocab:
++            raise ValueError(f"invalid token ID: {token_id!r}")
++        return self.vocab[token_id]
++
+     def decode(self, ids):
+-        byte_parts = []
+-        for token_id in ids:
+-            if token_id in self.vocab:
+-                byte_parts.append(self.vocab[token_id])
+-        return b"".join(byte_parts).decode("utf-8", errors="replace")
++        return b"".join(self.get_token_bytes(token_id) for token_id in ids).decode("utf-8", errors="replace")
+ 
+     def vocab_size(self):
+         return len(self.vocab)
+ 
+-    def get_token_bytes(self, token_id):
+-        return self.vocab.get(token_id, b"<?>")
+-
+-
+-def demo_byte_encoding():
+-    print("=" * 60)
+-    print("Byte-Level Encoding")
+-    print("=" * 60)
+-
+-    texts = [
+-        ("English", "hello"),
+-        ("Chinese", "你好"),
+-        ("Japanese", "こんにちは"),
+-        ("Emoji", "🔥🌍"),
+-        ("Mixed", "hello你好🔥"),
+-        ("Code", "def f(x):"),
+-    ]
+-
+-    for label, text in texts:
+-        b = list(text.encode("utf-8"))
+-        print(f"{label:10s}: {len(text):2d} chars -> {len(b):2d} bytes -> {b[:16]}{'...' if len(b) > 16 else ''}")
+-
+-
+-def demo_pre_tokenization():
+-    print("\n" + "=" * 60)
+-    print("Pre-Tokenization (GPT-2 Regex)")
+-    print("=" * 60)
+-
+-    texts = [
+-        "Hello, world! Don't stop.",
+-        "def train(model, data):",
+-        "The price is $3.14 per unit.",
+-        "  multiple   spaces   here  ",
+-    ]
+-
+-    for text in texts:
+-        chunks = pre_tokenize(text)
+-        print(f"\n'{text}'")
+-        print(f"  -> {chunks}")
+-
+-
+-def demo_full_tokenizer():
+-    print("\n" + "=" * 60)
+-    print("Training Production Tokenizer")
+-    print("=" * 60)
+-
+-    corpus = (
+-        "The quick brown fox jumps over the lazy dog. "
+-        "The quick brown fox runs through the forest. "
+-        "Machine learning models process natural language. "
+-        "Machine learning transforms how we build software. "
+-        "Deep learning models need large datasets to train. "
+-        "def train(model, data): return model.fit(data) "
+-        "def predict(model, x): return model(x) "
+-        "for i in range(100): print(i) "
+-    )
+-
+-    tok = ProductionTokenizer()
+-    tok.train(corpus, num_merges=50)
+-
+-    bos_id = tok.add_special_token("<|begin|>")
+-    eos_id = tok.add_special_token("<|end|>")
+-    user_id = tok.add_special_token("<|user|>")
+-    asst_id = tok.add_special_token("<|assistant|>")
+-
+-    print(f"\nVocab size: {tok.vocab_size()}")
+-    print(f"Special tokens: <|begin|>={bos_id}, <|end|>={eos_id}, <|user|>={user_id}, <|assistant|>={asst_id}")
+-
+-    print("\n" + "=" * 60)
+-    print("Encoding Tests")
+-    print("=" * 60)
+-
+-    test_texts = [
+-        "The quick brown fox.",
+-        "你好世界 Hello World",
+-        "🔥🌍🚀",
+-        "def foo(x): return x + 1",
+-        "<|begin|><|user|>Hello<|end|>",
+-        "Machine learning is powerful.",
+-    ]
+-
+-    for text in test_texts:
+-        ids = tok.encode(text)
+-        decoded = tok.decode(ids)
+-        raw_bytes = len(text.encode("utf-8"))
+-        print(f"\nInput:   {text}")
+-        print(f"IDs:     {ids[:20]}{'...' if len(ids) > 20 else ''}")
+-        print(f"Tokens:  {len(ids)} (from {raw_bytes} bytes, ratio: {len(ids)/raw_bytes:.2f})")
+-        print(f"Decoded: {decoded}")
+-        roundtrip = "PASS" if decoded == text else "FAIL"
+-        print(f"Round-trip: {roundtrip}")
+-
+-
+-def demo_tiktoken_comparison():
+-    try:
+-        import tiktoken
+-    except ImportError:
+-        print("\ntiktoken not installed. Run: pip install tiktoken")
+-        return
+-
+-    print("\n" + "=" * 60)
+-    print("Comparison with tiktoken (GPT-4)")
+-    print("=" * 60)
+-
+-    enc = tiktoken.get_encoding("cl100k_base")
+-
+-    test_paragraph = "Machine learning is powerful. 机器学习很强大。 L'apprentissage automatique est puissant. 🤖💪"
+-
+-    tokens = enc.encode(test_paragraph)
+-    pieces = [enc.decode([t]) for t in tokens]
+-
+-    print(f"\nInput: {test_paragraph}")
+-    print(f"GPT-4 tokens ({len(tokens)}): {pieces}")
+-
+-    languages = [
+-        ("English", "The quick brown fox jumps over the lazy dog."),
+-        ("Chinese", "快速的棕色狐狸跳过了懒狗。"),
+-        ("Japanese", "素早い茶色のキツネが怠け者の犬を飛び越えた。"),
+-        ("Korean", "빠른 갈색 여우가 게으른 개를 뛰어넘었다."),
+-        ("Code", "def quicksort(arr): return sorted(arr)"),
+-        ("Emoji", "🎉🎊🎈🎁🎂🎄🎃🎆🎇✨"),
+-    ]
+ 
+-    print(f"\n{'Language':<10} {'Chars':<6} {'Tokens':<7} {'Fertility':<10}")
+-    print("-" * 35)
+-    for label, text in languages:
+-        toks = enc.encode(text)
+-        words = len(text.split())
+-        fertility = len(toks) / max(words, 1)
+-        print(f"{label:<10} {len(text):<6} {len(toks):<7} {fertility:<10.2f}")
++def demo():
++    print("Educational stdlib byte-BPE; identity normalization; explicit controls")
++    tokenizer = ProductionTokenizer()
++    tokenizer.train("Python teaches. مرحبا بالعالم. café 你好 Python teaches.", 12)
++    control = tokenizer.add_special_token("<|end|>")
++    for text in ("مرحبا", "你好", "café", "Arabic عربي 中文 🙂 _42\r\n", "", "<|end|>"):
++        ids = tokenizer.encode(text)
++        restored = tokenizer.decode(ids)
++        assert restored == text
++        assert control not in ids
++        print(f"Input={text!r}; IDs={ids}; round-trip=PASS")
++    print(f"Explicit control opt-in: {tokenizer.encode('<|end|>', allowed_special={'<|end|>'})}")
++    print("Compiled-tokenizer comparison deferred: stays stdlib-first for educational clarity.")
+ 
+ 
+ if __name__ == "__main__":
+-    demo_byte_encoding()
+-    demo_pre_tokenization()
+-    demo_full_tokenizer()
+-    demo_tiktoken_comparison()
++    demo()
+diff --git a/phases/10-llms-from-scratch/02-building-a-tokenizer/docs/en.md b/phases/10-llms-from-scratch/02-building-a-tokenizer/docs/en.md
+index 8e2f007b..c5d246a5 100644
+--- a/phases/10-llms-from-scratch/02-building-a-tokenizer/docs/en.md
++++ b/phases/10-llms-from-scratch/02-building-a-tokenizer/docs/en.md
+@@ -1,6 +1,6 @@
+ # Building a Tokenizer from Scratch
+ 
+-> Lesson 01 gave you a toy. This lesson gives you a weapon.
++> Preserve every Unicode character, then compress UTF-8 bytes without confusing quoted text with controls.
+ 
+ **Type:** Build
+ **Languages:** Python
+@@ -9,439 +9,137 @@
+ 
+ ## Learning Objectives
+ 
+-- Build a production-grade BPE tokenizer that handles Unicode, whitespace normalization, and special tokens
+-- Implement byte-level fallback so the tokenizer can encode any input (including emoji, CJK, and code) without unknown tokens
+-- Add pre-tokenization regex patterns that split text at word boundaries before applying BPE merges
+-- Train a custom tokenizer on a corpus and evaluate its compression ratio against tiktoken on multilingual text
++- Trace a Unicode string through UTF-8 bytes, pre-tokenization, merges, and decoding.
++- Build a deterministic byte-BPE tokenizer with standard-library tools.
++- Preserve Arabic, CJK, accents, emoji, whitespace, and literal control spellings.
++- Separate ordinary text encoding from explicit structural-token insertion.
++- Verify normalization, merge ties, invalid IDs, and round-trip boundaries.
+ 
+ ## The Problem
+ 
+-Your BPE tokenizer from Lesson 01 works on English text. Now throw Japanese at it. Or emoji. Or Python code with mixed tabs and spaces.
++An ASCII-only word pattern can silently omit Arabic or Chinese characters. A
++256-byte vocabulary cannot recover characters that pre-tokenization discarded.
++Likewise, recognizing a control spelling in every input lets quoted ordinary text
++acquire structure the caller did not authorize.
+ 
+-It breaks.
+-
+-Not because BPE is wrong -- because the implementation is incomplete. A production tokenizer handles raw bytes in any encoding, normalizes Unicode before splitting, manages special tokens that never get merged, chains pre-tokenization with subword splitting, and does all of this fast enough to not bottleneck a training pipeline processing 15 trillion tokens.
+-
+-GPT-2's tokenizer has 50,257 tokens. Llama 3 has 128,256. GPT-4 has roughly 100,000. These are not toy numbers. The merge tables behind those vocabularies were trained on hundreds of gigabytes of text, and the surrounding machinery -- normalization, pre-tokenization, special token injection, chat template formatting -- is what separates a tokenizer that handles "hello world" from one that handles the entire internet.
+-
+-You are going to build that machinery.
++This educational implementation fixes both boundaries. It is not compatible with
++GPT-2 or any production tokenizer's exact vocabulary/pattern. The historical
++ProductionTokenizer class name remains for compatibility; its scope is a small
++stdlib byte-BPE reference. Persistence, large-corpus performance, and production
++chat-template compatibility need separate implementation and tests.
+ 
+ ## The Concept
+ 
+-### The Full Pipeline
+-
+-A production tokenizer is not one algorithm. It is a pipeline of five stages, each solving a different problem.
+-
+-```mermaid
+-graph LR
+-    A[Raw Text] --> B[Normalize]
+-    B --> C[Pre-Tokenize]
+-    C --> D[BPE Merge]
+-    D --> E[Special Tokens]
+-    E --> F[Token IDs]
+-
+-    style A fill:#1a1a2e,stroke:#e94560,color:#fff
+-    style B fill:#1a1a2e,stroke:#e94560,color:#fff
+-    style C fill:#1a1a2e,stroke:#e94560,color:#fff
+-    style D fill:#1a1a2e,stroke:#e94560,color:#fff
+-    style E fill:#1a1a2e,stroke:#e94560,color:#fff
+-    style F fill:#1a1a2e,stroke:#e94560,color:#fff
+-```
+-
+-Each stage has a specific job:
+-
+-| Stage | What It Does | Why It Matters |
+-|-------|-------------|----------------|
+-| Normalize | NFKC Unicode, lowercase optional, strip accents optional | "fi" ligature (U+FB01) becomes "fi" (two chars). Without this, same word gets different tokens. |
+-| Pre-Tokenize | Split text into chunks before BPE | Prevents BPE from merging across word boundaries. "the cat" should never produce a token "e c". |
+-| BPE Merge | Apply learned merge rules to byte sequences | The core compression. Turns raw bytes into subword tokens. |
+-| Special Tokens | Inject [BOS], [EOS], [PAD], chat template markers | These tokens have fixed IDs. They never participate in BPE merges. The model needs them for structure. |
+-| ID Mapping | Convert token strings to integer IDs | The model sees integers, not strings. |
+-
+-### Byte-Level BPE
+-
+-Lesson 01's tokenizer operated on UTF-8 bytes. That was the right call. But we skipped something important: what happens when those bytes are not valid UTF-8?
+-
+-Byte-level BPE solves this by treating every possible byte value (0-255) as a valid token. Your base vocabulary is exactly 256 entries. Any file -- text, binary, corrupted -- can be tokenized without producing an unknown token.
+-
+-GPT-2 added a trick: map each byte to a printable Unicode character so the vocabulary stays human-readable. Byte 0x20 (space) becomes the character "G" in their mapping. This is purely cosmetic. The algorithm does not care.
+-
+-The real power: byte-level BPE handles every language on earth. Chinese characters are 3 UTF-8 bytes each. Japanese can be 3-4 bytes. Arabic, Devanagari, emoji -- all just byte sequences. The BPE algorithm finds patterns in these byte sequences exactly the same way it finds patterns in English ASCII bytes.
+-
+-### Pre-Tokenization
+-
+-Before BPE touches your text, you need to split it into chunks. This prevents the merge algorithm from creating tokens that span word boundaries.
+-
+-GPT-2 uses a regex pattern to split text:
+-
+-```
+-'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+
+-```
+-
+-This pattern splits on contractions ("don't" becomes "don" + "'t"), words with optional leading spaces, numbers, punctuation, and whitespace. The leading space is kept attached to the word -- so "the cat" becomes [" the", " cat"], not ["the", " ", "cat"].
+-
+-Llama uses SentencePiece, which skips regex entirely. It treats the raw byte stream as one long sequence and lets the BPE algorithm figure out the boundaries. This is simpler but gives BPE more freedom to create cross-word tokens.
+-
+-The choice matters. GPT-2's regex prevents the tokenizer from learning that "the" at the end of one word and "the" at the start of the next should merge. SentencePiece allows it, which sometimes produces more efficient compression but less interpretable tokens.
+-
+-### Special Tokens
+-
+-Every production tokenizer reserves token IDs for structural markers:
+-
+-| Token | Purpose | Used By |
+-|-------|---------|---------|
+-| `[BOS]` / `<s>` | Beginning of sequence | Llama 3, GPT |
+-| `[EOS]` / `</s>` | End of sequence | All models |
+-| `[PAD]` | Padding for batch alignment | BERT, T5 |
+-| `[UNK]` | Unknown token (byte-level BPE eliminates this) | BERT, WordPiece |
+-| `<\|im_start\|>` | Chat message boundary start | ChatGPT, Qwen |
+-| `<\|im_end\|>` | Chat message boundary end | ChatGPT, Qwen |
+-| `<\|user\|>` | User turn marker | Llama 3 |
+-| `<\|assistant\|>` | Assistant turn marker | Llama 3 |
+-
+-Special tokens are never split by BPE. They are matched exactly before the merge algorithm runs, replaced with their fixed ID, and the surrounding text is tokenized normally.
+-
+-### Chat Templates
+-
+-This is where most people get confused and most implementations break.
+-
+-When you send messages to a chat model, the API accepts a list of messages:
+-
+-```
+-[
+-  {"role": "system", "content": "You are helpful."},
+-  {"role": "user", "content": "Hello"},
+-  {"role": "assistant", "content": "Hi there!"}
+-]
+-```
+-
+-The model does not see JSON. It sees a flat token sequence. The chat template converts messages into that flat sequence using special tokens. Every model does this differently:
+-
+-```
+-Llama 3:
+-<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+-
+-You are helpful.<|eot_id|><|start_header_id|>user<|end_header_id|>
+-
+-Hello<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+-
+-Hi there!<|eot_id|>
+-
+-ChatGPT:
+-<|im_start|>system
+-You are helpful.<|im_end|>
+-<|im_start|>user
+-Hello<|im_end|>
+-<|im_start|>assistant
+-Hi there!<|im_end|>
+-```
+-
+-Get the template wrong and the model produces garbage. It was trained on one exact format. Any deviation -- a missing newline, a swapped token, an extra space -- puts the input outside the training distribution.
+-
+-### Speed
+-
+-Python is too slow for production tokenization.
+-
+-tiktoken (OpenAI) is written in Rust with Python bindings. HuggingFace tokenizers is also Rust. SentencePiece is C++. These achieve 10-100x speedups over pure Python.
+-
+-For perspective: tokenizing 15 trillion tokens for Llama 3 pre-training at 1 million tokens per second (fast Python) would take 174 days. At 100 million tokens per second (Rust), it takes 1.7 days.
+-
+-You are building in Python to understand the algorithm. In production, you would use a compiled implementation and only touch the Python wrapper.
+-
+-```figure
+-weight-tying
+-```
++~~~mermaid
++flowchart LR
++    A[Unicode text] --> B[Declared normalization]
++    B --> C[Exhaustive Unicode chunks]
++    C --> D[UTF-8 bytes]
++    D --> E[Ordered BPE merges]
++    E --> F[Ordinary IDs]
++    G[Explicit allowed controls] --> F
++~~~
++
++The vocabulary begins with all byte values 0–255. Byte sequences merge within
++pre-tokenized chunks. Choose the most frequent adjacent pair; break frequency
++ties by the numeric pair. Apply learned merges in their recorded order. This is
++an original educational implementation of the merge mechanism described in
++[the primary subword paper](https://arxiv.org/abs/1508.07909).
++
++Normalization is a contract. The default is identity, so valid Unicode text
++round-trips exactly. Optional NFC/NFKC changes the expected round trip to the
++declared normalized text. Arbitrary sampled bytes can be invalid UTF-8; decoding
++uses replacement characters. Unknown, negative, non-integer, and boolean IDs are
++rejected rather than silently dropped.
+ 
+ ## Build It
+ 
+-### Step 1: Byte-Level Encoding
+-
+-The foundation. Convert any string into a sequence of bytes, map each byte to a printable character for display, and reverse the process.
++### Unicode coverage
+ 
+-```python
+-def bytes_to_tokens(text):
+-    return list(text.encode("utf-8"))
++Python's standard-library re uses Unicode word-character semantics. Use an
++exhaustive pattern, including underscores/word characters and whitespace, and
++test that joining its matches restores the whole input:
+ 
+-def tokens_to_text(token_bytes):
+-    return bytes(token_bytes).decode("utf-8", errors="replace")
+-```
+-
+-Test on multilingual text to see the byte counts:
+-
+-```python
+-texts = [
+-    ("English", "hello"),
+-    ("Chinese", "你好"),
+-    ("Emoji", "🔥"),
+-    ("Mixed", "hello你好🔥"),
+-]
+-
+-for label, text in texts:
+-    b = bytes_to_tokens(text)
+-    print(f"{label}: {len(text)} chars -> {len(b)} bytes -> {b}")
+-```
+-
+-"hello" is 5 bytes. "你好" is 6 bytes (3 per character). The fire emoji is 4 bytes. The byte-level tokenizer does not care what language it is. Bytes are bytes.
+-
+-### Step 2: Pre-Tokenizer with Regex
+-
+-Split text into chunks using the GPT-2 regex pattern. Each chunk gets tokenized independently by BPE.
+-
+-```python
++~~~python
+ import re
+ 
+-try:
+-    import regex
+-    GPT2_PATTERN = regex.compile(
+-        r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+-    )
+-except ImportError:
+-    GPT2_PATTERN = re.compile(
+-        r"""'(?:[sdmt]|ll|ve|re)| ?[a-zA-Z]+| ?[0-9]+| ?[^\s\w]+|\s+(?!\S)|\s+"""
+-    )
+-
+-def pre_tokenize(text):
+-    return [match.group() for match in GPT2_PATTERN.finditer(text)]
+-```
+-
+-The `regex` module supports Unicode property escapes (`\p{L}` for letters, `\p{N}` for numbers). The standard library `re` module does not, so we fall back to ASCII character classes. For production multilingual tokenizers, install `regex`.
+-
+-Try it:
+-
+-```python
+-print(pre_tokenize("Hello, world! Don't stop."))
+-# [' Hello', ',', ' world', '!', " Don", "'t", ' stop', '.']
+-```
+-
+-The leading space stays attached to the word. Contractions split at the apostrophe. Punctuation becomes its own chunk. BPE will never merge tokens across these boundaries.
+-
+-### Step 3: BPE on Byte Sequences
+-
+-The core algorithm from Lesson 01, but now operating on pre-tokenized chunks independently.
+-
+-```python
+-from collections import Counter
+-
+-def get_byte_pairs(chunks):
+-    pairs = Counter()
+-    for chunk in chunks:
+-        byte_seq = list(chunk.encode("utf-8"))
+-        for i in range(len(byte_seq) - 1):
+-            pairs[(byte_seq[i], byte_seq[i + 1])] += 1
+-    return pairs
+-
+-def apply_merge(byte_seq, pair, new_id):
+-    merged = []
+-    i = 0
+-    while i < len(byte_seq):
+-        if i < len(byte_seq) - 1 and byte_seq[i] == pair[0] and byte_seq[i + 1] == pair[1]:
+-            merged.append(new_id)
+-            i += 2
+-        else:
+-            merged.append(byte_seq[i])
+-            i += 1
+-    return merged
+-```
+-
+-### Step 4: Special Token Handling
+-
+-Special tokens need exact matching and fixed IDs. They bypass BPE entirely.
+-
+-```python
+-class SpecialTokenHandler:
+-    def __init__(self):
+-        self.special_tokens = {}
+-        self.pattern = None
+-
+-    def add_token(self, token_str, token_id):
+-        self.special_tokens[token_str] = token_id
+-        escaped = [re.escape(t) for t in sorted(self.special_tokens.keys(), key=len, reverse=True)]
+-        self.pattern = re.compile("|".join(escaped))
+-
+-    def split_with_specials(self, text):
+-        if not self.pattern:
+-            return [(text, False)]
+-        parts = []
+-        last_end = 0
+-        for match in self.pattern.finditer(text):
+-            if match.start() > last_end:
+-                parts.append((text[last_end:match.start()], False))
+-            parts.append((match.group(), True))
+-            last_end = match.end()
+-        if last_end < len(text):
+-            parts.append((text[last_end:], False))
+-        return parts
+-```
+-
+-### Step 5: Full Tokenizer Class
+-
+-Chain everything together: normalize, split on special tokens, pre-tokenize, BPE merge, map to IDs.
+-
+-```python
+-import unicodedata
+-
+-class ProductionTokenizer:
+-    def __init__(self):
+-        self.merges = {}
+-        self.vocab = {i: bytes([i]) for i in range(256)}
+-        self.special_handler = SpecialTokenHandler()
+-        self.next_id = 256
+-
+-    def normalize(self, text):
+-        return unicodedata.normalize("NFKC", text)
+-
+-    def train(self, text, num_merges):
+-        text = self.normalize(text)
+-        chunks = pre_tokenize(text)
+-        chunk_bytes = [list(chunk.encode("utf-8")) for chunk in chunks]
+-
+-        for i in range(num_merges):
+-            pairs = Counter()
+-            for seq in chunk_bytes:
+-                for j in range(len(seq) - 1):
+-                    pairs[(seq[j], seq[j + 1])] += 1
+-            if not pairs:
+-                break
+-            best = max(pairs, key=pairs.get)
+-            new_id = self.next_id
+-            self.next_id += 1
+-            self.merges[best] = new_id
+-            self.vocab[new_id] = self.vocab[best[0]] + self.vocab[best[1]]
+-            chunk_bytes = [apply_merge(seq, best, new_id) for seq in chunk_bytes]
+-
+-    def add_special_token(self, token_str):
+-        token_id = self.next_id
+-        self.next_id += 1
+-        self.special_handler.add_token(token_str, token_id)
+-        self.vocab[token_id] = token_str.encode("utf-8")
+-        return token_id
+-
+-    def encode(self, text):
+-        text = self.normalize(text)
+-        parts = self.special_handler.split_with_specials(text)
+-        all_ids = []
+-        for part_text, is_special in parts:
+-            if is_special:
+-                all_ids.append(self.special_handler.special_tokens[part_text])
+-            else:
+-                for chunk in pre_tokenize(part_text):
+-                    byte_seq = list(chunk.encode("utf-8"))
+-                    for pair, new_id in self.merges.items():
+-                        byte_seq = apply_merge(byte_seq, pair, new_id)
+-                    all_ids.extend(byte_seq)
+-        return all_ids
+-
+-    def decode(self, ids):
+-        byte_parts = []
+-        for token_id in ids:
+-            if token_id in self.vocab:
+-                byte_parts.append(self.vocab[token_id])
+-        return b"".join(byte_parts).decode("utf-8", errors="replace")
+-
+-    def vocab_size(self):
+-        return len(self.vocab)
+-```
+-
+-### Step 6: Multilingual Test
+-
+-The real test. Throw English, Chinese, emoji, and code at it.
+-
+-```python
+-corpus = (
+-    "The quick brown fox jumps over the lazy dog. "
+-    "The quick brown fox runs through the forest. "
+-    "Machine learning models process natural language. "
+-    "Deep learning transforms how we build software. "
+-    "def train(model, data): return model.fit(data) "
+-    "def predict(model, x): return model(x) "
++PRETOKEN_PATTERN = re.compile(
++    r"'(?:[sdmt]|ll|ve|re)| ?[^\W\d_]+| ?\d+| ?[^\s\w]+|\w+|\s+"
+ )
+ 
+-tok = ProductionTokenizer()
+-tok.train(corpus, num_merges=50)
+-
+-bos = tok.add_special_token("<|begin|>")
+-eos = tok.add_special_token("<|end|>")
+-
+-test_texts = [
+-    "The quick brown fox.",
+-    "你好世界",
+-    "Hello 🌍 World",
+-    "def foo(x): return x + 1",
+-    f"<|begin|>Hello<|end|>",
+-]
++def pre_tokenize(text):
++    return [match.group() for match in PRETOKEN_PATTERN.finditer(text)]
++~~~
+ 
+-for text in test_texts:
+-    ids = tok.encode(text)
+-    decoded = tok.decode(ids)
+-    print(f"Input:   {text}")
+-    print(f"Tokens:  {len(ids)} ids")
+-    print(f"Decoded: {decoded}")
+-    print()
+-```
++This pattern is deliberately simpler than production patterns. Combining marks
++can form their own chunks but must never disappear. See [Python's official
++Unicode regex rules](https://docs.python.org/3/library/re.html).
+ 
+-Chinese characters produce 3 bytes each. The emoji produces 4 bytes. None of these crash the tokenizer. None produce unknown tokens. That is the power of byte-level BPE.
++### Byte vocabulary and deterministic merges
+ 
+-## Use It
++Inspect [the reference implementation](../code/main.py). Every ordinary chunk is
++UTF-8 encoded before merges. Training uses a fresh tokenizer before controls are
++registered; a negative/non-integer merge count fails. Empty training data retains
++the byte baseline. Both training and ordinary encoding exclude reserved control
++IDs. Registering a spelling twice returns the same control ID.
+ 
+-### Comparing Real Tokenizers
++### Ordinary text versus controls
+ 
+-Load the actual tokenizers from Llama 3, GPT-4, and Mistral. See how each handles the same multilingual paragraph.
++The ordinary encode method treats a registered spelling as ordinary bytes by
++default. The allowed_special argument recognizes only named registered spellings.
++Unknown allowance entries fail; a string is not an allowance collection. A caller
++can also deliberately insert a registered ID in a governed sequence builder.
++Ordinary retrieved/user text must not receive that permission.
+ 
+-```python
+-import tiktoken
++~~~python
++tokenizer = ProductionTokenizer()
++eos_id = tokenizer.add_special_token("<|end|>")
++ordinary = tokenizer.encode("quoted <|end|>")
++assert eos_id not in ordinary
++assert tokenizer.decode(ordinary) == "quoted <|end|>"
++structural = tokenizer.encode("<|end|>", allowed_special={"<|end|>"})
++assert structural == [eos_id]
++~~~
+ 
+-gpt4_enc = tiktoken.get_encoding("cl100k_base")
++### Verify the boundary
+ 
+-test_paragraph = "Machine learning is powerful. 机器学习很强大。 L'apprentissage automatique est puissant. 🤖💪"
++The tests include Arabic, CJK, composed/decomposed accents, emoji, CRLF,
++underscores, empty text, byte fallback, deterministic ties, controls, and invalid
++IDs. Declared normalization is tested separately from identity round-trip.
+ 
+-tokens = gpt4_enc.encode(test_paragraph)
+-pieces = [gpt4_enc.decode([t]) for t in tokens]
+-print(f"GPT-4 ({len(tokens)} tokens): {pieces}")
+-```
++~~~console
++python -X utf8 main.py
++python -X utf8 -m unittest discover tests -v
++~~~
+ 
+-```python
+-from transformers import AutoTokenizer
++Run from this lesson's code directory with the actual selected interpreter.
+ 
+-llama_tok = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
+-mistral_tok = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-v0.1")
++## Use It
+ 
+-for name, tok in [("Llama 3", llama_tok), ("Mistral", mistral_tok)]:
+-    tokens = tok.encode(test_paragraph)
+-    pieces = tok.convert_ids_to_tokens(tokens)
+-    print(f"{name} ({len(tokens)} tokens): {pieces[:20]}...")
+-```
++Use Python's built-in UTF-8 conversion as the independent byte-baseline comparison:
+ 
+-You will see different token counts for the same text. Llama 3 with 128K vocabulary is more aggressive at merging common patterns. GPT-4 with 100K sits in the middle. Mistral with 32K produces more tokens but has a smaller embedding layer.
++~~~python
++text = "مرحبا 你好 café"
++baseline_ids = list(text.encode("utf-8"))
++assert bytes(baseline_ids).decode("utf-8") == text
++~~~
+ 
+-The tradeoff is always the same: larger vocabulary means shorter sequences but more parameters.
++Compare BPE compression on the same text and report vocabulary size and
++normalization. A compiled production-tokenizer comparison requires its actual
++vocabulary/template and a separately governed workspace. It is deferred here:
++**stays stdlib-first for educational clarity**. No regex or tiktoken installation
++is needed for the canonical demo.
+ 
+ ## Ship It
+ 
+-This lesson produces a prompt for building and debugging production tokenizers. See `outputs/prompt-tokenizer-builder.md`.
++Use the [tokenizer contract prompt](../outputs/prompt-tokenizer-builder.md) to
++review byte coverage, normalization, controls, IDs, and deterministic merges.
++It is a checklist, not evidence that a tokenizer is production ready.
+ 
+ ## Exercises
+ 
+-1. **Easy:** Add a `get_token_bytes(id)` method that shows the raw bytes for any token ID. Use it to inspect what your most common merged tokens actually represent.
+-2. **Medium:** Implement the Llama-style pre-tokenizer that splits on whitespace and digits but keeps leading spaces. Compare its vocabulary with the GPT-2 regex approach on the same corpus.
+-3. **Hard:** Add a chat template method that takes a list of `{"role": ..., "content": ...}` messages and produces the correct token sequence for the Llama 3 chat format. Test it against the HuggingFace implementation.
+-
+-## Key Terms
+-
+-| Term | What people say | What it actually means |
+-|------|----------------|----------------------|
+-| Byte-level BPE | "Tokenizer that works on bytes" | BPE with a base vocabulary of 256 byte values -- handles any input without unknown tokens |
+-| Pre-tokenization | "Splitting before BPE" | Regex or rule-based splitting that prevents BPE from merging across word boundaries |
+-| NFKC normalization | "Unicode cleanup" | Canonical decomposition followed by compatibility composition -- "fi" ligature becomes "fi", fullwidth "A" becomes "A" |
+-| Chat template | "How messages become tokens" | The exact format for converting a list of role/content messages into a flat token sequence -- model-specific and must match training format |
+-| Special tokens | "Control tokens" | Reserved token IDs that bypass BPE -- [BOS], [EOS], [PAD], chat markers -- matched exactly before merge |
+-| Fertility | "Tokens per word" | Ratio of output tokens to input words -- 1.3 for English in GPT-4, 2-3 for Korean, higher means wasted context |
+-| tiktoken | "OpenAI tokenizer" | Rust BPE implementation with Python bindings -- 10-100x faster than pure Python |
+-| Merge table | "The vocabulary" | Ordered list of byte-pair merges learned during training -- this IS the tokenizer's learned knowledge |
+-
+-## Further Reading
+-
+-- [OpenAI tiktoken source](https://github.com/openai/tiktoken) -- Rust BPE implementation used by GPT-3.5/4
+-- [HuggingFace tokenizers](https://github.com/huggingface/tokenizers) -- Rust tokenizer library supporting BPE, WordPiece, Unigram
+-- [Llama 3 paper (Meta, 2024)](https://arxiv.org/abs/2407.21783) -- details on 128K vocabulary and tokenizer training
+-- [SentencePiece (Kudo & Richardson, 2018)](https://arxiv.org/abs/1808.06226) -- language-agnostic tokenization
+-- [GPT-2 tokenizer source](https://github.com/openai/gpt-2/blob/master/src/encoder.py) -- the original byte-to-Unicode mapping
++- Explain why a full byte vocabulary cannot rescue a lossy pre-tokenizer.
++- Add an original Unicode fixture and a regression test.
++- Predict an ordinary versus explicitly allowed control encoding.
++- Compare identity and NFKC on a small fixture; report the changed contract.
++- Design persistence tests as later depth without assuming this reference saves a model.
+diff --git a/phases/10-llms-from-scratch/02-building-a-tokenizer/outputs/prompt-tokenizer-builder.md b/phases/10-llms-from-scratch/02-building-a-tokenizer/outputs/prompt-tokenizer-builder.md
+index 8b8a8890..183f4e9d 100644
+--- a/phases/10-llms-from-scratch/02-building-a-tokenizer/outputs/prompt-tokenizer-builder.md
++++ b/phases/10-llms-from-scratch/02-building-a-tokenizer/outputs/prompt-tokenizer-builder.md
+@@ -1,66 +1,20 @@
+ ---
+ name: prompt-tokenizer-builder
+-description: Build and debug production-quality tokenizers for LLM projects
+-version: 1.0.0
++description: Review an educational stdlib byte-BPE tokenizer contract
++version: 1.1.0
+ phase: 10
+ lesson: 2
+-tags: [tokenizer, bpe, byte-level, special-tokens, chat-template, multilingual]
++tags: [tokenizer, bpe, byte-level, special-tokens, multilingual]
+ ---
+ 
+-# Production Tokenizer Builder
++# Educational Tokenizer Contract
+ 
+-When building or debugging a tokenizer for an LLM project, follow this framework.
++1. Declare identity, NFC, or NFKC normalization. Default identity preserves valid Unicode exactly; normalized round-trip uses the declared normalized text.
++2. Verify exhaustive chunks: joining them preserves Arabic, CJK, combining marks, emoji, underscores, whitespace, and CRLF.
++3. Keep all 256 ordinary byte IDs. Use deterministic numeric-pair tie breaks; controls do not enter merges.
++4. Literal registered control spellings remain ordinary text unless the caller explicitly names them in allowed_special. Retrieved/user text must not acquire that permission.
++5. Reject unknown/negative/non-integer IDs. State replacement decoding for invalid generated UTF-8.
++6. Run stdlib tests and record the actual command/revision. The historical ProductionTokenizer name does not claim production compatibility.
++7. Add persistence tests separately if persistence is implemented; this reference does not save/load a model or reproduce a production vocabulary/template.
+ 
+-## Pipeline Checklist
+-
+-Every production tokenizer needs these five stages. If one is missing, you will hit edge cases in production.
+-
+-1. **Normalize** -- Apply NFKC Unicode normalization. This collapses ligatures ("fi" -> "fi"), normalizes fullwidth characters, and standardizes whitespace. Skip this and the same word gets different token IDs depending on how it was typed.
+-
+-2. **Pre-Tokenize** -- Split text into chunks before BPE. Use GPT-2's regex pattern for English-centric models. Use SentencePiece's raw-byte approach for multilingual models. The choice determines whether BPE can merge across word boundaries.
+-
+-3. **BPE Merge** -- Apply the learned merge table to byte sequences within each chunk. The merge table IS the tokenizer's learned knowledge. Everything else is plumbing.
+-
+-4. **Special Token Injection** -- Match special tokens exactly before BPE runs. [BOS], [EOS], [PAD], chat template markers get fixed IDs. They never participate in merges.
+-
+-5. **ID Mapping** -- Convert token strings to integers. The model sees integers only.
+-
+-## Debugging Tokenizer Issues
+-
+-**Symptom: model produces garbage on chat input**
+-- Check the chat template. Every model has a different format. Llama 3 uses `<|start_header_id|>` markers. ChatGPT uses `<|im_start|>` markers. A wrong template puts input outside the training distribution.
+-
+-**Symptom: non-English text uses too many tokens**
+-- Check fertility (tokens per word). Above 2.0 means the tokenizer wastes context window on that language. Solutions: retrain with more multilingual data, increase vocabulary size, or use SentencePiece with Unigram.
+-
+-**Symptom: numbers and arithmetic fail**
+-- Check how digits are tokenized. "1234" as one token means the model cannot do digit-level operations. Split digits individually during pre-tokenization.
+-
+-**Symptom: code tokens are inefficient**
+-- Check how indentation is handled. GPT-2's tokenizer wastes tokens on spaces. Codex and StarCoder use special indentation tokens (4 spaces = 1 token).
+-
+-## Vocabulary Size Decision
+-
+-- 32K tokens: single-language, small model, limited compute. Embedding layer is 32K * d_model parameters.
+-- 50K-64K: multilingual or code-heavy. Good balance for most projects.
+-- 100K+ (GPT-4, Llama 3): only with massive training data. Shorter sequences but 100K * d_model embedding parameters.
+-
+-For a 4096-dimensional model: 32K vocab = 131M embedding params. 128K vocab = 524M embedding params. That is 400M parameters just in the embedding layer.
+-
+-## Speed Requirements
+-
+-- Training data tokenization: use Rust-backed libraries (tiktoken, HuggingFace tokenizers). Pure Python is 10-100x slower.
+-- Inference tokenization: latency matters less (single sequence), but still use compiled implementations.
+-- Benchmark: tokenize 1GB of text and measure wall clock time. If it takes more than 60 seconds, switch to a Rust backend.
+-
+-## Chat Template Validation
+-
+-Before deploying any chat model, verify the template:
+-
+-1. Encode a known conversation with the tokenizer
+-2. Decode it back to text
+-3. Compare character-by-character with the expected format from the model's documentation
+-4. Pay attention to: newlines after header tokens, spaces before content, end-of-turn markers
+-5. Test edge cases: empty system message, very long user message, multiple assistant turns
+-
+-Getting the chat template wrong is the most common source of degraded chat model performance.
++Compiled comparisons require a separately governed workspace and are deferred here: **stays stdlib-first for educational clarity**. Do not install regex or tiktoken to repair missing characters. Use a tiny permitted corpus. Compression, explanation, independent construction, and retention remain distinct evidence.
+diff --git a/phases/10-llms-from-scratch/04-pre-training-mini-gpt/code/main.py b/phases/10-llms-from-scratch/04-pre-training-mini-gpt/code/main.py
+index 2239c754..304fca13 100644
+--- a/phases/10-llms-from-scratch/04-pre-training-mini-gpt/code/main.py
++++ b/phases/10-llms-from-scratch/04-pre-training-mini-gpt/code/main.py
+@@ -1,6 +1,14 @@
++# Lesson: phases/10-llms-from-scratch/04-pre-training-mini-gpt/docs/en.md
++# Educational reference; inspect REFERENCE_WARNING before comparisons.
++# Source: https://arxiv.org/abs/1706.03762 (transformer components).
++# Qualified demonstration only; not evidence of complete model training.
++# Canonical CPU demo is bounded; meaningful tests use the stdlib runner.
+ import numpy as np
+ 
+ 
++REFERENCE_STATUS = 'partial_backward'
++REFERENCE_WARNING = 'PARTIAL-BACKWARD EDUCATIONAL DEMONSTRATION: attention, first normalization, positions, and input-use tied-embedding gradients are omitted. Excluded from full-training correctness comparisons.'
++
+ class Embedding:
+     def __init__(self, vocab_size, embed_dim, max_seq_len):
+         self.token_embed = np.random.randn(vocab_size, embed_dim) * 0.02
+@@ -131,7 +139,7 @@ def cross_entropy_loss(logits, targets):
+     return loss
+ 
+ 
+-def generate(model, prompt_tokens, max_new_tokens=100, temperature=0.8):
++def generate(model, prompt_tokens, max_new_tokens=16, temperature=0.8):
+     tokens = list(prompt_tokens)
+     seq_len = model.embedding.pos_embed.shape[0]
+ 
+@@ -189,6 +197,8 @@ def ffn_backward(dy, x_in, ffn):
+ 
+ def train_mini_gpt(text, vocab_size=256, embed_dim=128, num_heads=4,
+                    num_layers=4, seq_len=64, num_steps=200, lr=3e-4):
++    """Partial backward demonstration; not a complete gradient implementation."""
++    print(REFERENCE_WARNING)
+     tokens = np.array(list(text.encode("utf-8")[:2048]))
+     model = MiniGPT(
+         vocab_size=vocab_size, embed_dim=embed_dim, num_heads=num_heads,
+@@ -346,13 +356,13 @@ The causal mask ensures autoregressive generation during training.
+ Pre-training on large text corpora teaches the model general language understanding.
+ Fine-tuning adapts the pre-trained model to specific downstream tasks."""
+ 
+-    print("Training Mini GPT")
++    print("Partial-backward CPU demonstration (not complete pretraining)")
+     print("=" * 65)
+-    model = train_mini_gpt(corpus, num_steps=200)
++    model = train_mini_gpt(corpus, embed_dim=32, num_heads=1, num_layers=1, seq_len=16, num_steps=5)
+ 
+     prompt = list("The transformer".encode("utf-8"))
+     print(f"\nPrompt: 'The transformer'")
+     print("Generating...")
+-    output_tokens = generate(model, prompt, max_new_tokens=100, temperature=0.8)
++    output_tokens = generate(model, prompt, max_new_tokens=16, temperature=0.8)
+     generated_text = bytes(output_tokens).decode("utf-8", errors="replace")
+     print(f"Generated: {generated_text}")
+diff --git a/phases/10-llms-from-scratch/04-pre-training-mini-gpt/docs/en.md b/phases/10-llms-from-scratch/04-pre-training-mini-gpt/docs/en.md
+index 86ca3b1c..2e95b47d 100644
+--- a/phases/10-llms-from-scratch/04-pre-training-mini-gpt/docs/en.md
++++ b/phases/10-llms-from-scratch/04-pre-training-mini-gpt/docs/en.md
+@@ -1,18 +1,27 @@
+-# Pre-Training a Mini GPT (124M Parameters)
++# Mini GPT Anatomy and Partial-Backward Demonstration
+ 
+-> GPT-2 Small has 124 million parameters. That's 12 transformer layers, 12 attention heads, and 768-dimensional embeddings. You can train it from scratch on a single GPU in a few hours. Most people never do this. They use pre-trained checkpoints. But if you don't train one yourself, you don't actually understand what's happening inside the model you're building products on.
++> Trace a small causal decoder on CPU; the Python update loop is a partial-backward educational demonstration, not complete pretraining.
+ 
+-**Type:** Build
+-**Languages:** Python (with numpy)
++**Type:** Reference
++**Languages:** Python, Rust
+ **Prerequisites:** Phase 10, Lessons 01-03 (Tokenizers, Building a Tokenizer, Data Pipelines)
+ **Time:** ~120 minutes
+ 
+ ## Learning Objectives
+ 
+-- Implement the full GPT-2 architecture (124M parameters) from scratch: token embeddings, positional embeddings, transformer blocks, and the language model head
+-- Train a GPT model on a text corpus using next-token prediction with cross-entropy loss
+-- Implement autoregressive text generation with temperature sampling and top-k/top-p filtering
+-- Monitor training loss curves and validate that the model learns coherent language patterns
++- Trace embeddings, causal attention, residual paths, and logits.
++- Calculate parameter counts for the stated educational architecture.
++- Check stable loss, future-token invariance, and bounded generation.
++- Verify isolated feed-forward and normalization derivatives numerically.
++- Distinguish partial updates from complete validated pretraining.
++
++## Python reference qualification
++
++**PARTIAL-BACKWARD EDUCATIONAL DEMONSTRATION: attention, first normalization, positions, and input-use tied-embedding gradients are omitted. Excluded from full-training correctness comparisons.**
++
++Verify gradient/update participation for every intended trainable module in the learner tensor graph, including both uses of tied embeddings. The CPU demo uses 1 block, width 32, and 5 partial steps. Rust is an existing architecture reference; it was not repaired or certified by this Python qualification.
++
++These boundaries qualify the reference; the incomplete/random/simulated routines have not been repaired into complete training or measurement.
+ 
+ ## The Problem
+ 
+@@ -24,7 +33,7 @@ There are 124,438,272 parameters in GPT-2 Small (with weight tying). Every singl
+ 
+ If you have never built this yourself, you are working with a black box. You can use the API. You can fine-tune. But when something goes wrong -- when the model hallucinates, when it repeats itself, when it refuses to follow instructions -- you have no mental model for *why*.
+ 
+-This lesson builds GPT-2 Small from scratch. Not in PyTorch. In numpy. Every matrix multiplication is visible. Every gradient is computed by your code. You will see exactly how 124 million numbers conspire to predict the next word.
++The forward component examples make matrix operations visible. The Python update routine is incomplete and cannot establish full-gradient pretraining.
+ 
+ ## The Concept
+ 
+@@ -93,7 +102,7 @@ For each token position, compute three vectors from the input:
+ - **Key (K)**: "What do I contain?"
+ - **Value (V)**: "What information do I carry?"
+ 
+-```
++```text
+ Q = input @ W_q    (768 -> 768)
+ K = input @ W_k    (768 -> 768)
+ V = input @ W_v    (768 -> 768)
+@@ -384,7 +393,7 @@ class MiniGPT:
+ 
+ Notice the weight tying: `logits = x @ self.embedding.token_embed.T`. The output projection reuses the token embedding matrix (transposed). This is not just a parameter-saving trick. It means the model uses the same vector space for understanding tokens (embeddings) and predicting them (output).
+ 
+-### Step 6: Training Loop
++### Step 6: Partial update loop (excluded from training parity)
+ 
+ For a real training run on 124M parameters, you would need a GPU and PyTorch. This training loop demonstrates the mechanics on a small model that runs in pure numpy. We use a tiny model (4 layers, 4 heads, 128 dims) to make it tractable.
+ 
+@@ -470,7 +479,7 @@ sampling-decoder
+ 
+ ## Use It
+ 
+-### Full Training and Generation Demo
++### Partial-update and generation demonstration
+ 
+ ```python
+ corpus = """The transformer architecture has revolutionized natural language processing.
+@@ -486,7 +495,7 @@ The causal mask ensures autoregressive generation during training.
+ Pre-training on large text corpora teaches the model general language understanding.
+ Fine-tuning adapts the pre-trained model to specific downstream tasks."""
+ 
+-model = train_mini_gpt(corpus, num_steps=200)
++model = train_mini_gpt(corpus, embed_dim=32, num_heads=1, num_layers=1, seq_len=16, num_steps=5)
+ 
+ prompt = list("The transformer".encode("utf-8"))
+ output_tokens = generate(model, prompt, max_new_tokens=100, temperature=0.8)
+diff --git a/phases/10-llms-from-scratch/04-pre-training-mini-gpt/outputs/prompt-gpt-architecture-analyzer.md b/phases/10-llms-from-scratch/04-pre-training-mini-gpt/outputs/prompt-gpt-architecture-analyzer.md
+index 9140d10c..c17e335d 100644
+--- a/phases/10-llms-from-scratch/04-pre-training-mini-gpt/outputs/prompt-gpt-architecture-analyzer.md
++++ b/phases/10-llms-from-scratch/04-pre-training-mini-gpt/outputs/prompt-gpt-architecture-analyzer.md
+@@ -7,6 +7,9 @@ lesson: 4
+ tags: [gpt, transformer, architecture, attention, kv-cache, scaling, pre-training]
+ ---
+ 
++
++**Reference boundary:** PARTIAL-BACKWARD EDUCATIONAL DEMONSTRATION: attention, first normalization, positions, and input-use tied-embedding gradients are omitted. Excluded from full-training correctness comparisons.
++
+ # GPT Architecture Analyzer
+ 
+ When evaluating a GPT-style model from a technical report, model card, or training log, use this framework to break down the architecture and identify design tradeoffs.
+diff --git a/phases/10-llms-from-scratch/06-instruction-tuning-sft/code/main.py b/phases/10-llms-from-scratch/06-instruction-tuning-sft/code/main.py
+index e5ad8f8d..b4d299b2 100644
+--- a/phases/10-llms-from-scratch/06-instruction-tuning-sft/code/main.py
++++ b/phases/10-llms-from-scratch/06-instruction-tuning-sft/code/main.py
+@@ -1,16 +1,27 @@
++# Lesson: phases/10-llms-from-scratch/06-instruction-tuning-sft/docs/en.md
++# Educational reference; inspect REFERENCE_WARNING before comparisons.
++# Source: https://arxiv.org/abs/1706.03762 (transformer components).
++# Qualified demonstration only; not evidence of complete model training.
++# Canonical CPU demo is bounded; meaningful tests use the stdlib runner.
+ import numpy as np
+-import sys
+-import os
++import importlib.util
++from pathlib import Path
+ 
+-sys.path.insert(
+-    0,
+-    os.path.join(
+-        os.path.dirname(__file__), "..", "..", "04-pre-training-mini-gpt", "code"
+-    ),
+-)
+-from main import MiniGPT, LayerNorm, FeedForward, MultiHeadAttention, TransformerBlock, Embedding
++_reference_path = Path(__file__).resolve().parents[2] / "04-pre-training-mini-gpt/code/main.py"
++_reference_spec = importlib.util.spec_from_file_location("partial_gpt_reference", _reference_path)
++_reference = importlib.util.module_from_spec(_reference_spec)
++_reference_spec.loader.exec_module(_reference)
++MiniGPT = _reference.MiniGPT
++LayerNorm = _reference.LayerNorm
++FeedForward = _reference.FeedForward
++MultiHeadAttention = _reference.MultiHeadAttention
++TransformerBlock = _reference.TransformerBlock
++Embedding = _reference.Embedding
+ 
+ 
++REFERENCE_STATUS = 'random_update_not_sft'
++REFERENCE_WARNING = 'RANDOM-UPDATE DEMONSTRATION, NOT SFT: dlogits does not drive the weight updates. Changed weights/samples do not establish supervised learning. Excluded from adaptation correctness comparisons.'
++
+ INSTRUCTION_DATA = [
+     {
+         "instruction": "What is the capital of France?",
+@@ -108,13 +119,15 @@ def masked_cross_entropy_loss(logits, targets, loss_mask):
+ 
+ 
+ def sft_train(model, dataset, num_epochs=2, lr=2e-5, seq_len=64):
++    """Retained random-perturbation example; NOT supervised fine-tuning."""
++    print(REFERENCE_WARNING)
+     formatted_data = []
+     for example in dataset:
+         tokens = tokenize_instruction_pair(example["instruction"], example["response"])
+         mask = create_loss_mask(tokens)
+         formatted_data.append((tokens, mask))
+ 
+-    print(f"SFT Training: {len(formatted_data)} examples, {num_epochs} epochs, lr={lr}")
++    print(f"Random-update demonstration: {len(formatted_data)} examples, {num_epochs} epochs, lr={lr}")
+     print(f"Total tokens: {sum(len(t) for t, _ in formatted_data):,}")
+     print()
+ 
+@@ -191,7 +204,7 @@ def generate_response(model, prompt_tokens, max_new_tokens=50, temperature=0.8):
+ 
+ 
+ def evaluate_instruction_following(model, instructions):
+-    print("Evaluating instruction following:")
++    print("Untrained fixture samples; not measured instruction following:")
+     print("-" * 50)
+ 
+     for instruction in instructions:
+@@ -242,6 +255,7 @@ def measure_forgetting(model, test_text, seq_len=64):
+ 
+ 
+ if __name__ == "__main__":
++    print(REFERENCE_WARNING)
+     np.random.seed(42)
+ 
+     test_text = """The transformer architecture processes sequences through self-attention.
+@@ -250,48 +264,48 @@ Residual connections and layer normalization stabilize deep networks.
+ The model learns to predict the next token given all previous tokens."""
+ 
+     print("=" * 70)
+-    print("INSTRUCTION TUNING (SFT) DEMO")
++    print("INSTRUCTION MASK / RANDOM-UPDATE DEMONSTRATION (NOT SFT)")
+     print("=" * 70)
+     print()
+ 
+     model = MiniGPT(
+         vocab_size=256,
+-        embed_dim=128,
+-        num_heads=4,
+-        num_layers=4,
++        embed_dim=32,
++        num_heads=1,
++        num_layers=1,
+         max_seq_len=128,
+-        ff_dim=512,
++        ff_dim=128,
+     )
+     print(f"Model: {model.count_parameters():,} parameters")
+-    print(f"Config: 4 layers, 4 heads, 128 dims (mini GPT from Lesson 04)")
++    print(f"Config: 1 layer, 1 head, 32 dims; untrained educational fixture")
+     print()
+ 
+-    print("PRE-SFT: Measuring base model loss on raw text")
++    print("BEFORE RANDOM UPDATES: untrained fixture loss on raw text")
+     base_loss = measure_forgetting(model, test_text)
+     print(f"  Base model loss: {base_loss:.4f}")
+     print()
+ 
+     print("=" * 70)
+-    print("SFT TRAINING")
++    print("RANDOM PERTURBATIONS, NOT LOSS-DERIVED TRAINING")
+     print("=" * 70)
+ 
+     model, losses = sft_train(
+-        model, INSTRUCTION_DATA, num_epochs=3, lr=2e-5, seq_len=128
++        model, INSTRUCTION_DATA, num_epochs=1, lr=2e-5, seq_len=128
+     )
+ 
+     print()
+-    print("POST-SFT: Measuring fine-tuned model loss on raw text")
++    print("AFTER RANDOM UPDATES: perturbed fixture loss on raw text")
+     sft_loss = measure_forgetting(model, test_text)
+-    print(f"  SFT model loss: {sft_loss:.4f}")
++    print(f"  Randomly perturbed fixture loss: {sft_loss:.4f}")
+     print(f"  Change: {((sft_loss - base_loss) / base_loss * 100):+.1f}%")
+     if abs(sft_loss - base_loss) / base_loss < 0.15:
+-        print("  Minimal forgetting (< 15% change)")
++        print("  Fixture change < 15%; this does not measure SFT forgetting")
+     else:
+-        print("  Significant forgetting detected")
++        print("  Fixture change >= 15%; this does not measure SFT forgetting")
+     print()
+ 
+     print("=" * 70)
+-    print("INSTRUCTION FOLLOWING EVALUATION")
++    print("UNTRAINED FIXTURE SAMPLES (NOT INSTRUCTION-FOLLOWING EVIDENCE)")
+     print("=" * 70)
+     print()
+ 
+@@ -323,7 +337,7 @@ The model learns to predict the next token given all previous tokens."""
+         print()
+ 
+     print("=" * 70)
+-    print("TRAINING LOSS CURVE")
++    print("LOSS VALUES DURING RANDOM PERTURBATIONS")
+     print("=" * 70)
+     print()
+ 
+diff --git a/phases/10-llms-from-scratch/06-instruction-tuning-sft/docs/en.md b/phases/10-llms-from-scratch/06-instruction-tuning-sft/docs/en.md
+index de402879..3e3cf176 100644
+--- a/phases/10-llms-from-scratch/06-instruction-tuning-sft/docs/en.md
++++ b/phases/10-llms-from-scratch/06-instruction-tuning-sft/docs/en.md
+@@ -1,22 +1,31 @@
+-# Instruction Tuning (SFT)
++# Instruction Tuning: Masking and a Qualified Reference
+ 
+-> A base model predicts the next token. That's it. It doesn't follow instructions, answer questions, or refuse harmful requests. SFT is the bridge between a token predictor and a useful assistant. Every model you've ever talked to -- Claude, GPT, Llama Chat -- went through this step.
++> Response-only loss needs correct target alignment and loss-derived updates; this Python reference demonstrates masks and random perturbations, not valid SFT.
+ 
+-**Type:** Build
+-**Languages:** Python (with numpy)
++**Type:** Reference
++**Languages:** Python
+ **Prerequisites:** Phase 10, Lesson 04 (Pre-Training a Mini GPT)
+ **Time:** ~90 minutes
+ 
+ ## Learning Objectives
+ 
+-- Implement supervised fine-tuning (SFT) that converts a base language model into an instruction-following assistant
+-- Format training data using chat templates with system, user, and assistant roles, and mask loss on non-assistant tokens
+-- Explain why SFT is necessary: base models continue text rather than answer questions
+-- Evaluate SFT quality by comparing base model vs fine-tuned model responses on a held-out instruction set
++- Explain response-only loss and shifted-target alignment.
++- Trace an instruction/response fixture and mask.
++- Verify prompt logits do not affect response-only loss.
++- Identify why random parameter perturbations are not supervised learning.
++- Design loss-derived update and held-out adaptation checks.
++
++## Python reference qualification
++
++**RANDOM-UPDATE DEMONSTRATION, NOT SFT: dlogits does not drive the weight updates. Changed weights/samples do not establish supervised learning. Excluded from adaptation correctness comparisons.**
++
++Use the validated learner graph for actual SFT. Score the first response target after shifting. After truncation, reject or explicitly skip zero-supervised-target examples with a counted reason; this reference returns a zero placeholder, which is not successful learning. Preserve all 256 byte IDs and reserve controls outside that range in the learner implementation. The ASCII-only sample display is not a multilingual decoder.
++
++These boundaries qualify the reference; the incomplete/random/simulated routines have not been repaired into complete training or measurement.
+ 
+ ## The Problem
+ 
+-You trained a model in Lesson 04. It can predict the next token given a sequence. Feed it "The transformer architecture" and it might continue with "has revolutionized natural language processing." That's impressive for a next-token predictor.
++After independently validated pretraining, a model can predict the next token. Lesson 04's partial Python backward path alone does not establish that achievement. Feed it "The transformer architecture" and it might continue with "has revolutionized natural language processing." That's impressive for a next-token predictor.
+ 
+ Now try this: feed it "What is the capital of France?" A base model doesn't answer "Paris." It continues the pattern. It might produce "What is the capital of Germany? What is the capital of Spain?" because it learned from documents that contain lists of questions. Or it might produce "is a question that many people ask" because that's a plausible next-token continuation. The model has no concept of *answering*. It only knows *continuing*.
+ 
+@@ -78,7 +87,7 @@ Supports multi-turn conversations. The "from" field uses "human" and "gpt" by co
+ 
+ **ChatML Format** (OpenAI, used by many open-source models):
+ 
+-```
++```text
+ <|im_start|>system
+ You are a helpful assistant.<|im_end|>
+ <|im_start|>user
+@@ -109,7 +118,7 @@ Why? Because you don't want the model to learn to *generate* instructions. You w
+ 
+ In practice, you create a loss mask: 1 for response tokens, 0 for instruction tokens. Multiply the per-token loss by this mask before averaging.
+ 
+-```
++```text
+ Tokens:    [SYS] You are helpful [USER] What is the capital? [ASST] Paris is the capital [EOS]
+ Loss mask:   0    0    0     0      0     0   0  0     0       1     1    1   1     1      1
+ ```
+@@ -311,7 +320,7 @@ def masked_cross_entropy_loss(logits, targets, loss_mask):
+ 
+ The denominator is `num_response_tokens`, not `seq_len`. If you divide by the total sequence length, longer instructions dilute the gradient signal. Dividing by response token count ensures equal weight per response token regardless of instruction length.
+ 
+-### Step 4: SFT Training Loop
++### Step 4: Random-update demonstration (not valid SFT)
+ 
+ Reuse the MiniGPT from Lesson 04. The training loop looks almost identical to pre-training, but with instruction formatting and masked loss.
+ 
+@@ -369,6 +378,7 @@ def sft_train(model, dataset, num_epochs=2, lr=2e-5, seq_len=64):
+                 dlogits = dlogits * mask_expanded / num_resp
+ 
+             for block in model.blocks:
++                # Invalid comparator: random perturbations do not use dlogits.
+                 block.ffn.W1 -= lr * np.random.randn(*block.ffn.W1.shape) * 0.01
+                 block.ffn.W2 -= lr * np.random.randn(*block.ffn.W2.shape) * 0.01
+                 block.ffn.b1 -= lr * np.random.randn(*block.ffn.b1.shape) * 0.01
+@@ -386,7 +396,7 @@ def sft_train(model, dataset, num_epochs=2, lr=2e-5, seq_len=64):
+ 
+ The learning rate is 2e-5, matching Llama 2 Chat. Compare this to the 3e-4 used in pre-training -- 15x smaller. The gradient is masked: instruction tokens produce zero gradient. Only response tokens push the weights.
+ 
+-### Step 5: Compare Base vs SFT Model
++### Step 5: Fixture samples (not learned instruction evidence)
+ 
+ The whole point of SFT is behavioral change. Let's measure it by checking how the model responds to instruction-formatted inputs versus raw text continuations.
+ 
+@@ -437,7 +447,7 @@ def evaluate_instruction_following(model, instructions):
+ 
+ On a tiny model with 8 examples, the responses won't be meaningful. That's expected. The important thing is the *structure*: the model learns to produce output after the response marker instead of continuing to generate more instructions.
+ 
+-### Step 6: Measure Catastrophic Forgetting
++### Step 6: Loss-comparison concept (not measured SFT forgetting)
+ 
+ Compare the model's next-token prediction ability before and after SFT. If SFT damages general capabilities, the loss on raw text will increase.
+ 
+@@ -474,7 +484,7 @@ In real fine-tuning, you would track this metric throughout training. If the raw
+ 
+ ## Use It
+ 
+-### Full SFT Pipeline Demo
++### Qualified mask/random-update demo
+ 
+ ```python
+ if __name__ == "__main__":
+@@ -504,7 +514,7 @@ The model learns to predict the next token given all previous tokens."""
+     print()
+ 
+     print("=" * 70)
+-    print("SFT TRAINING")
++    print("RANDOM-UPDATE DEMONSTRATION, NOT SFT")
+     print("=" * 70)
+ 
+     model, losses = sft_train(
+@@ -512,9 +522,9 @@ The model learns to predict the next token given all previous tokens."""
+     )
+ 
+     print()
+-    print("POST-SFT: Measuring fine-tuned model loss on raw text")
++    print("AFTER RANDOM UPDATES: untrained fixture loss")
+     sft_loss = measure_forgetting(model, test_text)
+-    print(f"  SFT model loss: {sft_loss:.4f}")
++    print(f"  Perturbed fixture loss: {sft_loss:.4f}")
+     print(f"  Change: {((sft_loss - base_loss) / base_loss * 100):+.1f}%")
+     if abs(sft_loss - base_loss) / base_loss < 0.15:
+         print("  Minimal forgetting (< 15% change)")
+@@ -550,7 +560,7 @@ The model learns to predict the next token given all previous tokens."""
+         print()
+ 
+     print("=" * 70)
+-    print("TRAINING LOSS CURVE")
++    print("LOSS VALUES DURING RANDOM PERTURBATIONS")
+     print("=" * 70)
+     print()
+ 
+diff --git a/phases/10-llms-from-scratch/06-instruction-tuning-sft/outputs/prompt-sft-data-curator.md b/phases/10-llms-from-scratch/06-instruction-tuning-sft/outputs/prompt-sft-data-curator.md
+index ab31d4e5..43bdb235 100644
+--- a/phases/10-llms-from-scratch/06-instruction-tuning-sft/outputs/prompt-sft-data-curator.md
++++ b/phases/10-llms-from-scratch/06-instruction-tuning-sft/outputs/prompt-sft-data-curator.md
+@@ -7,6 +7,9 @@ lesson: 6
+ tags: [sft, instruction-tuning, fine-tuning, data-curation, alignment]
+ ---
+ 
++
++**Reference boundary:** RANDOM-UPDATE DEMONSTRATION, NOT SFT: dlogits does not drive the weight updates. Changed weights/samples do not establish supervised learning. Excluded from adaptation correctness comparisons.
++
+ # SFT Data Curator
+ 
+ When designing an instruction-tuning dataset for a specific capability (code generation, math, conversation, safety), use this framework to plan data collection, define quality criteria, and structure the training pipeline.
+@@ -81,7 +84,7 @@ Use when: conversational applications, multi-turn context is important.
+ 
+ ### ChatML Format (with special tokens)
+ 
+-```
++```text
+ <|im_start|>system
+ You are a Python expert.<|im_end|>
+ <|im_start|>user
+diff --git a/phases/10-llms-from-scratch/10-evaluation/code/main.py b/phases/10-llms-from-scratch/10-evaluation/code/main.py
+index 5a02d375..a47a870e 100644
+--- a/phases/10-llms-from-scratch/10-evaluation/code/main.py
++++ b/phases/10-llms-from-scratch/10-evaluation/code/main.py
+@@ -1,9 +1,18 @@
++# Lesson: phases/10-llms-from-scratch/10-evaluation/docs/en.md
++# Educational reference; inspect REFERENCE_WARNING before comparisons.
++# Source: https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html (NLL objective).
++# Qualified demonstration only; not evidence of measured model quality.
++# Canonical CPU demo is bounded; meaningful tests use the stdlib runner.
+ import json
++import math
+ from collections import Counter
+ 
+ import numpy as np
+ 
+ 
++REFERENCE_STATUS = 'simulated_metrics'
++REFERENCE_WARNING = 'SIMULATED EVALUATION: fixture answers, heuristic judge, and model_quality-generated log probabilities are not measured trained-model performance. Excluded from model-quality claims.'
++
+ class EvalCase:
+     def __init__(self, input_text, expected, metadata=None):
+         self.input_text = input_text
+@@ -109,7 +118,27 @@ def perplexity(log_probs):
+     return float(np.exp(avg_neg_log_prob))
+ 
+ 
++def mean_target_nll(batch_totals):
++    """Combine (summed measured target NLL, scored target count), not batch means.
++
++    This arithmetic helper does not obtain model logits or certify measurement.
++    Empty/zero-target evaluation is invalid; padding must be excluded upstream.
++    """
++    total_nll, total_targets = 0.0, 0
++    for nll_sum, target_count in batch_totals:
++        if type(target_count) is not int or target_count < 0:
++            raise ValueError("target counts must be non-negative integers")
++        if not math.isfinite(nll_sum) or nll_sum < 0 or (target_count == 0 and nll_sum != 0):
++            raise ValueError("NLL sums must be finite, non-negative, and zero for zero targets")
++        total_nll += nll_sum
++        total_targets += target_count
++    if total_targets == 0:
++        raise ValueError("evaluation has no scored targets")
++    return total_nll / total_targets
++
++
+ def token_log_probs_simulated(text, model_quality=0.8):
++    """Synthetic values; does not call a trained model or inspect its logits."""
+     np.random.seed(hash(text) % 2**31)
+     tokens = text.split()
+     log_probs = []
+@@ -195,7 +224,7 @@ def demo_model_random(prompt):
+ 
+ def run_eval_demo():
+     print("=" * 60)
+-    print("  STEP 1: Eval Framework")
++    print("  STEP 1: FIXTURE Eval Framework (SIMULATED)")
+     print("=" * 60)
+ 
+     cases = [
+@@ -215,7 +244,7 @@ def run_eval_demo():
+         scorers={
+             "exact_match": exact_match,
+             "token_f1": token_f1,
+-            "llm_judge": llm_judge_simulated,
++            "simulated_judge": llm_judge_simulated,
+         },
+     )
+ 
+@@ -230,7 +259,7 @@ def run_eval_demo():
+ 
+ def run_elo_demo():
+     print(f"\n{'=' * 60}")
+-    print("  STEP 2: ELO Tournament")
++    print("  STEP 2: FIXTURE ELO Tournament (SIMULATED)")
+     print("=" * 60)
+ 
+     cases = [
+@@ -286,7 +315,7 @@ def run_elo_demo():
+ 
+ def run_perplexity_demo():
+     print(f"\n{'=' * 60}")
+-    print("  STEP 3: Perplexity Comparison")
++    print("  STEP 3: SIMULATED Perplexity Comparison (not model measurements)")
+     print("=" * 60)
+ 
+     test_texts = [
+@@ -300,12 +329,12 @@ def run_perplexity_demo():
+         for quality, label in [(0.9, "Strong"), (0.7, "Medium"), (0.4, "Weak")]:
+             log_probs = token_log_probs_simulated(text, model_quality=quality)
+             ppl = perplexity(log_probs)
+-            print(f"    {label} model (quality={quality}): perplexity = {ppl:.2f}")
++            print(f"    SIMULATED {label} quality knob ({quality}): perplexity = {ppl:.2f}")
+ 
+ 
+ def run_metric_comparison():
+     print(f"\n{'=' * 60}")
+-    print("  STEP 4: Metric Disagreement Analysis")
++    print("  STEP 4: Heuristic/FIXTURE Metric Disagreement")
+     print("=" * 60)
+ 
+     test_pairs = [
+@@ -328,6 +357,7 @@ def run_metric_comparison():
+ 
+ 
+ if __name__ == "__main__":
++    print(REFERENCE_WARNING)
+     run_eval_demo()
+     run_elo_demo()
+     run_perplexity_demo()
+diff --git a/phases/10-llms-from-scratch/10-evaluation/docs/en.md b/phases/10-llms-from-scratch/10-evaluation/docs/en.md
+index ae449fff..d74a5a4a 100644
+--- a/phases/10-llms-from-scratch/10-evaluation/docs/en.md
++++ b/phases/10-llms-from-scratch/10-evaluation/docs/en.md
+@@ -1,6 +1,6 @@
+-# Evaluation: Benchmarks, Evals, LM Harness
++# Evaluation: Measured Contracts and Simulated Examples
+ 
+-> Goodhart's Law: when a measure becomes a target, it ceases to be a good measure. Every frontier lab games benchmarks. MMLU scores go up while models still can't reliably count the number of R's in "strawberry." The only eval that matters is YOUR eval -- on YOUR task, with YOUR data.
++> Measured evaluation needs actual model probabilities and target counting; these examples use fixture answers and simulated scores.
+ 
+ **Type:** Build
+ **Languages:** Python
+@@ -9,10 +9,19 @@
+ 
+ ## Learning Objectives
+ 
+-- Build a custom evaluation harness that runs multiple-choice and open-ended benchmarks against a language model
+-- Explain why standard benchmarks (MMLU, HumanEval) saturate and fail to differentiate frontier models
+-- Implement task-specific evals with proper metrics: exact match, F1, BLEU, and LLM-as-judge scoring
+-- Design a custom evaluation suite targeting your specific use case rather than relying solely on public leaderboards
++- Build a task harness with explicit cases and scorer contracts.
++- Distinguish fixture/simulated scores from trained-model measurements.
++- Aggregate target NLL by scored-target count, excluding padding.
++- Freeze context, boundary, tail, and overlap policies.
++- Report failures and limits of small local experiments.
++
++## Python reference qualification
++
++**SIMULATED EVALUATION: fixture answers, heuristic judge, and model_quality-generated log probabilities are not measured trained-model performance. Excluded from model-quality claims.**
++
++For measured NLL, score each eligible target once under a common context policy. Sum target NLL and divide by actual scored-target count, never average unequal batch means. Declare document-start/BOS, EOS, final partial-window, context/stride, overlap deduplication, and padding exclusion. BPB divides total target NLL by ln(2) and the exact original UTF-8 content-byte count whose targets were scored, excluding inserted controls/padding. The mean_target_nll helper combines supplied totals; it does not measure a model. Its unequal-count test is (2 + 12)/(1 + 3) = 3.5, not 3.
++
++These boundaries qualify the reference; the incomplete/random/simulated routines have not been repaired into complete training or measurement.
+ 
+ ## The Problem
+ 
+@@ -67,7 +76,7 @@ Three mechanisms cause benchmark scores to stop reflecting real capability.
+ 
+ Perplexity measures how surprised a model is by a sequence of tokens. Formally, it is the exponentiated average negative log-likelihood:
+ 
+-```
++```text
+ PPL = exp(-1/N * sum(log P(token_i | context)))
+ ```
+ 
+@@ -254,7 +263,7 @@ class ELOTracker:
+         return sorted(self.ratings.items(), key=lambda x: -x[1])
+ ```
+ 
+-### Step 4: Perplexity Calculation
++### Step 4: Perplexity arithmetic with SIMULATED probabilities
+ 
+ Compute perplexity using token probabilities. In practice you would get these from the model's logits. Here we simulate with a probability distribution.
+ 
+@@ -268,6 +277,7 @@ def perplexity(log_probs):
+     return float(np.exp(avg_neg_log_prob))
+ 
+ def token_log_probs_simulated(text, model_quality=0.8):
++    # Synthetic demonstration, excluded from model-quality claims.
+     np.random.seed(hash(text) % 2**31)
+     tokens = text.split()
+     log_probs = []
+@@ -360,7 +370,7 @@ suite = EvalSuite(
+     scorers={
+         "exact_match": exact_match,
+         "token_f1": token_f1,
+-        "llm_judge": llm_judge_simulated,
++        "simulated_judge": llm_judge_simulated,
+     },
+ )
+ 
+@@ -401,7 +411,7 @@ for name, rating in elo.leaderboard():
+     print(f"  {name}: {rating:.0f}")
+ ```
+ 
+-### Step 8: Perplexity Comparison
++### Step 8: SIMULATED perplexity (not measurements)
+ 
+ Compare perplexity across "models" of different quality levels.
+ 
+diff --git a/phases/10-llms-from-scratch/10-evaluation/outputs/prompt-eval-designer.md b/phases/10-llms-from-scratch/10-evaluation/outputs/prompt-eval-designer.md
+index 7ad7227a..4c56c399 100644
+--- a/phases/10-llms-from-scratch/10-evaluation/outputs/prompt-eval-designer.md
++++ b/phases/10-llms-from-scratch/10-evaluation/outputs/prompt-eval-designer.md
+@@ -5,6 +5,9 @@ phase: 10
+ lesson: 10
+ ---
+ 
++**Reference boundary:** SIMULATED EVALUATION: fixture answers, heuristic judge, and model_quality-generated log probabilities are not measured trained-model performance. Excluded from model-quality claims.
++
++
+ You are an LLM evaluation engineer. I will describe a task that an LLM performs in production. You will design a complete evaluation suite for that task.
+ 
+ ## Design Protocol
+diff --git a/phases/10-llms-from-scratch/10-evaluation/outputs/skill-llm-evaluation.md b/phases/10-llms-from-scratch/10-evaluation/outputs/skill-llm-evaluation.md
+index 06450f85..ed3c6c72 100644
+--- a/phases/10-llms-from-scratch/10-evaluation/outputs/skill-llm-evaluation.md
++++ b/phases/10-llms-from-scratch/10-evaluation/outputs/skill-llm-evaluation.md
+@@ -7,6 +7,9 @@ lesson: 10
+ tags: [evaluation, evals, benchmarks, llm-as-judge, elo, metrics]
+ ---
+ 
++**Reference boundary:** SIMULATED EVALUATION: fixture answers, heuristic judge, and model_quality-generated log probabilities are not measured trained-model performance. Excluded from model-quality claims.
++
++
+ # LLM Evaluation Strategy
+ 
+ When evaluating an LLM system, apply this decision framework to choose the right approach.

@@ -51,12 +51,13 @@ def check(root: Path) -> list[str]:
         relative = path.relative_to(root)
         if any(p.startswith(".") for p in relative.parts) and relative.parts[0] != ".agents":
             continue
-        if relative.parts[0] == "archive" or relative.parts[:3] == (
-            "docs",
-            "review",
-            "independent",
+        if (
+            relative.parts[0] == "archive"
+            or relative.parts[:3]
+            in {("docs", "review", "independent"), ("docs", "review", "from-scratch-audits")}
+            or relative.parts[:2] in {("from-scratch", "lessons"), ("from-scratch", "skills")}
         ):
-            continue  # Frozen source/report references are historical, not current paths.
+            continue  # Frozen source/report/upstream copies keep their original relative paths.
         text = path.read_text(encoding="utf-8")
         inside = False
         prose = []

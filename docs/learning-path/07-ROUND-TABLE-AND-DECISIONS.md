@@ -1,6 +1,7 @@
 # Party discussion: the choices behind the plan
 
-Historical planning discussion. The adopted one-workbench decision is recorded in the update at the end; older project/activation choices below are not current authority.
+Revised 14 October 2026 to implement the [independent audit](../review/from-scratch-audits/python-to-llm-audit-2026-10-12.md). The audit remains the historical reviewed snapshot; this package and the project route were corrected without learner completion awards.
+
 11 October 2026. A planning snapshot for Ahmed. Voices: Nadia, senior AI engineer; Amelia, Python programmer; Paige, software engineering tutor. Ahmed's later clarification is incorporated: 10 hours/week, CPU first, and cumulative RAG/agent coverage.
 
 ## Start with AI or with Python?
@@ -77,7 +78,24 @@ Historical planning discussion. The adopted one-workbench decision is recorded i
 
 Open implementation choices are corpus/domain, actual learner workspace, model/embedding provider or local runtime, any spending budget, RAM/throughput, and optional framework comparisons. They do not prevent producing or reviewing this planning package.
 
+## Decisions corrected after the independent audit
 
-## Adoption update — 11 October 2026
+The earlier dialogue above records the 11 October proposal. These dated operational
+decisions incorporate the independent review without turning that review into learner
+progress or activating a route:
 
-The user subsequently authorized a blind review and consolidation of six owned repositories, publication of one coherent project and removal of redundant projects. The governing choices are now one Workbench with an applied assistant and an internal model laboratory, one S0–S8 route, ten hours weekly, CPU-first completion and independent learner evidence. Earlier proposal-only activation language in the discussion is historical. The review report explains retained content, rejected duplication and executable limits.
+| Decision | Operational consequence |
+|---|---|
+| Separate readiness, retention, and closure | Execution/explanation plus a fresh independent implementation/debug task permits advancement. Delayed independent success establishes retained status; all required gates need it for closure. Failed retention gets targeted repair. |
+| Scope evidence categories | Attempts do not advance; focused bridges satisfy their exact stage only; full completion needs reviewed eligibility. Quiz recognition and changed-input reruns cannot award construction mastery. |
+| Sample S0 | Count/explain plus one file/mutation probe; stop at a real blocker and observe remaining skills later. |
+| Preserve source/action identity | Hash exact decoded snapshots with defined character offsets; bind approval to action, canonical target, and content hash; test freshness and crash replay. |
+| Probe graph/callback mechanisms | Shared-node identity/order and stored callable behavior precede scalar autodiff; syntax choices remain optional. |
+| Use qualified references | Unicode/control coverage is repaired in 10/02. Partial 10/04 backward, random-update 10/06 SFT, and simulated 10/10 metrics are excluded from correctness/quality parity. |
+| Make model verification exact | Count-weighted content-target NLL, declared context/boundaries, actual next-batch fresh-process resume, first-response/zero-target SFT and initial-equality/update LoRA checks. |
+| Maintain continuity and bound S8 | Small assistant tasks rotate through existing lab review time. Re-estimate separate integration/reliability, adaptation-literacy, and final-demonstration slices after S7; original totals remain provisional. |
+| Keep candidate inactive | It validates all nine core gates at 10 hours/week and starts at S0 with empty evidence; default active M1 still selects 11.01 at 5–7 hours/week. |
+
+The [evidence protocol](EVIDENCE-PROTOCOL.md) governs the
+corrected state semantics. None of these maintainer corrections authorizes a learner
+solution, billable model call, project creation, or publication.

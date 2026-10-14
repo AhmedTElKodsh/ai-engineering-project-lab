@@ -47,5 +47,6 @@ No API key, GPU, model download or network call is needed to run the baseline af
 | Selected primitive exercises | [Mechanism shelf](resources/README.md) |
 | Review of the six source repositories and merge choices | [Consolidation report](docs/review/CONSOLIDATION.md) |
 | Versions, validation and contributor rules | [Project context](project-context.md) |
+| Curriculum route, resolver and edited lessons from the from-scratch clone | [From-scratch](from-scratch/README.md) |
 
-Only this route, one installed mentor and one factual event log are active. Historical state is labelled under archive; full source histories and unpublished local experiments are privately backed up. Superseded repository handling and its exact status are recorded in the consolidation report.
+Only one installed mentor and one factual event log are active. The same S0–S8 plan also exists as [`from-scratch/route.json`](from-scratch/route.json), moved here on 15 October 2026 with the curriculum resolver; the two route files still need to be reconciled into one. Historical state is labelled under archive; full source histories and unpublished local experiments are privately backed up. Superseded repository handling and its exact status are recorded in the consolidation report.

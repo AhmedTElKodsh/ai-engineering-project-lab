@@ -25,3 +25,7 @@ Confusion calls for repair, not a surprise quiz. Preserve separately valid evide
 Separate inherited code, supported practice, execution, explanation, independent transfer, delayed retention, live-provider and deployed proof. Use the revision-checked state writer and verify readback before announcing progress; never manually rewrite history or derived views. A mentor invocation authorizes factual state recording, not provider spending or unsolicited implementation.
 
 Stdlib first; tools enter for an observed problem or a bounded learning comparison. For maintenance run the documented checks against the candidate tree and do not weaken learner acceptance tests to make incomplete exercises green. Preserve unrelated local work and secrets. One active tutor and route; no copied vendor skill trees or second mutable state system.
+
+## From-scratch route (moved here 15 October 2026)
+
+`from-scratch/` holds the S0–S8 route, resolver, LEARNING notes and edited lessons from the learner's clone of the upstream curriculum. It describes the same S0–S8 plan as `learning/route.json`, and the two have not been reconciled. Do not edit either route to match the other without the learner's decision. Files under `from-scratch/lessons/` and `from-scratch/skills/` are frozen upstream-derived copies under the MIT notice in `from-scratch/NOTICE`; the skills there are not active mentors.

@@ -5,7 +5,7 @@ Generated from learning/route.json and learning/evidence.jsonl. Do not edit this
 Learner: Ahmed. Pace: 10 hours/week, five two-hour sessions. CPU first.
 Active project: projects/grounded_support_assistant
 Active stage: S0
-Evidence revision: 7290c3b17ad235346b4ba6bf4e25e3397d79849b5db5d4921b9bd47de230e6b6
+Evidence revision: 3577d4bde2f8b28e7a3c2085cab930e5b6b55d878c97d31d5f66f1d40228e546
 
 ## Carried-forward context
 

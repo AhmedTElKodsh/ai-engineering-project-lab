@@ -1,5 +1,7 @@
 # The first four weeks: 20 sessions, 40 hours
 
+Revised 14 October 2026 to implement the [independent audit](../review/from-scratch-audits/python-to-llm-audit-2026-10-12.md). The audit remains the historical reviewed snapshot; this package and the project route were corrected without learner completion awards.
+
 Prepared 11 October 2026. These are relative study weeks; start date has not been selected. Each session is two hours, five sessions per week. Gate results govern movement, so these are session targets rather than promises.
 
 ## Starting mission
@@ -8,17 +10,17 @@ Prepared 11 October 2026. These are relative study weeks; start date has not bee
 
 Use three learner-authored short text files initially, then expand to 10–30 permitted non-sensitive documents after the ingestion contract works. Do not begin with PDFs, OCR, web scraping, private documents, or a large downloaded corpus.
 
-If the existing learner project already implements these features, replace construction sessions with explanation, independent changed-input tasks, and missing features. Reuse demonstrated knowledge and preserve prior evidence.
+If the existing learner project already implements these features, replace construction sessions with explanation, fresh independent contract changes or unfamiliar bug repairs, and missing features. Reuse demonstrated knowledge and preserve prior evidence.
 
 ## Week 1 — Find the next reachable task
 
 | Session | Mission and mechanism | Learner action | Checkpoint |
 |---|---|---|---|
 | 1 | Frame the search problem; strings/functions/dictionaries | State success/no-match behavior; predict and attempt a word counter. | Explain repeated counts and empty input. Save the diagnostic result. |
-| 2 | File I/O, sorting, mutation, testing | Attempt the remaining S0 tasks; repair one specific gap with a small example. | Complete a fresh variation with less help. Locate the actual project workspace. |
+| 2 | File I/O, sorting, mutation, testing | Sample one file or mutation probe; stop at a blocking gap and repair that mechanism. Observe unsampled areas later in their actual project slices. | Complete a fresh variation with less help. Locate the actual project workspace. |
 | 3 | Text normalization and function contracts | Write the normalizer and counter for a new small fixture. | Case, punctuation, repeated words, and empty text behave as specified. |
 | 4 | Paths, UTF-8, and context managers | Load the three files and attach source IDs. | Explain missing-file behavior; read a Unicode example. |
-| 5 | Integrate a simple local search | Score token overlap and display the best excerpt/source. | Friday transfer: add an unfamiliar document and predict the result before running. |
+| 5 | Integrate a simple local search | Score token overlap and display the best excerpt/source. | Add an unfamiliar document and predict the result as execution/trace evidence. For independent construction, make a fresh small ranking/normalization contract change or fix an unfamiliar bug with the teaching example closed. |
 
 Expected result: an intentionally small search function or script you can trace. It may have no persistent index or polished CLI yet. If loops/dictionaries remain blocking, use the next week for repair and keep the same project mission.
 
@@ -27,10 +29,10 @@ Expected result: an intentionally small search function or script you can trace.
 | Session | Mission and mechanism | Learner action | Checkpoint |
 |---|---|---|---|
 | 6 | Data records and module boundaries | Separate file reading, text processing, and ranking. | Identify side effects and test one pure function independently. |
-| 7 | Paragraph chunking and offsets | Convert document text to passage records with IDs and source positions. | Empty/long paragraphs have an explicit policy; no source information is lost. |
+| 7 | Paragraph chunking and offsets | Convert document text to passage records with IDs and source positions. | Use half-open character offsets into one UTF-8-decoded, LF-normalized snapshot identified by hash; test Arabic CRLF text. Empty/long paragraphs have a bounded policy. |
 | 8 | Sorting and deterministic ties | Implement top-k results, duplicate-query-token policy, and tie breaking. | Explain why a set/dict/list fits each step; repair a supplied tie bug. |
-| 9 | Persistence and validation | Save/load a small JSON index and validate expected fields. | Round trip and reject an incompatible/corrupt index with a clear message. |
-| 10 | Review and failure testing | Add missing/empty/Unicode/tie tests; write a small README run command. | Independent change: handle a new document without editing search logic. |
+| 9 | Persistence and validation | Save/load a small JSON index and validate expected fields. | Round trip; reject/rebuild after source edit/deletion or normalization/chunk-version changes. Store raw/snapshot hashes and reject corrupt/incompatible indexes. |
+| 10 | Review and failure testing | Add missing/empty/Unicode/tie tests; write a small README run command. | New-document handling without logic edits is execution evidence. For independent construction, repair an unfamiliar file/ranking bug and add a regression test. |
 
 Expected result: a reliable data pipeline and ranking contract. Add dataclasses/type hints if repeated unstructured records obscure the code. Do not add inheritance or generic repositories just to imitate a production architecture.
 
@@ -46,7 +48,7 @@ Expected result: a reliable data pipeline and ranking contract. Add dataclasses/
 
 Expected result: an evaluated search release, or clearly recorded remaining work. A weak paraphrase result is useful evidence for the later semantic-embedding comparison. Do not repair it by hard-coding the evaluation questions.
 
-## Week 4 — Close A1 and approach the model boundary
+## Week 4 — Establish A1 readiness and approach the model boundary
 
 | Session | Mission and mechanism | Learner action | Checkpoint |
 |---|---|---|---|
@@ -64,7 +66,7 @@ Start with this prompt, not a supplied implementation:
 
 > We want to find information in a few documents. For the text `Python helps. Python teaches!`, what word counts would your search tool need? State your rules for case and punctuation. Then write a function that returns those counts for any small text string.
 
-The tutor first waits for your prediction. It then reviews the attempt and selects one next action. If normalization itself is unfamiliar, teach it with a different short example before assigning a fresh variation. Do not grade a hidden expected punctuation policy; specify it together.
+The tutor first waits for your prediction. It then reviews the attempt and selects one next action. If normalization itself is unfamiliar, teach it with a different short example before assigning a fresh variation. Do not grade a hidden expected punctuation policy; specify it together. Follow the [hint ladder](01-LEARNING-METHOD.md#tutor-conduct): guide the learner rather than supplying the word-counting solution. If an attempt and useful hints leave a persistent blocker and the learner asks for more help, reveal only that tricky part and leave the remaining implementation to the learner. A complete solution requires an explicit request for the complete solution.
 
 The first session should not require you to install a model, create a cloud account, learn matrix calculus, or read this entire planning package. The documents are reference material for the tutor and for reviewing the route.
 
@@ -75,7 +77,7 @@ The first session should not require you to install a model, create a cloud acco
 | 1 | Diagnostic, learner function, explanation, changed input | Intermediate Python broadly mastered |
 | 2 | Passage/data contract and failure tests | Semantic retrieval or generation quality |
 | 3 | Frozen retrieval cases and baseline/candidate results | A generalizable production benchmark |
-| 4 | A1 release/transfer gate and model-boundary readiness | Real RAG generation if only fixtures ran |
+| 4 | A1 independent readiness with delayed retention state and model-boundary readiness | Retained closure with missing delayed/live evidence; real RAG if only fixtures ran |
 
 ## Adapt the schedule
 

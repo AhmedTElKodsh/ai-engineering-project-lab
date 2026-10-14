@@ -17,8 +17,15 @@ dev = [
 [tool.pytest.ini_options]
 addopts = "--import-mode=importlib"
 pythonpath = ["."]
-testpaths = ["projects", "tests"]
+testpaths = ["projects", "tests", "from-scratch/scripts/tests"]
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+# Frozen upstream-derived lesson copies keep the curriculum's own style.
+extend-exclude = ["from-scratch/lessons"]
+
+[tool.ruff.lint.per-file-ignores]
+# The resolver reports every schema problem as ValueError (callers and tests rely on it)
+# and schedules by the learner's local calendar date.
+"from-scratch/scripts/**" = ["TRY004", "DTZ011"]

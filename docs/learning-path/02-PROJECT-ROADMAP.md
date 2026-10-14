@@ -1,14 +1,16 @@
 # The cumulative project roadmap
 
+Revised 14 October 2026 to implement the [independent audit](../review/from-scratch-audits/python-to-llm-audit-2026-10-12.md). The audit remains the historical reviewed snapshot; this package and the project route were corrected without learner completion awards.
+
 Prepared 11 October 2026. Read the [mastery rules](03-SKILLS-AND-MASTERY.md) alongside these stages. Effort ranges are estimates for learner work; a stage can take longer without changing its exit criteria.
 
 ## Project architecture
 
-**Component A: Grounded Document Assistant.** A local document-search tool evolves into an evaluated RAG application with controlled tools, persistence, and a bounded agent loop. Start with text/Markdown and a command line. Add other formats only after a demonstrated need.
+**Project A: Grounded Document Assistant.** A local document-search tool evolves into an evaluated RAG application with controlled tools, persistence, and a bounded agent loop. Start with text/Markdown and a command line. Add other formats only after a demonstrated need.
 
-**Component B: Language-Model Laboratory.** Count-based text prediction evolves through gradients, neural networks, tokenization, causal attention, and an end-to-end model trained from random weights. Reuse data and evaluation habits from A; keep architecture experiments separate from the application's stable implementation.
+**Project B: Language-Model Laboratory.** Count-based text prediction evolves through gradients, neural networks, tokenization, causal attention, and an end-to-end model trained from random weights. Reuse data and evaluation habits from A; keep architecture experiments separate from the application's stable implementation.
 
-Both components belong to this one AI Engineering Workbench under projects/grounded_support_assistant; model/ is its internal laboratory. The current lexical baseline is inherited reference implementation. Future core solutions are learner-authored during tutoring, not supplied by consolidation. Releases A1–A4/B1–B5 label components, not competing projects or routes.
+Both projects may live in one separate learner repository with clearly separated directories. An existing learner repository should be inspected and reused where suitable. Do not build the learner app inside this curriculum checkout. The folder arrangement is a future implementation choice, not permission to create the implementation during planning.
 
 ## S0 — Frame the problem and diagnose through work
 
@@ -22,20 +24,20 @@ Mission: find a relevant piece of information in three short local documents and
 - Read one UTF-8 text file and handle a missing path.
 - Write one meaningful assertion and explain what failure it catches.
 
-Use the diagnostic in the mastery document. Complete unsupported concepts through short bridges. Prior scripts and commits are candidate material to inspect, not automatic proof of present mastery.
+Sample the diagnostic rather than sweeping all seven areas: begin with counting/explanation and one file or mutation probe, stop at a blocking mechanism, teach it, and observe unsampled areas when the project uses them. Complete unsupported concepts through short bridges. Prior scripts and commits are candidate material to inspect, not automatic proof of present mastery.
 
 **Exit:** identify the next Python gaps; run one learner-authored function; explain it; change it for a new input. Save a starting evidence note and project location. No exam-style placement label is needed.
 
 ## S1 — Build intermediate Python through a document-search CLI
 
-**Effort:** 26–38 hours. **Assistant release:** A1, deterministic document explorer. **Dependency:** S0 gaps repaired sufficiently to implement small functions.
+**Effort:** 26–38 hours. **Project A release:** A1, deterministic document explorer. **Dependency:** S0 gaps repaired sufficiently to implement small functions.
 
 ### Slices
 
-1. **A1.1 Text to records:** read approved `.txt`/`.md` files; assign document IDs; preserve source paths and paragraph offsets. Learn `pathlib`, `with`, UTF-8, list/dict transformations, and pure functions.
+1. **A1.1 Text to records:** read approved `.txt`/`.md` files; assign document IDs; preserve source paths and half-open character offsets into a UTF-8-decoded, LF-normalized snapshot identified by hash. Learn `pathlib`, `with`, UTF-8, list/dict transformations, and pure functions.
 2. **A1.2 Records to passages:** split by paragraphs first; handle empty documents and long paragraphs with an explicit bounded policy. Introduce simple dataclasses/type hints only once records become hard to manage.
 3. **A1.3 Passages to search results:** implement an overlap score, deterministic tie breaking, and top-k ranking. Progress to a small inverted index; TF-IDF is a later bridge rather than a requirement on day one.
-4. **A1.4 Search to CLI:** accept a query and corpus path with `argparse`; print source IDs, excerpts, and scores; return a clear no-match result. Add JSON persistence and rebuild behavior.
+4. **A1.4 Search to CLI:** accept a query and corpus path with `argparse`; print source IDs, excerpts, and scores; return a clear no-match result. Add JSON persistence with an index manifest: raw document hashes, decoded snapshot hashes, normalization/chunking versions, and canonical source identity. Source edit/deletion or config changes require rebuild/rejection before retrieval-to-generation; never reuse stale known IDs. Test an Arabic CRLF fixture.
 5. **A1.5 Reliability:** separate modules by real responsibility; add tests, error messages, logging, and a self-terminating demo.
 
 **Python growth:** comprehensions, sets, tuples, sorting with a key, exceptions, modules/imports, type hints, generators for file iteration, and JSON. Introduce classes through a concrete state-management need. Defer decorators, metaclasses, concurrency, and clever abstractions.
@@ -46,7 +48,7 @@ Use the diagnostic in the mastery document. Complete unsupported concepts throug
 
 ## S2 — Model interaction and evaluated RAG
 
-**Effort:** 36–52 hours. **Assistant release:** A2, grounded answer generation. **Dependency:** A1 and basic JSON/HTTP literacy.
+**Effort:** 36–52 hours. **Project A release:** A2, grounded answer generation. **Dependency:** A1 and basic JSON/HTTP literacy.
 
 ### S2a: Introduce the model boundary
 
@@ -75,11 +77,11 @@ The original RAG research combines learned generation with retrieved information
 
 ## S3 — Tools and a bounded agent
 
-**Effort:** 20–30 hours. **Assistant release:** A3, a controlled document-work agent. **Dependency:** S2 readiness, including the real model/semantic-retrieval gates. Preparatory fake-tool work may continue as practice while S2 is incomplete; it does not grant S3 readiness. If access is blocked, route eligible CPU work through S4 after S1.
+**Effort:** 20–30 hours. **Project A release:** A3, a controlled document-work agent. **Dependency:** A2 contracts, or its tested offline orchestration path with live behavior explicitly pending.
 
 Mission: answer a question that requires searching, reading a selected passage, and optionally drafting a note.
 
-1. Implement three narrow tools: `search_documents`, `read_passage`, and `draft_note`. Treat the draft as an output artifact first; writing requires an explicit approval transition in the eventual application.
+1. Implement three narrow tools: `search_documents`, `read_passage`, and `draft_note`. Treat the draft as an output artifact first. Approval binds the action ID, canonical target, and exact content-byte hash; content/target changes invalidate it. Initially permit only one new note in a bounded output directory, without overwrite. Define idempotent replay: a matching existing artifact counts as already applied; a mismatch is refused. Test a crash immediately after the write and before success-state persistence.
 2. Validate tool names and arguments. Restrict paths to the project corpus/output directories, cap output sizes, and reject traversal and unknown IDs.
 3. Start with a deterministic workflow. Add an agent loop that selects a tool or a final response, observes the result, updates state, and terminates.
 4. Set limits such as six tool steps, one retry for a transient tool failure, a bounded context size, and an elapsed-time budget. Tune them using recorded tasks; do not treat these starting numbers as standards.
@@ -94,7 +96,7 @@ Use observable actions, arguments, results, and short decision summaries in trac
 
 ## S4 — Learn from data and connect the math
 
-**Effort:** 50–70 hours. **Model releases:** B1, count-based language prediction and transparent learning baselines. **Dependency:** Python data transformation/test skills; applied model use does not replace these foundations.
+**Effort:** 50–70 hours. **Project B releases:** B1, count-based language prediction and transparent learning baselines. **Dependency:** Python data transformation/test skills; applied model use does not replace these foundations.
 
 ### Slices
 
@@ -112,9 +114,9 @@ Use observable actions, arguments, results, and short decision summaries in trac
 
 ## S5 — Write backpropagation and a neural network
 
-**Effort:** 45–65 hours. **Model release:** B2, a learning engine and neural text predictor. **Dependency:** S4 derivatives, probability, vectors, loss, and update rules.
+**Effort:** 45–65 hours. **Project B release:** B2, a learning engine and neural text predictor. **Dependency:** S4 derivatives, probability, vectors, loss, and update rules.
 
-- Derive gradients for a scalar expression, then a tiny network.
+- First trace a tiny shared dependency graph (identity, reuse, execution order) and an unrelated stored-callback example. Probe the Python mechanism and insert a conditional bridge if needed; closures/operator overloading are optional implementation choices. Then derive gradients for a scalar expression and tiny network.
 - Implement a scalar computation graph with backward functions, topological ordering, and gradient accumulation. Test shared subexpressions rather than only a chain.
 - Implement a small MLP with a forward pass, activation, loss, and hand-coded training/update loop. Learn on XOR or another tiny synthetic task before increasing dimensions.
 - Build a small neural next-token predictor over a fixed short context. Compare it against the count-based model.
@@ -127,7 +129,7 @@ Use observable actions, arguments, results, and short decision summaries in trac
 
 ## S6 — Tokenizer and a causal transformer
 
-**Effort:** 60–85 hours. **Model release:** B3, independently implemented model architecture. **Dependency:** B2 and a shape/matrix refresher.
+**Effort:** 60–85 hours. **Project B release:** B3, independently implemented model architecture. **Dependency:** B2 and a shape/matrix refresher.
 
 1. Begin with a byte or character baseline so model debugging has a transparent vocabulary.
 2. Implement deterministic BPE training and encoding, byte fallback, save/load, and explicitly reserved control tokens. BPE is introduced as an algorithm; do not attempt compatibility with a particular production tokenizer. [Subword-tokenization paper](https://arxiv.org/abs/1508.07909)
@@ -143,14 +145,14 @@ The original transformer paper is the primary source for attention and transform
 
 ## S7 — Train, checkpoint, evaluate, and generate
 
-**Effort:** 45–70 hours plus unattended compute. **Model release:** B4, a complete trained small language model. **Dependency:** B3 correctness before larger runs.
+**Effort:** 45–70 hours plus unattended compute. **Project B release:** B4, a complete trained small language model. **Dependency:** B3 correctness before larger runs.
 
 - Run the one-batch overfit test first. It proves learning machinery can fit that batch, not generalization.
 - Start with a sub-million-parameter CPU model, a short context, and a small corpus. Measure throughput and memory before selecting the next run.
 - Train from random weights; record configuration, seed, data split, tokenizer hash, code revision, optimizer state, metrics, and checkpoints.
-- Save and resume. Compare interrupted versus uninterrupted training under a controlled local setup and stated tolerance.
+- Save and resume through the actual batch path in a fresh process. Capture all relevant RNG state; shuffled epochs also need permutation/cursor state and any active scheduler needs its state. Direct random-window sampling can remain simple. Compare next batch IDs and interrupted/uninterrupted updates under a controlled setup and stated tolerance, not a fixed externally supplied batch alone.
 - Implement greedy and temperature/top-k sampling; cap context and generated length; handle EOS and invalid arguments.
-- Freeze a final held-out set. Evaluate loss, perplexity under the same tokenizer, short completions, repetition, and narrow task behavior.
+- Freeze a final held-out set and exact scoring policy. Score content targets once, include final partial tails, exclude inserted BOS/EOS controls and padding from the main comparison, and use fixed context/stride; any overlap is context only. Sum measured target NLL and divide by scored-target count. Report EOS loss separately if studied. BPB uses only original UTF-8 content bytes whose targets were scored, after the declared normalization. Evaluate actual logits, bounded completions, repetition, and narrow behavior; simulated probabilities are excluded.
 - Compare the count-based model, neural context model, and transformer. Use a common byte/character tokenizer for the main comparison; handle later BPE comparisons using explicitly comparable normalization such as bits per byte.
 
 The TinyStories study demonstrates that restricted-data language modeling can work at small scales; it does not guarantee comparable results on a small CPU training budget. Begin with learner-authored or clearly usable text. TinyStories is a later candidate after checking its current data terms and choosing a bounded subset. [TinyStories paper](https://arxiv.org/abs/2305.07759)
@@ -159,16 +161,16 @@ The TinyStories study demonstrates that restricted-data language modeling can wo
 
 ## S8 — Integrate, compare, and harden
 
-**Effort:** 20–30 hours. **Components:** A4 and B5. **Dependency:** prior gates, with unresolved external/model quality gates visible.
+**Effort:** provisional 20–30-hour allowance in the original total, to re-estimate by slice after S7; it is not an accepted completion budget. **Projects:** A4 and B5. **Dependency:** prior gates, with unresolved external/model quality gates visible.
 
 - Run your model behind the same generation interface as the assistant's other model. Compare it on narrow completion tasks and separately on document QA. Poor QA is a legitimate finding.
 - Preserve the capable generator for RAG if the tiny model fails the grounded-answer requirements. Consider using the tiny model for completion or another bounded task where evidence supports it.
 - Add cache/version invalidation, latency measurement, retry tests, trace redaction, and reproducible evaluation commands.
-- Complete a bounded supervised fine-tuning exercise on a copy of your own tiny model: format prompt/response pairs, mask prompt tokens from the loss, retain a held-out set, and compare before/after behavior on a narrow task.
-- Implement a small LoRA projection experiment in PyTorch: freeze a base weight, add two trainable low-rank matrices, count trainable parameters, and compare one update and a tiny adaptation run. This teaches the mechanism without requiring a large pretrained model or an extra package. [LoRA paper](https://arxiv.org/abs/2106.09685)
+- In the adaptation-literacy slice, fine-tune a copy of the validated learner model using actual loss-derived updates: format prompt/response pairs, align the shifted mask to include the first response target, and reject or explicitly skip/count zero-supervised-target examples after truncation. Retain a held-out set and compare before/after on a narrow task. The mapped random-update reference is excluded.
+- Implement a small LoRA projection experiment in PyTorch: freeze a base weight, initialize one adapter factor randomly and the other to zero, verify initial base/adapter output equality, count trainable parameters, and verify an actual adapter update with base weights unchanged. The initially zero factor must receive the first learning signal; both factors need not update on the first step. Compare a tiny held-out run. This teaches the mechanism without requiring a large pretrained model or an extra package. [LoRA paper](https://arxiv.org/abs/2106.09685)
 - Compare adaptation with a prompting/retrieval baseline for the selected task. Educational comparison is required for breadth; adoption in the assistant depends on measured benefit. Adaptation evidence remains distinct from pretraining evidence. Large-model QLoRA is later depth, subject to a separate compute plan.
 - Package a self-terminating offline demo, optional live demo instructions, test commands, dataset provenance, model card, architecture diagram, and results with code/data identifiers.
-- Conduct a final walkthrough: explain one retrieved answer, one agent execution, and one training/update/generation trace; make a fresh small change in each component.
+- Conduct a final walkthrough: explain one retrieved answer, one agent execution, and one training/update/generation trace; make a fresh small change in each project.
 
 **Exit:** reproducible artifacts; baseline/candidate and small adaptation comparisons; honest CPU/cost/runtime reports; traceable learner evidence; independent transfer on Python, RAG/tools, and model internals.
 
@@ -176,4 +178,26 @@ The TinyStories study demonstrates that restricted-data language modeling can wo
 
 The required core covers recurring capabilities, not every named framework or AI specialization. Record one bounded future comparison for orchestration frameworks and one for an industrial retrieval store if the learner project permits those dependencies. Keep larger-model adaptation, advanced multi-agent systems, multimodal pipelines, distributed training, RLHF, and deployment platforms as separate later branches.
 
-This workbench follows [TOOLING.md](../../TOOLING.md): standard-library mechanisms first, locked inherited boundary/development dependencies, and scoped comparisons only after a measured need or explicit learning question. The external curriculum keeps its own contribution allowlist when editing its lessons; that policy does not relocate this project or ban its inherited runtime. Broad optional comparisons remain outside the core effort estimate.
+This curriculum's dependency allowlist excludes packages such as LangChain, LangGraph, Pydantic, scikit-learn, and vector-database clients: **stays stdlib-first for educational clarity**. Learn their underlying patterns here. Any actual framework comparison belongs in a separately governed learner workspace after checking its rules; it is outside the hour estimate above. Preserve your earlier interest in common tools as a tracked follow-up rather than silently erasing it.
+
+## Progression and bounded final slices
+
+Every stage's Exit list describes readiness/content requirements, not automatic closure.
+Use [explicit evidence states](EVIDENCE-PROTOCOL.md):
+execution, explanation, and fresh independent implementation/debug transfer permit
+advancement; pending delayed retention and live/quality gates remain visible. Closure
+requires all required gates ready and retained. Targeted repair follows failed review.
+
+During S4–S7, rotate one small assistant trace, unfamiliar bug, or contract change into
+existing Friday review time every one or two weeks. Do not add a parallel project
+or extra hours. Traces keep familiarity; fresh code changes establish independent evidence.
+
+| S8 slice | Bounded outcome | Estimation checkpoint |
+|---|---|---|
+| S8a integration/reliability | Adapter compatibility, narrow comparisons, targeted reliability checks | Re-estimate after S7 evidence and unresolved live/quality gates. |
+| S8b adaptation literacy | Separate tiny SFT and LoRA mechanism checks on the validated learner graph | Estimate from first mask/update experiments; no production adaptation promise. |
+| S8c independent final demonstration | Packaging, explanation and fresh changes in both projects; pending retention visible | Estimate after the previous slices, rather than compressing them into one finish session. |
+
+The 20–30-hour placeholder remains in arithmetic until real pace supports a replacement.
+Mapped partial backward, random-noise SFT, and simulated evaluation routines are
+qualified teaching references, not correctness or quality comparators; see the mapping.

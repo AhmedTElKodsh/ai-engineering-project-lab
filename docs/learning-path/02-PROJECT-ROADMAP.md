@@ -1,179 +1,169 @@
 # The cumulative project roadmap
 
-Prepared 11 October 2026. Read the [mastery rules](03-SKILLS-AND-MASTERY.md) alongside these stages. Effort ranges are estimates for learner work; a stage can take longer without changing its exit criteria.
+Revised 15 October 2026; replaces the 11 October S0–S8 route. Read the [mastery rules](03-SKILLS-AND-MASTERY.md) and the [library map](08-LIBRARY-MAP.md) alongside these stages. Effort ranges are estimates for learner work; a stage can take longer without changing its exit criteria.
 
-## Project architecture
+## Direction of this route
 
-**Component A: Grounded Document Assistant.** A local document-search tool evolves into an evaluated RAG application with controlled tools, persistence, and a bounded agent loop. Start with text/Markdown and a command line. Add other formats only after a demonstrated need.
+**Depth:** RAG systems, then AI agents and agentic engineering. **Floor:** Python, evaluation, observability, cost, security and reproducible delivery, which show up inside every stage instead of as separate subjects. **Deferred:** deployment/LLMOps and model adaptation come after the core route. **Optional:** the from-scratch track (manual gradients, transformer internals, training from random weights) is a separate later shelf.
 
-**Component B: Language-Model Laboratory.** Count-based text prediction evolves through gradients, neural networks, tokenization, causal attention, and an end-to-end model trained from random weights. Reuse data and evaluation habits from A; keep architecture experiments separate from the application's stable implementation.
+**Learn as needed, as much as needed.** Each mechanism gets the theory needed to use it correctly with an existing library or framework: a plain-language idea, one concrete trace, its limits and the engineering consequence. Plain-Python reimplementation of a framework mechanism belongs to the optional track unless the learner asks for it at that moment.
 
-Both components belong to this one AI Engineering Workbench under projects/grounded_support_assistant; model/ is its internal laboratory. The current lexical baseline is inherited reference implementation. Future core solutions are learner-authored during tutoring, not supplied by consolidation. Releases A1–A4/B1–B5 label components, not competing projects or routes.
+**Three working surfaces.**
 
-## S0 — Frame the problem and diagnose through work
+1. **This workbench** (public): `projects/grounded_support_assistant` holds the learner's code. Its inherited handbook corpus serves S1–S2; the [HR policy corpus](../../resources/corpora/hr-policy/README.md) (fictional company, PDF/DOCX/HTML/Markdown, English and Arabic, 125 golden questions, 20 agent scenarios) serves S3–S6.
+2. **Mushir** (private, client-approved for learning): each stage ends by explaining and then changing the matching Mushir mechanism in its own checkout. Evidence records written here describe what the learner did and point to Mushir commits by ID. AAOIFI standards text is never copied into this public repository; link to the official download instead.
+3. **Explorations** (`explorations/`): side quests and tutorial follow-alongs. They earn no stage credit and need no state file.
 
-**Effort:** 4–6 hours. **Project:** A. **Dependency:** none beyond a working Python interpreter and basic syntax.
+Frameworks enter in the order **official library first, then the orchestration layer**. For example, a stage uses the provider SDK and Chroma directly before rebuilding the same behavior with LangChain or LlamaIndex. The aim is reading Mushir (built mostly from libraries) and job-market frameworks (LangChain, LangGraph, LlamaIndex, LangSmith) with equal confidence.
 
-Mission: find a relevant piece of information in three short local documents and report where it came from.
+## S0 — Frame the quest and trace one answer
 
-- State what a useful answer looks like and what should happen when nothing matches.
-- Predict and write a short word-counting function.
-- Explain list versus dictionary behavior and identify a mutation bug.
-- Read one UTF-8 text file and handle a missing path.
-- Write one meaningful assertion and explain what failure it catches.
+**Effort:** 4–6 hours. **Dependency:** a working Python interpreter and basic syntax.
 
-Use the diagnostic in the mastery document. Complete unsupported concepts through short bridges. Prior scripts and commits are candidate material to inspect, not automatic proof of present mastery.
+Mission: understand what a grounded assistant must do before changing one.
 
-**Exit:** identify the next Python gaps; run one learner-authored function; explain it; change it for a new input. Save a starting evidence note and project location. No exam-style placement label is needed.
+- State in ordinary language who the user is, what a useful answer looks like, and what should happen when the sources do not support an answer. Use Mushir's refusal of binding fatwas and the workbench's abstention as examples.
+- Run the inherited workbench CLI on two questions, one answered and one abstained. Predict each result before running it.
+- Trace one Mushir request from HTTP entry to retrieval, generation, citation validation and response. Name each step's input and output; reading code is enough, no change is required.
+- Read one short Python function from either project and explain its inputs, outputs and side effects.
+- Repair the carried-forward configuration confusion: a `.env` file versus the process environment, a client library versus a provider model ID.
 
-## S1 — Build intermediate Python through a document-search CLI
+**Exit:** a learner-written trace of one answer path with each step's input/output; a correct prediction or a diagnosed wrong one; Python gaps for S1 identified by observation, not by a placement label.
 
-**Effort:** 26–38 hours. **Assistant release:** A1, deterministic document explorer. **Dependency:** S0 gaps repaired sufficiently to implement small functions.
+## S1 — Python floor for AI applications
 
-### Slices
+**Effort:** 20–30 hours. **Dependency:** S0. **Corpus:** inherited handbook.
 
-1. **A1.1 Text to records:** read approved `.txt`/`.md` files; assign document IDs; preserve source paths and paragraph offsets. Learn `pathlib`, `with`, UTF-8, list/dict transformations, and pure functions.
-2. **A1.2 Records to passages:** split by paragraphs first; handle empty documents and long paragraphs with an explicit bounded policy. Introduce simple dataclasses/type hints only once records become hard to manage.
-3. **A1.3 Passages to search results:** implement an overlap score, deterministic tie breaking, and top-k ranking. Progress to a small inverted index; TF-IDF is a later bridge rather than a requirement on day one.
-4. **A1.4 Search to CLI:** accept a query and corpus path with `argparse`; print source IDs, excerpts, and scores; return a clear no-match result. Add JSON persistence and rebuild behavior.
-5. **A1.5 Reliability:** separate modules by real responsibility; add tests, error messages, logging, and a self-terminating demo.
-
-**Python growth:** comprehensions, sets, tuples, sorting with a key, exceptions, modules/imports, type hints, generators for file iteration, and JSON. Introduce classes through a concrete state-management need. Defer decorators, metaclasses, concurrency, and clever abstractions.
-
-**Evaluation:** create 20 development queries with expected relevant source IDs; include exact-word queries, no-answer queries, paraphrases, ambiguity, empty text, and Unicode. Keep a separate unseen transfer set. Preserve the lexical baseline, including its paraphrase failures.
-
-**Exit:** reproducible CLI; at least five meaningful core tests; source identity retained; deterministic ranking; documented no-match behavior; learner fixes a fresh ranking or file-handling bug. The metric threshold is agreed before implementation for the chosen fixture corpus, not invented after seeing the result.
-
-## S2 — Model interaction and evaluated RAG
-
-**Effort:** 36–52 hours. **Assistant release:** A2, grounded answer generation. **Dependency:** A1 and basic JSON/HTTP literacy.
-
-### S2a: Introduce the model boundary
-
-- Trace local program → request → hosted inference or a local model → response → extracted answer.
-- Implement a small adapter with timeout, bounded retries for appropriate transient failures, clear errors, and secret-safe configuration.
-- Compare zero-shot instructions and a few examples on fixed cases. Request brief task explanations where helpful; do not require hidden reasoning traces.
-- Specify output fields and validate parsed JSON: answer, source IDs, and status. Check types, allowed values, unknown citations, and malformed responses.
-- Persist provider/model/configuration metadata separately from secrets.
-
-Use a deterministic fixture adapter for offline contract work. Real model interaction remains an explicit evidence gate. Choose a provider or local runtime at implementation time, using current official documentation and a measured hardware/cost budget. No billable calls are implied by this planning request.
-
-### S2b: Add retrieval and grounding
-
-- Insert retrieved source passages into the prompt with clear boundaries and a context budget.
-- Keep the A1 lexical baseline and introduce TF-IDF/cosine similarity as a transparent vector bridge.
-- Compare semantic embeddings against the lexical method on the same development cases. Use NumPy similarity calculations over a small stored matrix; a vector database is unnecessary at this scale.
-- Compare one retrieval improvement: a hybrid rank fusion or a simple reranking step. Do not adopt it unless the metric and error analysis justify the added work.
-- Require answerable, ambiguous, and unsupported cases. Check that cited IDs exist and that the cited passage supports each material answer claim.
-- Distinguish retrieval recall from answer correctness and groundedness.
-
-The original RAG research combines learned generation with retrieved information. This educational application uses a simpler retrieval-then-generation pipeline and should describe that difference. [RAG paper](https://arxiv.org/abs/2005.11401)
-
-**CPU-first paths:** retrieval, evaluation, and vector operations remain local. Generation/embedding APIs are optional external adapters requiring an explicit execution budget when used. If the budget is unavailable, preserve fixture tests and retrieval results, move to local S4 work, and retain S2's live-generation and semantic-retrieval gates as pending.
-
-**Exit:** 20 fixed development cases plus at least five retrieval-injection/failure cases; comparison with A1; evidence of real generation; semantic retrieval evidence or a clearly pending branch; schema and citation validation; latency/failure/cost report. A human support rubric is sufficient initially; a model judge alone is not a reliable ground-truth label.
-
-## S3 — Tools and a bounded agent
-
-**Effort:** 20–30 hours. **Assistant release:** A3, a controlled document-work agent. **Dependency:** S2 readiness, including the real model/semantic-retrieval gates. Preparatory fake-tool work may continue as practice while S2 is incomplete; it does not grant S3 readiness. If access is blocked, route eligible CPU work through S4 after S1.
-
-Mission: answer a question that requires searching, reading a selected passage, and optionally drafting a note.
-
-1. Implement three narrow tools: `search_documents`, `read_passage`, and `draft_note`. Treat the draft as an output artifact first; writing requires an explicit approval transition in the eventual application.
-2. Validate tool names and arguments. Restrict paths to the project corpus/output directories, cap output sizes, and reject traversal and unknown IDs.
-3. Start with a deterministic workflow. Add an agent loop that selects a tool or a final response, observes the result, updates state, and terminates.
-4. Set limits such as six tool steps, one retry for a transient tool failure, a bounded context size, and an elapsed-time budget. Tune them using recorded tasks; do not treat these starting numbers as standards.
-5. Persist explicit state and task/action IDs with JSON or SQLite. Test restart and repeated action behavior.
-6. Compare the fixed workflow and agent on the same tasks. Record where the agent adds value and where the workflow is simpler or more reliable.
-
-Use observable actions, arguments, results, and short decision summaries in traces. A request for private model reasoning is not required to build or evaluate the control loop. The ReAct paper is background for interaction between model decisions and external actions, not a requirement to reproduce its prompt format. [ReAct paper](https://arxiv.org/abs/2210.03629)
-
-**Protocol bridge:** expose one read-only tool through an educational MCP stdio slice with initialization, capability negotiation, tool listing/calling, and error handling. Use the official specification at implementation time. A small protocol exercise is not evidence of production compliance or authentication support. [MCP specification](https://modelcontextprotocol.io/specification/2025-11-25)
-
-**Exit:** bounded termination; invalid-tool rejection; two injected-content attacks rejected at the control boundary; approval enforcement independent of model text; restart evidence; workflow-versus-agent comparison. Run fixtures first and report live tool-selection evidence separately.
-
-## S4 — Learn from data and connect the math
-
-**Effort:** 50–70 hours. **Model releases:** B1, count-based language prediction and transparent learning baselines. **Dependency:** Python data transformation/test skills; applied model use does not replace these foundations.
+Mission: make the workbench assistant a reliable, typed, tested command-line program that a later LLM layer can rely on.
 
 ### Slices
 
-- **B1.1 Counts to probabilities:** unigram and bigram next-token prediction; normalization, smoothing, seeded sampling, negative log likelihood, and held-out data.
-- **B1.2 Vectors and similarity:** implement dot products and small matrix multiplication in Python; compare with NumPy. Connect this to A2 retrieval and tensor shapes.
-- **B1.3 Learn a scalar relationship:** fit a synthetic linear regression with loss, a manually derived gradient, and gradient descent. Compare analytical and finite-difference gradients. Use a synthetic task to make the mechanism observable; an unreliable document feature is a poor first gradient example.
-- **B1.4 Text classification:** label a small document/intent corpus; implement a transparent Naive Bayes or logistic baseline after the required Bayes/gradient bridge. Report confusion counts, precision/recall, and imbalance.
-- **B1.5 Evaluation discipline:** split by document/source before creating related examples; prevent duplicate leakage; fit vocabulary and statistics on training data; separate tuning from final testing.
+1. **Records and files:** read Markdown/text with `pathlib` and UTF-8; produce passage records with IDs and source offsets; handle missing and empty files explicitly.
+2. **Typed boundaries:** model passages, queries and answers first with dataclasses and type hints, then with Pydantic where outside data arrives. Explain the difference between a hint and runtime validation.
+3. **Errors, logging and configuration:** typed exceptions with useful messages, `logging` instead of prints, settings from environment with secrets never printed.
+4. **Tests and tooling:** pytest with normal, empty, Unicode and tie cases; one meaningful mutation that a test catches; `uv` for the environment; Ruff for lint and format.
+5. **HTTP and async literacy:** call a small local or public JSON endpoint with `httpx`, with timeout and error handling; explain when `async` helps an I/O-bound program. This prepares S2 provider calls; no provider account is needed yet.
 
-**Math:** vectors, matrices, mean/variance, derivatives, chain rule introduction, probability, Bayes when needed, logarithms, cross-entropy, and optimization. Include small hand calculations before vectorized code. Defer SVD and unrelated mathematics unless a project need arises.
+**Python growth:** comprehensions, sorting with a key, generators for file iteration, context managers, modules and imports, classes only where state requires them. Defer metaclasses and elaborate packaging.
 
-**Connection to A:** use intent classification to suggest a search strategy, then measure whether it improves retrieval. Keep it as a lab experiment if it does not help the assistant.
+**Apply to Mushir:** read Mushir's settings and answer models; explain one validation rule and predict what happens when a required field is missing.
 
-**Exit:** probabilities sum to one; finite loss on defined unseen cases; deterministic split; lower held-out NLL than the frozen unigram baseline or an honest diagnosed failure; correct regression gradient; one independent probability/gradient task. Compare language-model losses only under compatible tokenization and units.
+**Exit:** the CLI runs reproducibly with at least five meaningful tests; Pydantic rejects a malformed input with a clear message; the learner repairs a fresh file-handling or validation bug without supplied code.
 
-## S5 — Write backpropagation and a neural network
+## S2 — LLM calls, structured output and tracing
 
-**Effort:** 45–65 hours. **Model release:** B2, a learning engine and neural text predictor. **Dependency:** S4 derivatives, probability, vectors, loss, and update rules.
+**Effort:** 20–30 hours. **Dependency:** S1. **Corpus:** inherited handbook.
 
-- Derive gradients for a scalar expression, then a tiny network.
-- Implement a scalar computation graph with backward functions, topological ordering, and gradient accumulation. Test shared subexpressions rather than only a chain.
-- Implement a small MLP with a forward pass, activation, loss, and hand-coded training/update loop. Learn on XOR or another tiny synthetic task before increasing dimensions.
-- Build a small neural next-token predictor over a fixed short context. Compare it against the count-based model.
-- Implement SGD and a small Adam experiment; compare one update against PyTorch with identical state, parameters, dtype, and hyperparameters. [Adam paper](https://arxiv.org/abs/1412.6980)
-- Port the validated small network to PyTorch; compare forward outputs and gradients before using the library to scale training. PyTorch handles automatic differentiation, while you continue to own the model design. [Official autograd tutorial](https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html)
+Mission: put a real model behind the assistant safely and see every call.
 
-**Scope boundary:** a full tensor-autograd framework is optional depth. The required route uses scalar autodiff plus manual gradients on a small network, followed by PyTorch for the transformer. Writing a full differentiable tensor system changes the effort estimate substantially.
+### Concepts, just enough
 
-**Exit:** finite-difference gradient checks on smooth test points; shared-node accumulation correct; loss reduction on a tiny train set; held-out evaluation; explanation of zeroing versus accumulating gradients; independent diagnosis of a wrong update or missing backward edge.
+What a chat completion request contains (messages, roles, temperature, max tokens); tokens and context windows as a cost and length budget; why model output is untrusted data; what structured output and function schemas guarantee and what they do not.
 
-## S6 — Tokenizer and a causal transformer
+### Build
 
-**Effort:** 60–85 hours. **Model release:** B3, independently implemented model architecture. **Dependency:** B2 and a shape/matrix refresher.
+- Call an OpenAI-compatible provider (Mushir uses OpenRouter; Groq also works) through the official `openai` SDK with timeout, bounded retries for transient errors and secret-safe configuration. Verify current model IDs in official provider docs before use.
+- Request a structured answer (answer, cited passage IDs, status) and validate it with Pydantic. Reject unknown citations and malformed output.
+- Rebuild the same call with LangChain (chat model, prompt template, structured output) and compare code size, transparency and failure messages.
+- Trace calls in LangSmith or Langfuse; record tokens, latency and cost per call.
+- Keep a deterministic fake model for default tests; live calls are explicit and budgeted.
 
-1. Begin with a byte or character baseline so model debugging has a transparent vocabulary.
-2. Implement deterministic BPE training and encoding, byte fallback, save/load, and explicitly reserved control tokens. BPE is introduced as an algorithm; do not attempt compatibility with a particular production tokenizer. [Subword-tokenization paper](https://arxiv.org/abs/1508.07909)
-3. Build shifted inputs/targets and document-boundary handling. Explain exactly what the model predicts at each position.
-4. Implement stable softmax and scaled dot-product attention in NumPy on a very small sequence.
-5. Add causal masking and multi-head shape transformations. Test future-token invariance.
-6. Implement token and learned position embeddings, pre-normalization, residual paths, MLP blocks, final normalization, and output logits with PyTorch tensor primitives and learner-written modules.
-7. Assemble a small decoder-only model. Compare individual mechanisms to appropriate library operations after the independent implementation.
+**Apply to Mushir:** read its provider client and citation validation; explain what happens when the model cites a chunk that was not retrieved.
 
-The original transformer paper is the primary source for attention and transformer components. A causal decoder-only language model is a chosen adaptation, rather than a reproduction of its full encoder-decoder translation system. [Attention Is All You Need](https://arxiv.org/abs/1706.03762)
+**Exit:** one live call with recorded model ID, tokens, latency and cost; structured output validated, with a malformed-response test passing on the fake model; a trace viewed and explained; a fresh validation bug repaired independently.
 
-**Exit:** shape annotations from IDs to logits; tokenizer round-trip/save-load tests; normalized attention weights; future information blocked in evaluation mode; finite outputs/gradients; parameter-count calculation agrees with actual parameters; one independent mask or transpose bug repair.
+## S3 — RAG core with frameworks
 
-## S7 — Train, checkpoint, evaluate, and generate
+**Effort:** 30–45 hours. **Dependency:** S2. **Corpus:** HR policy corpus.
 
-**Effort:** 45–70 hours plus unattended compute. **Model release:** B4, a complete trained small language model. **Dependency:** B3 correctness before larger runs.
+Mission: answer HR policy questions only from retrieved sources, with citations, and measure retrieval.
 
-- Run the one-batch overfit test first. It proves learning machinery can fit that batch, not generalization.
-- Start with a sub-million-parameter CPU model, a short context, and a small corpus. Measure throughput and memory before selecting the next run.
-- Train from random weights; record configuration, seed, data split, tokenizer hash, code revision, optimizer state, metrics, and checkpoints.
-- Save and resume. Compare interrupted versus uninterrupted training under a controlled local setup and stated tolerance.
-- Implement greedy and temperature/top-k sampling; cap context and generated length; handle EOS and invalid arguments.
-- Freeze a final held-out set. Evaluate loss, perplexity under the same tokenizer, short completions, repetition, and narrow task behavior.
-- Compare the count-based model, neural context model, and transformer. Use a common byte/character tokenizer for the main comparison; handle later BPE comparisons using explicitly comparable normalization such as bits per byte.
+### Concepts, just enough
 
-The TinyStories study demonstrates that restricted-data language modeling can work at small scales; it does not guarantee comparable results on a small CPU training budget. Begin with learner-authored or clearly usable text. TinyStories is a later candidate after checking its current data terms and choosing a bounded subset. [TinyStories paper](https://arxiv.org/abs/2305.07759)
+Embeddings as vectors where nearby meaning gives nearby vectors; cosine similarity in one small worked example; chunk size versus context budget; why retrieval quality caps answer quality; hit@k and MRR.
 
-**Exit:** all essential mechanisms implemented; genuine parameter updates; demonstrated overfit test; reproducible held-out evaluation; checkpoint resume; bounded generation; honest limitations. The research-success target is better held-out prediction than the frozen baseline. If it fails, B4 implementation may be structurally complete but the performance gate remains open; diagnose rather than inflate the claim.
+### Build
 
-## S8 — Integrate, compare, and harden
+1. **Load and parse:** Markdown and HTML first, then PDF (`pypdf` or PyMuPDF) and DOCX (`python-docx`). Note the two-column PDF, the scanned table and the hidden HTML element as parsing failures to record, not to solve all at once.
+2. **Chunk:** LangChain text splitters at two sizes; keep document key, section and version metadata on every chunk.
+3. **Embed and store:** `sentence-transformers` (try a multilingual model because of the Arabic documents) into Chroma, with metadata.
+4. **Retrieve and answer:** top-k retrieval, a context-bounded prompt and structured cited answers from S2.
+5. **Evaluate:** run the golden set's `typical`, `code_lookup` and `out_of_scope` slices; report hit@5 and MRR per slice and per language.
+6. **Framework rebuild:** rebuild the pipeline once with LangChain (loaders, retriever, chain) and once with LlamaIndex; compare results on the same questions and say what each framework hid or exposed.
 
-**Effort:** 20–30 hours. **Components:** A4 and B5. **Dependency:** prior gates, with unresolved external/model quality gates visible.
+**Apply to Mushir:** read its chunking and retrieval code; explain why it uses BGE-M3 and what its dialect hit@5 table measures.
 
-- Run your model behind the same generation interface as the assistant's other model. Compare it on narrow completion tasks and separately on document QA. Poor QA is a legitimate finding.
-- Preserve the capable generator for RAG if the tiny model fails the grounded-answer requirements. Consider using the tiny model for completion or another bounded task where evidence supports it.
-- Add cache/version invalidation, latency measurement, retry tests, trace redaction, and reproducible evaluation commands.
-- Complete a bounded supervised fine-tuning exercise on a copy of your own tiny model: format prompt/response pairs, mask prompt tokens from the loss, retain a held-out set, and compare before/after behavior on a narrow task.
-- Implement a small LoRA projection experiment in PyTorch: freeze a base weight, add two trainable low-rank matrices, count trainable parameters, and compare one update and a tiny adaptation run. This teaches the mechanism without requiring a large pretrained model or an extra package. [LoRA paper](https://arxiv.org/abs/2106.09685)
-- Compare adaptation with a prompting/retrieval baseline for the selected task. Educational comparison is required for breadth; adoption in the assistant depends on measured benefit. Adaptation evidence remains distinct from pretraining evidence. Large-model QLoRA is later depth, subject to a separate compute plan.
-- Package a self-terminating offline demo, optional live demo instructions, test commands, dataset provenance, model card, architecture diagram, and results with code/data identifiers.
-- Conduct a final walkthrough: explain one retrieved answer, one agent execution, and one training/update/generation trace; make a fresh small change in each component.
+**Exit:** hit@5 and MRR reported per slice and language with the eval set version; refusal on out-of-scope questions; the two framework rebuilds compared on identical cases; a fresh retrieval failure diagnosed to a layer (parsing, chunking, embedding or ranking) without hints.
 
-**Exit:** reproducible artifacts; baseline/candidate and small adaptation comparisons; honest CPU/cost/runtime reports; traceable learner evidence; independent transfer on Python, RAG/tools, and model internals.
+## S4 — RAG depth and evaluation
 
-## Breadth after the core
+**Effort:** 35–50 hours. **Dependency:** S3. **Corpus:** HR policy corpus, all slices.
 
-The required core covers recurring capabilities, not every named framework or AI specialization. Record one bounded future comparison for orchestration frameworks and one for an industrial retrieval store if the learner project permits those dependencies. Keep larger-model adaptation, advanced multi-agent systems, multimodal pipelines, distributed training, RLHF, and deployment platforms as separate later branches.
+Mission: make retrieval and answers trustworthy on the hard cases, and prove improvements statistically.
 
-This workbench follows [TOOLING.md](../../TOOLING.md): standard-library mechanisms first, locked inherited boundary/development dependencies, and scoped comparisons only after a measured need or explicit learning question. The external curriculum keeps its own contribution allowlist when editing its lessons; that policy does not relocate this project or ban its inherited runtime. Broad optional comparisons remain outside the core effort estimate.
+### Build
+
+- **Hybrid search:** BM25 (`rank_bm25`) plus dense retrieval, fused with reciprocal rank fusion; show where `code_lookup` needs keywords.
+- **Re-ranking:** a cross-encoder re-ranker over the fused candidates; measure gain and latency.
+- **Query handling:** rewrite follow-up questions to standalone queries (`follow_up` slice); route personal-data questions away from search (`tool_route`).
+- **Filters before ranking:** role and region filters built from the session, never from question text (`abac`); prefer current versions and surface conflicts (`version`, `conflict`).
+- **Security:** treat retrieved text as data; defeat the hidden FAQ injection; keep the canary token out of answers (`security`).
+- **Evaluation:** RAGAS or DeepEval faithfulness and relevance; an LLM judge validated against 60 learner labels with Cohen's kappa; McNemar's test when comparing two versions; held-out IDs from `gates.json` used only before a release.
+- **Observability and cost:** traces per question in LangSmith or Langfuse; p50/p95 latency and cost per query reported next to quality.
+
+**Apply to Mushir:** explain its hybrid search fix and quote-repair change from recent commits; propose and measure one improvement on its QA pack in the Mushir checkout.
+
+**Exit:** a results table where each change beats or ties the baseline with a stated test; every hard gate in `gates.json` checked; injection and canary cases passing; one independent improvement with a before/after comparison.
+
+## S5 — Tool-using agents with LangGraph
+
+**Effort:** 35–50 hours. **Dependency:** S3 (S4 may still be in progress). **Corpus:** HR policy corpus, `hris_seed.json`, `leave_rules.json`, `agent_scenarios.jsonl`.
+
+Mission: an HR assistant that looks up leave balances and drafts requests through tools, under rules the model cannot override.
+
+### Concepts, just enough
+
+Tool calling as a model proposing a function name and arguments that the program decides whether to run; the agent loop (propose, execute, observe, stop); state; why deterministic code, not model text, authorizes actions; the ReAct idea as background.
+
+### Build
+
+1. **Native tool calling:** two read-only tools through the provider SDK, with Pydantic argument schemas and allowlisted names.
+2. **LangGraph:** rebuild as a state graph with nodes, conditional edges, a step budget and a checkpointer; resume after restart.
+3. **Human approval:** a confirm flow for any write (leave request draft), using a LangGraph interrupt bound to exact arguments and an idempotency key; reject replay and changed parameters.
+4. **Workflow versus agent:** solve the same scenarios with a fixed workflow and with the agent; record where each is simpler or more reliable.
+5. **MCP:** expose one read-only tool through the official MCP Python SDK and call it from the agent.
+6. **Comparison:** one bounded rebuild in the OpenAI Agents SDK or PydanticAI; note what changed.
+
+**Apply to Mushir:** design (on paper first) how its scholar-review queue could become an approval step; explain where Mushir must refuse instead of acting.
+
+**Exit:** all 20 agent scenarios run with pass/fail recorded; budgets stop runaway loops; approval cannot be bypassed by model text; restart resumes correctly; an independent fix to a failed tool scenario.
+
+## S6 — Agentic engineering: workflows, guardrails and evaluation
+
+**Effort:** 30–45 hours. **Dependency:** S4 and S5.
+
+Mission: combine retrieval and tools into a multi-step assistant that is safe, observable and measured.
+
+- **Patterns:** router, supervisor with specialist agents, and handoff in LangGraph; decide by evidence when one agent is enough.
+- **Memory:** distinguish conversation state, persisted state and retrieved knowledge; add one bounded long-term memory and show what it must not store.
+- **Guardrails:** input and output checks, tool allowlists, rate and cost budgets, redaction of personal data in traces.
+- **Agent evaluation:** task success, trajectory checks (right tools, right order) and failure classification on the scenario set; regression gating before changes.
+- **Observability:** end-to-end traces across nodes and tools; a cost and latency report per scenario.
+- **Comparison:** one bounded rebuild of a multi-agent flow in CrewAI; record token overhead and control differences.
+- **Fairness slice (optional):** the screening expectations and 32 counterfactual résumés test whether a screening agent scores irrelevant attribute changes identically.
+
+**Apply to Mushir:** implement one agentic improvement in the Mushir checkout with its own eval evidence, such as a clarification-question tool loop or a source-gap guard.
+
+**Exit:** a multi-step assistant passing its scenario gates with traces; one guardrail proven by a counterexample that fails without it; an honest workflow-versus-multi-agent comparison; an independent agentic change shipped in Mushir with before/after evidence.
+
+## Later branches
+
+These are not stages in `learning/route.json`. Each one becomes a route stage only when the learner chooses to start it after the core.
+
+**Deployment and LLMOps.** FastAPI service, Docker, CI with eval gates, prompt and model versioning, caching, monitoring and alerting, local serving (Ollama or vLLM), and a cloud target. Mushir's deployment, readiness and metrics endpoints are the worked reference.
+
+**Model adaptation.** Fine-tuning and parameter-efficient adaptation (LoRA/QLoRA) with existing libraries, compared against prompting and retrieval baselines on a narrow task.
+
+**Optional from-scratch track.** Learner-written count models, manual gradients and backpropagation, tokenizer, causal transformer, and training a small model from random weights. Its contract is the [model build specification](05-LLM-BUILD-SPEC.md); its materials are the [mechanism labs](../../resources/README.md) and the folded [from-scratch lessons](../../resources/from-scratch-lessons/README.md). Plain-Python versions of any core-route mechanism also belong here.
+
+This workbench follows [TOOLING.md](../../TOOLING.md): each library enters at the stage that teaches it, with official documentation checked at that time.

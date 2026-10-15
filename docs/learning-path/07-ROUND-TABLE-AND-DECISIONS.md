@@ -81,3 +81,17 @@ Open implementation choices are corpus/domain, actual learner workspace, model/e
 ## Adoption update — 11 October 2026
 
 The user subsequently authorized a blind review and consolidation of six owned repositories, publication of one coherent project and removal of redundant projects. The governing choices are now one Workbench with an applied assistant and an internal model laboratory, one S0–S8 route, ten hours weekly, CPU-first completion and independent learner evidence. Earlier proposal-only activation language in the discussion is historical. The review report explains retained content, rejected duplication and executable limits.
+
+## Revision — 15 October 2026
+
+A second round table reviewed the learner's remaining GitHub repositories and the job market for RAG and agents. Ahmed decided:
+
+- **Focus:** RAG systems, then AI agents and agentic engineering, are the depth of the current route. Python, evaluation, observability, cost, security and delivery are the floor inside every stage. Deployment/LLMOps is a later branch.
+- **Learn as needed:** theory only as far as each mechanism needs; learn practice with existing libraries and frameworks. The from-scratch work (formerly S4–S8) becomes an optional track, T1–T5 in the [build specification](05-LLM-BUILD-SPEC.md).
+- **Frameworks:** LangChain, LangGraph, LangSmith and LlamaIndex are core even where Mushir does not use them. The market-researched [library map](08-LIBRARY-MAP.md) tiers the rest.
+- **Mushir:** the client approved using Mushir for learning. Each stage applies its mechanism in the private Mushir checkout. AAOIFI's site permits personal and educational download but requires a licence for redistribution, so standards text stays out of this public repository and is linked instead.
+- **Python:** stays inside this workbench as the S1 floor; no separate Python repository.
+- **Consolidation:** the HR-Agent corpus and eval data became the S3–S6 practice corpus; the unmerged from-scratch branch's lessons joined the optional shelf and its second route was archived; `explorations/` holds side quests such as the LangChain loader notebooks.
+
+The route went from S0–S8 (306–446 hours, about 65% from-scratch model work) to S0–S6 (174–256 hours). No learner evidence existed beyond one context note, so no credit was lost.
+

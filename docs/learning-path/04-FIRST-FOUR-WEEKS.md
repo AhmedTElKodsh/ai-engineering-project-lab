@@ -1,90 +1,76 @@
 # The first four weeks: 20 sessions, 40 hours
 
-Prepared 11 October 2026. These are relative study weeks; start date has not been selected. Each session is two hours, five sessions per week. Gate results govern movement, so these are session targets rather than promises.
+Prepared 11 October 2026; revised 15 October 2026 for the RAG/agents route. These are relative study weeks; the start date has not been selected. Each session is two hours, five sessions per week. Gate results govern movement, so these are session targets rather than promises.
 
 ## Starting mission
 
-**Build a command-line tool that finds relevant passages in a small document collection and tells you exactly where each passage came from.** This is the retrieval foundation of the later RAG assistant. The first release performs search and extraction; real generated answers are introduced in S2.
+**Understand how a grounded assistant turns a question into a cited answer, then make the workbench assistant a reliable Python program that a model can sit behind.** Weeks 1–3 cover S0 and S1; week 4 opens S2 with the first model call.
 
-Use three learner-authored short text files initially, then expand to 10–30 permitted non-sensitive documents after the ingestion contract works. Do not begin with PDFs, OCR, web scraping, private documents, or a large downloaded corpus.
+Use the inherited handbook corpus in the workbench. Read Mushir in its own private checkout; do not copy its corpus or AAOIFI text here.
 
-If the existing learner project already implements these features, replace construction sessions with explanation, independent changed-input tasks, and missing features. Reuse demonstrated knowledge and preserve prior evidence.
-
-## Week 1 — Find the next reachable task
+## Week 1 — Frame the quest and trace one answer (S0, then S1 begins)
 
 | Session | Mission and mechanism | Learner action | Checkpoint |
 |---|---|---|---|
-| 1 | Frame the search problem; strings/functions/dictionaries | State success/no-match behavior; predict and attempt a word counter. | Explain repeated counts and empty input. Save the diagnostic result. |
-| 2 | File I/O, sorting, mutation, testing | Attempt the remaining S0 tasks; repair one specific gap with a small example. | Complete a fresh variation with less help. Locate the actual project workspace. |
-| 3 | Text normalization and function contracts | Write the normalizer and counter for a new small fixture. | Case, punctuation, repeated words, and empty text behave as specified. |
-| 4 | Paths, UTF-8, and context managers | Load the three files and attach source IDs. | Explain missing-file behavior; read a Unicode example. |
-| 5 | Integrate a simple local search | Score token overlap and display the best excerpt/source. | Friday transfer: add an unfamiliar document and predict the result before running. |
+| 1 | Frame the quest; the carried-forward `.env` versus process-environment confusion | State who the user is, what a useful answer is and when to refuse. Predict the workbench CLI result for one answered and one unanswerable question, then run both. | Prediction compared with output; the configuration distinction explained in your own words. |
+| 2 | Follow one Mushir answer | Trace one request from HTTP entry to retrieval, generation, citation validation and response, naming each step's input and output. | A learner-written trace; one step you cannot yet explain marked as a question. |
+| 3 | Read code you did not write | Pick one function from the trace; explain inputs, outputs and side effects; predict its result on a new input. | S0 exit: trace, prediction and the Python gaps observed. |
+| 4 | Records and files | Read the handbook into passage records with IDs and offsets using `pathlib` and UTF-8. | Missing and empty files handled explicitly. |
+| 5 | Review and transfer | Add an unfamiliar document; predict the records produced before running. | Fresh-case result recorded. |
 
-Expected result: an intentionally small search function or script you can trace. It may have no persistent index or polished CLI yet. If loops/dictionaries remain blocking, use the next week for repair and keep the same project mission.
-
-## Week 2 — Make the data reliable
+## Week 2 — Typed boundaries and tests (S1)
 
 | Session | Mission and mechanism | Learner action | Checkpoint |
 |---|---|---|---|
-| 6 | Data records and module boundaries | Separate file reading, text processing, and ranking. | Identify side effects and test one pure function independently. |
-| 7 | Paragraph chunking and offsets | Convert document text to passage records with IDs and source positions. | Empty/long paragraphs have an explicit policy; no source information is lost. |
-| 8 | Sorting and deterministic ties | Implement top-k results, duplicate-query-token policy, and tie breaking. | Explain why a set/dict/list fits each step; repair a supplied tie bug. |
-| 9 | Persistence and validation | Save/load a small JSON index and validate expected fields. | Round trip and reject an incompatible/corrupt index with a clear message. |
-| 10 | Review and failure testing | Add missing/empty/Unicode/tie tests; write a small README run command. | Independent change: handle a new document without editing search logic. |
+| 6 | Dataclasses and type hints | Model passages and answers as dataclasses. | Explain what a type hint does and does not check. |
+| 7 | Pydantic at the boundary | Validate an incoming query and an outgoing answer; produce a clear error for bad input. | A malformed input is rejected with a useful message. |
+| 8 | pytest | Write tests for normal, empty, Unicode and tie cases. | One deliberate wrong implementation fails a test. |
+| 9 | Errors and logging | Typed exceptions and `logging` instead of prints. | A failure can be located from the log alone. |
+| 10 | Review and transfer | Fix a fresh validation or file bug without supplied code. | Regression test added for it. |
 
-Expected result: a reliable data pipeline and ranking contract. Add dataclasses/type hints if repeated unstructured records obscure the code. Do not add inheritance or generic repositories just to imitate a production architecture.
-
-## Week 3 — Measure retrieval
+## Week 3 — Configuration, HTTP and tooling (S1)
 
 | Session | Mission and mechanism | Learner action | Checkpoint |
 |---|---|---|---|
-| 11 | CLI boundaries and error messages | Add `argparse` query/corpus options and a self-terminating demo. | Unknown/missing arguments and no-match results are understandable. |
-| 12 | Inverted indexing | Map query tokens to candidate passage IDs. | Compare results with exhaustive search on a tiny corpus. |
-| 13 | Evaluation fixtures | Create 20 development cases with expected source IDs and label answerability. | Freeze the cases before retrieval changes; preserve paraphrase failures. |
-| 14 | Vector bridge | If ready, compute a tiny TF-IDF example and explain cosine similarity. | Hand calculation agrees with the simple implementation; otherwise repair vectors first. |
-| 15 | Baseline comparison and retention | Compare overlap and candidate retrieval; record rank/recall failures and runtime. | Fresh retrieval task plus one delayed Python task. Keep only a justified improvement. |
+| 11 | Settings and secrets | Load settings from the environment; prove a secret never appears in output or logs. | Explain where each setting comes from. |
+| 12 | HTTP with `httpx` | Call a small public JSON endpoint with a timeout and error handling. | Timeout and non-200 responses handled. |
+| 13 | Async, just enough | Fetch three endpoints sequentially and concurrently; compare time. | Explain when async helps and when it does not. |
+| 14 | `uv`, Ruff and a clean run | Reproduce the environment from the lock file; lint and format. | Documented commands run from a clean checkout. |
+| 15 | Apply to Mushir and close S1 | Read Mushir's settings and answer models; predict a missing-field failure. Run the S1 exit task. | G1 attempted on a fresh bug; remaining gaps recorded. |
 
-Expected result: an evaluated search release, or clearly recorded remaining work. A weak paraphrase result is useful evidence for the later semantic-embedding comparison. Do not repair it by hard-coding the evaluation questions.
-
-## Week 4 — Close A1 and approach the model boundary
+## Week 4 — The first model call (S2)
 
 | Session | Mission and mechanism | Learner action | Checkpoint |
 |---|---|---|---|
-| 16 | Integration and logging | Run the A1 gate, add targeted logs, and repair the largest failure. | Code revision, command/result, and limitations recorded. |
-| 17 | Independent release task | Extend a ranking or ingestion requirement selected after teaching. | Pass G1 with no supplied implementation; five meaningful core tests minimum. |
-| 18 | Local versus hosted models | Trace a fixture request/response and define a generation adapter interface. | Explain where inference happens and what a fixture proves. |
-| 19 | Prompts and JSON contracts | Define an answer/source/status contract; parse and validate fixture responses. | Reject malformed JSON, unknown source IDs, and wrong field types. |
-| 20 | Review and next release planning | Demonstrate A1; revisit an early Python mechanism; select the smallest S2 question. | Remaining gaps and actual pace recorded; no unearned S2 live-generation completion. |
+| 16 | What a chat request contains | Read an example request and response; predict what changes with temperature and max tokens. | Tokens and cost explained with one worked number. |
+| 17 | First live call | Call an OpenAI-compatible provider through the `openai` SDK with a timeout; record model ID, tokens and latency. Check the model ID in official docs first. | One budgeted live call with recorded metadata. |
+| 18 | Structured output | Request answer, citations and status; validate with Pydantic; reject an unknown citation. | Malformed response test passes on a fake model. |
+| 19 | Tracing | Send the same call through LangSmith or Langfuse and read the trace. | Trace explained step by step. |
+| 20 | Review and plan | Rebuild the call with LangChain; compare. Revisit one week 1–2 mechanism on a fresh case. | Actual pace recorded; S2 next step chosen. |
 
-If G1 is not ready, use sessions 18–20 for A1 repair/retention rather than adding an API. If G1 is ready early and you explicitly authorize a budgeted provider call in the teaching session, session 19 can include real generation after current official setup checks. Credentials are entered locally; never paste them into the tutor conversation.
+Live calls need explicit session authorization and a small budget. Enter credentials locally; never paste them into the tutor conversation.
 
 ## Task 1, ready for the next guided session
 
-Start with this prompt, not a supplied implementation:
+Start with this prompt, not a supplied answer:
 
-> We want to find information in a few documents. For the text `Python helps. Python teaches!`, what word counts would your search tool need? State your rules for case and punctuation. Then write a function that returns those counts for any small text string.
+> Mushir refuses to give a binding fatwa, and the workbench assistant abstains when its handbook does not support an answer. In your own words: who is the user of each, what does a useful answer look like, and what would go wrong if the assistant answered anyway? Then predict what the workbench CLI prints for "How long is an export link valid?" and for "What is the capital of France?" before running either.
 
-The tutor first waits for your prediction. It then reviews the attempt and selects one next action. If normalization itself is unfamiliar, teach it with a different short example before assigning a fresh variation. Do not grade a hidden expected punctuation policy; specify it together.
-
-The first session should not require you to install a model, create a cloud account, learn matrix calculus, or read this entire planning package. The documents are reference material for the tutor and for reviewing the route.
+The tutor waits for your answer, reviews it and selects one next action.
 
 ## Weekly exit evidence
 
 | Week | Evidence to save | What it does not establish |
 |---|---|---|
-| 1 | Diagnostic, learner function, explanation, changed input | Intermediate Python broadly mastered |
-| 2 | Passage/data contract and failure tests | Semantic retrieval or generation quality |
-| 3 | Frozen retrieval cases and baseline/candidate results | A generalizable production benchmark |
-| 4 | A1 release/transfer gate and model-boundary readiness | Real RAG generation if only fixtures ran |
+| 1 | Quest framing, one traced answer path, observed Python gaps | That you could build that path yet |
+| 2 | Typed records, Pydantic validation, meaningful tests | LLM or RAG skill |
+| 3 | Settings, HTTP client, reproducible environment; G1 attempt | Async mastery beyond the basic case |
+| 4 | One live call with metadata, validated structured output, a read trace | RAG quality |
 
 ## Adapt the schedule
 
-- If a prerequisite blocks two sessions, shrink the task and insert a focused bridge. Update effort after the bridge.
+- If a prerequisite blocks two sessions, shrink the task and insert a focused bridge.
 - If a mechanism is already independently demonstrated, shorten its teaching but keep the later retention check.
-- If an environment problem consumes more than 20–30 minutes, identify the interpreter/path issue, use a small runnable local task where possible, and keep environment repair separate from conceptual grading.
-- If you miss a day, continue the next session in sequence. Do not double the next day's conceptual load.
-- If the project stops being motivating, change the corpus/domain while retaining the same data and evaluation contracts.
-
-## Hardware information to collect when needed
-
-During S0, record OS, Python executable/version, available RAM, and disk space using local checks. During S6/S7, measure actual step time and memory for the tiny model. Only then investigate the GTX 1050 Ti's memory and supported software configuration. Hardware speed changes model/run size, not whether you can learn the mechanisms.
+- If an environment problem consumes more than 20–30 minutes, separate environment repair from conceptual work.
+- If you miss a day, continue in sequence; do not double the next day's load.
+- If live provider access is blocked, keep the fake-model work going and leave the live gate visibly pending.

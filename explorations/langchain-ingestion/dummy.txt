@@ -1,0 +1,5 @@
+Dummy Text File
+===============
+This is sample content for testing.
+Record ID: 001
+Status: Active

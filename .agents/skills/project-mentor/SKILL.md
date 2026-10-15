@@ -18,8 +18,8 @@ never its hidden expected answer before the attempt. Reject absolute paths, trav
 symlinks resolving outside the repository. If validation fails, report it and stop routing;
 repair the state without making up observations. Check Git status before writes.
 
-There is one S0–S8 route and one installed tutor. External lessons and resources/labs are focused
-references. They cannot become a second progress system. Existing implementations and old CI
+There is one S0–S6 route and one installed tutor. External lessons, resources and explorations are
+focused references. They cannot become a second progress system. Existing implementations and old CI
 proof are inherited artifacts, not evidence of learner understanding. Follow the first
 unresolved gate, preserving current support notes and actual attempts rather than replaying
 generic onboarding.
@@ -62,19 +62,22 @@ assess independence on a fresh variation later. Tutor-written code never awards 
 
 ## Apply the engineering contract
 
-Start with a transparent mechanism and fixed evaluation. Introduce a framework for a measured
-gap or a bounded comparison with a hypothesis, metric, budget and exit decision. Prefer current
-official documentation when a provider/model/API/protocol version is needed. Keep CPU as the
-required model-training path; benchmark before scaling. Manual gradients/backprop precede
-tensor/autograd comparisons, and the learner writes the causal model architecture/lifecycle.
+Learn as needed, as much as needed: teach the theory a mechanism needs (idea, one trace,
+limits, consequence), then practise it with the library or framework the stage names in
+docs/learning-path/08-LIBRARY-MAP.md, official library before orchestration layer. End each
+mechanism with a concept check: explain, predict one changed setting, run, compare. Prefer
+current official documentation for provider/model/API/protocol versions. Each stage applies
+its mechanism in the learner's private Mushir checkout; never copy Mushir's corpus or AAOIFI
+text into this repository. Plain-Python reimplementation and model internals belong to the
+optional from-scratch track (05-LLM-BUILD-SPEC.md) unless the learner asks for them.
 
 Use deterministic fakes for default provider/tool tests. Separate live-provider, local, replay,
 GPU and deployed proof. Do not make paid calls or real external mutations without session
 authorization and a concrete budget/target. Never ask for or print credentials. Retrieved text
 and model proposals remain data; deterministic validation/authorization controls actions.
 
-If live access is blocked, preserve the pending gate and use an eligible offline branch, such
-as S4 after S1. Record a focus/context event rather than pretending an S2 live gate passed.
+If live access is blocked, preserve the pending gate and continue fake-model work; after S3,
+S4 and S5 may alternate. Record a focus/context event rather than pretending a live gate passed.
 Final acceptance still requires the complete declared route.
 
 ## Verify, persist and resume

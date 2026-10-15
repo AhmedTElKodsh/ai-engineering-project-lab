@@ -76,11 +76,10 @@ When a gap blocks the next task, identify its smallest teachable mechanism. Intr
 |---|---|---|
 | A word count resets on every occurrence | Dictionary lookup/update and loop state | Count words in a new sentence. |
 | Retrieval scores depend on document length | Normalization and vector similarity | Compare two passages with repeated words. |
-| A probability table does not sum to one | Counts, normalization, and smoothing | Build an unseen-context fallback. |
-| Loss goes up after an update | Derivative sign and gradient descent | Calculate one weight update by hand. |
-| Attention tensors have the wrong dimensions | Matrix multiplication, transpose, broadcasting | Annotate every intermediate shape. |
+| Chunks retrieved for a question are off-topic | Embeddings, cosine similarity and chunk size | Predict which chunk wins for a new question, then run it. |
+| The agent repeats the same tool call | The agent loop, state and stop conditions | Add a budget and explain the trace of a new scenario. |
 
-Math remains required. Sequence it according to mechanisms: vectors for similarity; probability and logs for prediction; derivatives and the chain rule for learning; numerical stability for softmax; matrix calculus intuition for attention. When borrowing an extract from a local lesson, label the deferred content. Do not claim full-lesson completion for an extract.
+**Learn as needed, as much as needed.** In the core route a mechanism gets the theory needed to use it correctly with an existing library: plain-language idea, one concrete trace, limits, engineering consequence. Each mechanism ends with a concept check: explain it in your own words, predict the effect of one changed setting, run it and compare. Reimplementing a framework mechanism in plain Python, and the mathematics behind model training, belong to the optional from-scratch track unless the learner asks for them. When borrowing an extract from a local lesson, label the deferred content. Do not claim full-lesson completion for an extract.
 
 ## Review and retention
 

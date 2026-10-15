@@ -1,11 +1,11 @@
 # Tool adoption and comparison
 
-The required path starts with standard Python functions, files, JSON, dataclasses, explicit errors and local tests. The inherited baseline uses locked Pydantic; learner-written parsing/counting/math mechanisms should stay visible before their production equivalents.
+The core route learns each mechanism with an existing library or framework, with the theory needed to use it correctly. The [library map](docs/learning-path/08-LIBRARY-MAP.md) tiers libraries as core, compare once, or know about, and names the stage that teaches each one.
 
-NumPy enters after raw vector/matrix operations and shape reasoning. PyTorch tensors/autograd enter after manual gradients, finite differences and a small-network backprop proof. The learner still writes embeddings, causal attention/masks, normalization, blocks, output head and training lifecycle. Ready-made GPT/Transformer model classes do not satisfy that work.
+Order within a stage: the official library first (provider SDK, `sentence-transformers`, Chroma, `rank_bm25`), then the orchestration layer (LangChain, LlamaIndex, LangGraph). This keeps Mushir's library-based code readable and the job-market frameworks familiar. A framework never replaces the learner's explanation of what it does.
 
-Provider SDKs, semantic embedding libraries, API servers, MCP SDKs and orchestration frameworks are selected at their stage, with official versions verified then. A handwritten read-only MCP slice is educational protocol evidence, not complete protocol/authentication compliance.
+A library joins `pyproject.toml` when its stage starts, in a dependency group named after the stage, with the version taken from the lock file and its official documentation checked then. The default environment stays small: the inherited Pydantic boundary and pytest/Ruff development tools. Default tests use deterministic fake models and tools; live provider calls need explicit session authorization and a budget.
 
-A comparison requires a concrete question, fixed inputs, baseline, quality/cost/latency or clarity metric, bounded budget and exit decision. Production adoption requires a measured benefit or operational need. An optional framework comparison does not replace the core mechanism.
+A compare-once experiment needs a concrete question, fixed inputs, baseline, quality/cost/latency or clarity metric, bounded budget and an exit decision: keep, defer or drop. Production adoption in Mushir needs a measured benefit.
 
-Keep vector databases, graph RAG, several agent frameworks, cloud infrastructure, distributed queues, large-model serving and RLHF as extension shelves. Their concepts can be discussed when needed, but installing each is not a prerequisite for the small CPU model. S8's tiny SFT/LoRA mechanism comparisons are bounded breadth exercises on a copy, not substitutes for random-weight training.
+Plain-Python reimplementation of framework mechanisms, NumPy/PyTorch internals and the learner-written language model belong to the optional from-scratch track. That track keeps its own boundary in the [model build specification](docs/learning-path/05-LLM-BUILD-SPEC.md): manual gradients before autograd, and no ready-made transformer class in place of the learner's architecture.

@@ -1,16 +1,14 @@
 {
   "schema_version": 1,
-  "revision": "7290c3b17ad235346b4ba6bf4e25e3397d79849b5db5d4921b9bd47de230e6b6",
+  "revision": "d47a29c5f6abb00dbf4ba2e802a69736f8fe9440c7b76aa571c90177c450b31c",
   "contract_hashes": {
-    "S0": "470542a517e500044ba705e0ab28e299bb3909e395cb45838143f6fcaffdbed3",
-    "S1": "c4981747381a1ef9c5c6c80badd2f65f6b1846081850d3113ad1921d56c59368",
-    "S2": "c154ff0d9ee8c2f04bef9fed156e79e87772ea2a75474caeb03385ac5bde8055",
-    "S3": "7b09a59d43f0b0fefbf4232b423546fa134f4ed9f66a3263fb0ba00ca834eaf8",
-    "S4": "8feb069f98fe0835e40216f1d350ebb8fd8d4399d8e81bab6eea4cadee4de833",
-    "S5": "4a070ddce6868308c7347e7407829993c08f3f3a74a57ca38a1940751f4b32ab",
-    "S6": "ba3c39cedc8ac8611dbdcc43add6ac62bbb9a31f8f947805c30d22747d3707f6",
-    "S7": "195ca767f27fd89d13c3d80371e1bf9f5db5c54fc11d88a267c5f0f02c257311",
-    "S8": "9c018fcb3593e21edeb1f37e80414392c8949f9578431a53774fa98dcbfa89c8"
+    "S0": "0f5a18495371081f61419bb2c67a5bea53db39384b5d6ca75d64433d0e6ffd10",
+    "S1": "8fbfdba01bc1b9e0410c668fea55890127c587ac4f6af8c0e97a3c54413aee35",
+    "S2": "108d5b207e920e3b1849833e64e659fc754c8761befef17b73c7b4106e889e26",
+    "S3": "df2000e00b7e97afe28a895fca3110ef4f4aab69ddf5ddfbeb5790124094c037",
+    "S4": "2c05d2183f9a0c5f6ebef15ace453027da0c38e2ee9371a9b79a2c082e2c233e",
+    "S5": "fa3d772763c2d06214af248fff08b203e9aa4f8a95c55152f945d7eed4386192",
+    "S6": "bd4f076f45e6f3bc2e4ed087fd212fdb493b25286b2dec5cb30c765fbdf8a006"
   },
   "active_stage": "S0",
   "route_complete": false,
@@ -91,32 +89,10 @@
         "transfer": null,
         "retention": null
       }
-    },
-    "S7": {
-      "ready": false,
-      "retained": false,
-      "status": "not_started",
-      "proofs": {
-        "execution": null,
-        "explanation": null,
-        "transfer": null,
-        "retention": null
-      }
-    },
-    "S8": {
-      "ready": false,
-      "retained": false,
-      "status": "not_started",
-      "proofs": {
-        "execution": null,
-        "explanation": null,
-        "transfer": null,
-        "retention": null
-      }
     }
   },
   "context": [
     "In the configuration-test detour, distinguish exact Python/Pydantic identifiers and case-sensitive text: _env_file, not _get_file; \"Field required\" differs from \"field required\". In model-call work distinguish a client library from provider-owned model IDs, verify IDs before rebuilding, and distinguish .env files from process environment; load configuration before reading GROQ_API_KEY. These are support notes, not verified capability failures or completed skills."
   ],
-  "next_action": "Repair the carried-forward configuration/model-call confusion, frame the quest, then try a fresh small document task."
+  "next_action": "Repair the carried-forward configuration/model-call confusion, frame the quest, then predict and trace how one question becomes a cited answer."
 }

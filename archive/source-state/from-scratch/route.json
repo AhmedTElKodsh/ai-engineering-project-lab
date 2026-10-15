@@ -1,0 +1,213 @@
+{
+  "schema_version": 2,
+  "candidate": false,
+  "guide": "../docs/learning-path/00-START-HERE.md",
+  "progress_file": "LEARNING.md",
+  "evidence_file": "D:/AI Projects/Learning/python-to-llm-workspace/evidence.json",
+  "learner_workspace": "D:/AI Projects/Learning/python-to-llm-workspace",
+  "pace_hours_per_week": {
+    "minimum": 10,
+    "maximum": 10
+  },
+  "active_milestone": "PYTHON-TO-LLM",
+  "milestones": [
+    {
+      "id": "PYTHON-TO-LLM",
+      "title": "Python to AI engineering and a small language model",
+      "status": "active",
+      "stages": [
+        {
+          "id": "S0",
+          "title": "Diagnose through a text task",
+          "kind": "project",
+          "project_stage_id": "S0",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "counting/explanation",
+            "one file or mutation probe"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G0"
+          ],
+          "advancement_gate_ids": [
+            "G0"
+          ]
+        },
+        {
+          "id": "S1",
+          "title": "Reliable document-search CLI",
+          "kind": "project",
+          "project_stage_id": "S1",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "original functions",
+            "source snapshots",
+            "ranking",
+            "failure tests"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G1"
+          ],
+          "advancement_gate_ids": [
+            "G1"
+          ]
+        },
+        {
+          "id": "S2",
+          "title": "Model boundary and evaluated RAG",
+          "kind": "project",
+          "project_stage_id": "S2",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "contracts",
+            "lexical/vector retrieval",
+            "grounding",
+            "offline/live evidence"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G2",
+            "S2-live-generation",
+            "S2-semantic-retrieval"
+          ],
+          "advancement_gate_ids": [
+            "G2"
+          ]
+        },
+        {
+          "id": "S3",
+          "title": "Bounded agent and tools",
+          "kind": "project",
+          "project_stage_id": "S3",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "validated actions",
+            "exact-action approval",
+            "restart",
+            "bounded orchestration"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G3",
+            "S3-live-tool-selection"
+          ],
+          "advancement_gate_ids": [
+            "G3"
+          ]
+        },
+        {
+          "id": "S4",
+          "title": "Probability and gradient foundations",
+          "kind": "project",
+          "project_stage_id": "S4",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "counts",
+            "source splits",
+            "linear regression",
+            "transparent classification"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G4"
+          ],
+          "advancement_gate_ids": [
+            "G4"
+          ]
+        },
+        {
+          "id": "S5",
+          "title": "Backpropagation and neural network",
+          "kind": "project",
+          "project_stage_id": "S5",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "shared graph identity",
+            "callbacks",
+            "manual gradients",
+            "library parity"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G5"
+          ],
+          "advancement_gate_ids": [
+            "G5"
+          ]
+        },
+        {
+          "id": "S6",
+          "title": "Tokenizer and causal transformer",
+          "kind": "project",
+          "project_stage_id": "S6",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "byte coverage",
+            "causal mask",
+            "tensor shapes",
+            "own architecture"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G6"
+          ],
+          "advancement_gate_ids": [
+            "G6"
+          ]
+        },
+        {
+          "id": "S7",
+          "title": "Training and measured evaluation",
+          "kind": "project",
+          "project_stage_id": "S7",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "actual updates",
+            "target-weighted NLL",
+            "real batch resume",
+            "bounded generation"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G7",
+            "S7-held-out-quality"
+          ],
+          "advancement_gate_ids": [
+            "G7"
+          ]
+        },
+        {
+          "id": "S8",
+          "title": "Integration, adaptation, final demonstration",
+          "kind": "project",
+          "project_stage_id": "S8",
+          "required": true,
+          "mode": "project",
+          "focus": [
+            "integration/reliability",
+            "adaptation literacy",
+            "independent final demonstration"
+          ],
+          "evidence_category": "project_gate",
+          "gate_ids": [
+            "G8"
+          ],
+          "advancement_gate_ids": [
+            "G8"
+          ]
+        }
+      ],
+      "exit_criteria_source": "../docs/learning-path/EVIDENCE-PROTOCOL.md#advancement-retention-and-closure"
+    }
+  ]
+}

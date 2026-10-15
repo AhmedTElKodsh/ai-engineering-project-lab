@@ -1,8 +1,8 @@
 # Implementation and document authority
 
-The current product is the AI Engineering Workbench. The active assistant directory is projects/grounded_support_assistant; its model/ component will hold the learner's small model. The existing lexical app is inherited reference implementation. Future learner modules remain unimplemented until authored during tutoring.
+The current product is the AI Engineering Workbench. The active assistant directory is projects/grounded_support_assistant; the existing lexical app is inherited reference implementation. Future learner modules remain unimplemented until authored during tutoring. The route's depth is RAG and agents with existing frameworks; its model/ directory is reserved for the optional from-scratch track. Mushir, the private client project, is where each stage is applied; its code and corpus stay in its own repository.
 
-Python 3.12 is the canonical locked/CI runtime. pyproject.toml declares a broader interpreter floor; untested versions are not verified. Use `uv sync --locked --all-groups`; retain pinned GitHub Actions. Pydantic is inherited at the trust boundary; pytest and Ruff are development tools. No provider/network call occurs during default imports or checks. No new framework dependency is needed for consolidation.
+Python 3.12 is the canonical locked/CI runtime. pyproject.toml declares a broader interpreter floor; untested versions are not verified. Use `uv sync --locked --all-groups`; retain pinned GitHub Actions. Pydantic is inherited at the trust boundary; pytest and Ruff are development tools. No provider/network call occurs during default imports or checks. Stage libraries join as named dependency groups when their stage starts (see TOOLING.md); the default environment stays small.
 
 ## Owners
 
@@ -13,7 +13,8 @@ Python 3.12 is the canonical locked/CI runtime. pyproject.toml declares a broade
 - Project README: current quest, baseline behavior, data and known limitations.
 - learning/evidence.jsonl: append-only factual history. Derived state and LEARNING.md: resumable view.
 - TOOLING.md: dependency/adoption boundaries. Review report: source selection and verification evidence.
-- resources: explicitly incomplete focused exercises, not another active course.
+- resources: the HR practice corpus, fixtures and optional from-scratch material, not another active course.
+- explorations: side quests with no route, state or credit.
 - archive: historical state, never current instruction.
 
 ## Check a maintenance candidate

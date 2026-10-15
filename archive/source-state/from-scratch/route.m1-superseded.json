@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "guide": "../docs/learning-path/MILESTONES.md",
+  "progress_file": "LEARNING.md",
+  "pace_hours_per_week": {
+    "minimum": 5,
+    "maximum": 7
+  },
+  "active_milestone": "M1",
+  "lesson_reference_format": "phase.lesson; inclusive ranges use phase.start-phase.end",
+  "completion_record_format": "phase/lesson-directory",
+  "routing_policy": {
+    "selection": "Choose the first required scope without eligible readiness evidence under docs/learning-path/EVIDENCE-PROTOCOL.md; legacy Progress log row presence is not completion.",
+    "named_override": "Honor a learner-requested lesson, record it as a detour, then return to the route.",
+    "conditional_stages": "Do not schedule automatically; run only when the stage condition is true.",
+    "focused_mode": "Teach the named focus using learner-owned attempts; record focused_bridge evidence for that exact stage and deferred depth; it cannot satisfy a later full requirement.",
+    "milestone_transition": "Advance stages after execution, explanation, and independent implementation/debug transfer while carrying retention/live obligations; close only after required gates are retained and exit criteria are reviewed.",
+    "fallback": "Use LEARNING.md phase order only when this manifest is missing. If it exists but is invalid, stop and report the error."
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "title": "Applied LLM Engineer",
+      "status": "active",
+      "estimated_hours": {
+        "minimum": 35,
+        "maximum": 45
+      },
+      "stages": [
+        {
+          "id": "M1-G0",
+          "title": "Readiness gate",
+          "required": false,
+          "condition": "Run only when the matching local environment check fails.",
+          "mode": "repair",
+          "lesson_ids": [
+            "00.01",
+            "00.04",
+            "00.06",
+            "00.07",
+            "00.09",
+            "00.12"
+          ]
+        },
+        {
+          "id": "M1-S1",
+          "title": "Model interaction",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "11.01-11.03"
+          ]
+        },
+        {
+          "id": "M1-S2",
+          "title": "Knowledge grounding",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "11.04-11.07"
+          ]
+        },
+        {
+          "id": "M1-S3",
+          "title": "Adaptation bridge",
+          "required": true,
+          "mode": "focused",
+          "focus": [
+            "tokenization",
+            "pretraining model lifecycle",
+            "supervised instruction tuning"
+          ],
+          "lesson_ids": [
+            "10.01",
+            "10.04",
+            "10.06"
+          ]
+        },
+        {
+          "id": "M1-S4",
+          "title": "LoRA experiment",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "11.08"
+          ]
+        },
+        {
+          "id": "M1-S5",
+          "title": "Tools and orchestration",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "11.09",
+            "11.14",
+            "11.16",
+            "11.17"
+          ]
+        },
+        {
+          "id": "M1-S6",
+          "title": "Reliability",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "11.10-11.12",
+            "11.15"
+          ]
+        },
+        {
+          "id": "M1-S7",
+          "title": "Integration capstone",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "11.13"
+          ]
+        }
+      ],
+      "exit_criteria_source": "../docs/learning-path/MILESTONES.md#milestone-1-exit-criteria"
+    },
+    {
+      "id": "M2",
+      "title": "Tool and Agent Systems Engineer",
+      "status": "queued",
+      "estimated_hours": {
+        "minimum": 85,
+        "maximum": 100
+      },
+      "stages": [
+        {
+          "id": "M2-S1",
+          "title": "Tool ecosystem",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "13.01-13.23"
+          ]
+        },
+        {
+          "id": "M2-S2",
+          "title": "Agent foundations",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "14.01-14.22"
+          ]
+        },
+        {
+          "id": "M2-S3",
+          "title": "Reliability pair",
+          "required": true,
+          "mode": "paired",
+          "lesson_ids": [
+            "14.23",
+            "14.24"
+          ]
+        },
+        {
+          "id": "M2-S4",
+          "title": "Agent reliability",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "14.25-14.30"
+          ]
+        },
+        {
+          "id": "M2-S5",
+          "title": "Workbench sequence",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "14.31-14.42"
+          ]
+        },
+        {
+          "id": "M2-S6",
+          "title": "Coding-agent proof",
+          "required": true,
+          "mode": "full",
+          "lesson_ids": [
+            "19.20-19.29"
+          ]
+        }
+      ],
+      "exit_criteria_source": "../docs/learning-path/MILESTONES.md#milestone-2-exit-criteria"
+    }
+  ]
+}

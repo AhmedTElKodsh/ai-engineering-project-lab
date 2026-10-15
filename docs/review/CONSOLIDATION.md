@@ -64,3 +64,22 @@ Validated on 12 October 2026 with locked Python 3.12.14, Pydantic 2.13.4, pytest
 - No provider call, GPU run, deployment, learner assessment or model training was performed. S0 and all competence gates remain unawarded.
 
 Implementation commit `022c1d302c52756776c9fce56704ba48a51276c9` passed [hosted CI run 38294401028](https://github.com/AhmedTElKodsh/ai-engineering-project-lab/actions/runs/38294401028). Its local main, origin/main and remote refs/heads/main matched exactly, with a clean candidate checkout. Canonical visibility is PUBLIC and it remains unarchived. The 27 privately preserved local practice files were checked unchanged. This later receipt commit only records publication/retirement evidence; its synchronization and CI are verified separately.
+
+## Route revision and further merges — 15 October 2026
+
+Sections above describe the state on 12 October and are kept unchanged as a dated record. On 15 October the learner revised the objective: RAG systems and agents with existing frameworks are the depth of the current route, the from-scratch model work became an optional track, and deployment/LLMOps is a later branch. The active route is now S0–S6; see [round tables and decisions](../learning-path/07-ROUND-TABLE-AND-DECISIONS.md).
+
+A second inventory of the learner's GitHub account found the four deleted originals (v3, V4, ai-engineering-library, V2.0) gone from GitHub, with their backups on the main PC only. Further sources were merged without activating any second route or tutor:
+
+| Source | Commit | Integration |
+|---|---|---|
+| HR-Agent | `e5ab6c4a` | Data, eval sets, data scripts and tool contract became resources/corpora/hr-policy; plan and task catalog archived; 316 vendored skill files, its coach state and its sprint edition omitted |
+| LangChain, LangChain_Ultimate | `602619a6`, `619fa003` | Loader notebooks with outputs cleared in explorations/langchain-ingestion; a Wikipedia text excerpt omitted |
+| Learn_Rag | `efa41f70` | Empty notebook; recorded only |
+| Workbench branch `fold-from-scratch-clone` | `717312ae` | Upstream-derived lessons moved to resources/from-scratch-lessons under MIT notice; its second route, resolver, curriculum skills, audits and LEARNING view archived under archive/source-state/from-scratch |
+| Python-Daily-Practice, Study, ai-engineering-app | not imported | Python stays in S1 here; the study plan and empty app scaffold are superseded |
+| scraping-emails, scraping-emails-mod | not imported | Products, not learning material |
+
+Checks after the revision: package/state/link check, Ruff lint and format, and the default test suite (81 pass, five strict expected failures, unchanged) pass; the HR data validator reports 21 documents and 125 golden items consistent.
+
+On the user's instruction, HR-Agent, LangChain, Python-Daily-Practice, Study and ai-engineering-app were archived on GitHub (not deleted). LangChain_Ultimate and Learn_Rag stay active by choice. The remote `fold-from-scratch-clone` branch was deleted after its content was folded in as described above.

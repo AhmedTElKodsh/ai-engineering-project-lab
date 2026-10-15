@@ -1,28 +1,40 @@
 # AI Engineering Workbench
 
-One cumulative, learner-owned project: grow a grounded support assistant from intermediate Python into evaluated RAG and bounded agents, then build its small language-model laboratory from raw math and random weights.
+One cumulative, learner-owned project for learning AI engineering: grow a grounded assistant from a typed, tested Python program into evaluated RAG and tool-using agents, with each mechanism learned through existing frameworks and applied to a real product.
 
-**Pace:** two hours/day, five days/week. **Required hardware:** CPU. The GTX 1050 Ti is optional and unverified. **Current learner state:** S0 unresolved; no new competence is awarded by repository consolidation.
+**Pace:** two hours/day, five days/week, CPU first. **Depth:** RAG systems, then AI agents and agentic engineering. **Floor:** Python, evaluation, observability, cost, security. **Current learner state:** S0 unresolved; no competence is awarded by repository maintenance.
 
-Start with the [project plan](docs/learning-path/00-START-HERE.md), [current checkpoint](LEARNING.md), and [project quest](projects/grounded_support_assistant/README.md). Ask `$project-mentor` to resume one meaningful action at a time. The assistant and model laboratory are components of this same workbench, sharing data provenance, interfaces and evaluation discipline.
+Start with the [project plan](docs/learning-path/00-START-HERE.md), [current checkpoint](LEARNING.md) and [project quest](projects/grounded_support_assistant/README.md). Ask `$project-mentor` to resume one meaningful action at a time.
 
 ## The route
 
 | Stage | Cumulative outcome | Focused hours |
 |---|---|---:|
-| S0 | Frame the problem and diagnose Python through a fresh document task | 4–6 |
-| S1 | Build a reliable document-search CLI; demonstrate intermediate Python | 26–38 |
-| S2 | Validate model output; build and evaluate RAG | 36–52 |
-| S3 | Own a bounded tool/agent loop, approval and an educational MCP bridge | 20–30 |
-| S4 | Implement count baselines, probability, vectors and gradient learning | 50–70 |
-| S5 | Write manual gradients/backprop and a small neural network | 45–65 |
-| S6 | Write tokenization and a complete causal transformer architecture | 60–85 |
-| S7 | Train from random weights; evaluate, checkpoint, reload and generate | 45–70 |
-| S8 | Compare/integrate models, harden the assistant and study tiny adaptation | 20–30 |
+| S0 | Frame the quest; trace one Mushir answer from question to citation | 4–6 |
+| S1 | Python floor for AI apps: typed records, Pydantic, tests, HTTP, configuration | 20–30 |
+| S2 | LLM calls, structured output and tracing (SDK, then LangChain; LangSmith) | 20–30 |
+| S3 | RAG core: parsing, chunking, embeddings, Chroma, citations; LangChain and LlamaIndex rebuilds | 30–45 |
+| S4 | RAG depth: hybrid search, re-ranking, filters, injection defense, evaluation with statistics | 35–50 |
+| S5 | Tool-using agents: tool calling, LangGraph, approval, MCP | 35–50 |
+| S6 | Agentic engineering: multi-agent patterns, memory, guardrails, agent evaluation | 30–45 |
 
-The plan totals 306–446 focused hours; with a 20% reserve, about 37–54 study weeks at ten hours/week. These are estimates, not measured learner timings. Re-estimate after actual diagnostic and compute evidence. The [detailed roadmap](docs/learning-path/02-PROJECT-ROADMAP.md) owns acceptance behavior; [route.json](learning/route.json) owns stage IDs, dependencies and budget facts.
+The plan totals 174–256 focused hours; with a 20% reserve, about 21–31 study weeks at ten hours/week. These are estimates, not measured timings. The [roadmap](docs/learning-path/02-PROJECT-ROADMAP.md) owns acceptance behavior; [route.json](learning/route.json) owns stage IDs and dependencies; the [library map](docs/learning-path/08-LIBRARY-MAP.md) says which libraries each stage teaches and why.
 
-The final model is a complete **small decoder-only language model**, with learner-written architecture and lifecycle. First prove gradients and a small network manually, then use tensor/autograd machinery for practical CPU training. Calling a hosted LLM, fine-tuning pretrained weights, or completing a toy forward block does not satisfy this endpoint. See the [model build specification](docs/learning-path/05-LLM-BUILD-SPEC.md).
+After the core: deployment/LLMOps and model adaptation as later branches, and an optional from-scratch track (manual gradients, transformer, training from random weights) defined by the [model build specification](docs/learning-path/05-LLM-BUILD-SPEC.md).
+
+## Where things live
+
+| Path | What it is |
+|---|---|
+| `projects/grounded_support_assistant/` | The learner's code. Inherited lexical baseline to improve, not finished work |
+| `resources/corpora/hr-policy/` | Fictional HR corpus and eval sets used from S3 on |
+| `resources/labs/`, `resources/from-scratch-lessons/` | Optional from-scratch track material |
+| `explorations/` | Side quests and tutorial follow-alongs; no stage credit |
+| `learning/` | Route, append-only evidence log, derived state |
+| `docs/learning-path/` | The plan; `docs/review/` the consolidation record |
+| `archive/` | Historical state and retired routes, never current instruction |
+
+**Mushir** (the client's Islamic-finance RAG assistant) lives in its own private repository. Each stage applies its mechanism there; nothing from Mushir's corpus is copied into this public repository.
 
 ## Run the inherited baseline
 
@@ -33,19 +45,19 @@ uv run python projects/grounded_support_assistant/app.py "How long is an export 
 uv run pytest -rxX -q
 ```
 
-No API key, GPU, model download or network call is needed to run the baseline after environment setup. It retrieves English handbook sections using token overlap. The original evaluation has twenty cases and a declared paraphrase failure. Newly exposed unsupported and multi-intent cases are tracked separately; citation and lexical relevance alone do not establish answer support. This is inherited reference code to inspect and improve, not a finished reliable assistant or learner achievement.
+No API key, GPU, model download or network call is needed to run the baseline after environment setup. It retrieves English handbook sections by token overlap. Its evaluation has twenty cases with a declared paraphrase failure, plus four challenge cases tracked as strict expected failures. This is inherited reference code to inspect and improve, not a reliable assistant or learner achievement.
 
 ## Find the right document
 
 | Need | Owner |
 |---|---|
 | Session method and gradual help | [Learning method](docs/learning-path/01-LEARNING-METHOD.md), [mentor skill](.agents/skills/project-mentor/SKILL.md) |
-| Required skills and ownership gates | [Skills and mastery](docs/learning-path/03-SKILLS-AND-MASTERY.md) |
+| Skills and mastery gates | [Skills and mastery](docs/learning-path/03-SKILLS-AND-MASTERY.md) |
 | First twenty sessions | [First four weeks](docs/learning-path/04-FIRST-FOUR-WEEKS.md) |
-| Reference lesson bridges | [Curriculum map](docs/learning-path/06-CURRICULUM-MAP-AND-STATE.md) |
+| Libraries by stage and tier | [Library map](docs/learning-path/08-LIBRARY-MAP.md) |
+| Why the plan looks like this | [Round tables and decisions](docs/learning-path/07-ROUND-TABLE-AND-DECISIONS.md) |
 | Safe factual progress recording | [Evidence protocol](learning/PROTOCOL.md) |
-| Selected primitive exercises | [Mechanism shelf](resources/README.md) |
-| Review of the six source repositories and merge choices | [Consolidation report](docs/review/CONSOLIDATION.md) |
-| Versions, validation and contributor rules | [Project context](project-context.md) |
+| How earlier repositories were merged | [Consolidation report](docs/review/CONSOLIDATION.md) |
+| Versions, validation and contributor rules | [Project context](project-context.md), [tooling policy](TOOLING.md) |
 
-Only this route, one installed mentor and one factual event log are active. Historical state is labelled under archive; full source histories and unpublished local experiments are privately backed up. Superseded repository handling and its exact status are recorded in the consolidation report.
+Only this route, one installed mentor and one factual event log are active.

@@ -5,7 +5,7 @@ Generated from learning/route.json and learning/evidence.jsonl. Do not edit this
 Learner: Ahmed. Pace: 10 hours/week, five two-hour sessions. CPU first.
 Active project: projects/grounded_support_assistant
 Active stage: S0
-Evidence revision: 7290c3b17ad235346b4ba6bf4e25e3397d79849b5db5d4921b9bd47de230e6b6
+Evidence revision: d47a29c5f6abb00dbf4ba2e802a69736f8fe9440c7b76aa571c90177c450b31c
 
 ## Carried-forward context
 
@@ -22,11 +22,9 @@ Evidence revision: 7290c3b17ad235346b4ba6bf4e25e3397d79849b5db5d4921b9bd47de230e
 | S4 | not_started |
 | S5 | not_started |
 | S6 | not_started |
-| S7 | not_started |
-| S8 | not_started |
 
 Repository tests, inherited code and maintainer work do not certify learner competence.
 
 ## Next checkpoint
 
-Repair the carried-forward configuration/model-call confusion, frame the quest, then try a fresh small document task.
+Repair the carried-forward configuration/model-call confusion, frame the quest, then predict and trace how one question becomes a cited answer.

@@ -1,4 +1,4 @@
-# Grounded Support Assistant and Model Laboratory
+# Grounded Support Assistant
 
 ## Quest briefing
 
@@ -19,13 +19,13 @@ uv run pytest projects/grounded_support_assistant -rxX -q
 
 ## Cumulative learner-owned releases
 
-The single [S0–S8 roadmap](../../docs/learning-path/02-PROJECT-ROADMAP.md) owns the sequence. S1 adds the learner's CLI/data/modules/error/test skills; S2 adds model output boundaries, provenance and evaluated RAG; S3 adds explicit workflow, a bounded agent and tool approval; S4–S7 build the internal [model laboratory](model/README.md); S8 compares adapters and reliability.
+The single [S0–S6 roadmap](../../docs/learning-path/02-PROJECT-ROADMAP.md) owns the sequence. S1 makes this program typed, tested and configurable; S2 puts a real model behind it with structured output and tracing; S3 turns it into a RAG assistant over the [HR policy corpus](../../resources/corpora/hr-policy/README.md), built with libraries and then with LangChain and LlamaIndex; S4 deepens retrieval and evaluation; S5 adds tools and a LangGraph agent; S6 combines them into an evaluated agentic system. Each stage is also applied to Mushir in its own private checkout.
 
-Share meaningful provenance and held-out evaluation practices. The tiny model may supply bounded text completion through the same adapter, but it is not assumed suitable for factual support answers. Keep the more capable model or retrieval baseline when measured evidence favors it.
+The `model/` directory is reserved for the optional from-scratch track and is not part of the core route.
 
-## Tool-authority requirements at S3
+## Tool-authority requirements at S5
 
-Tools are search_documents, read_passage and draft_note. Names/arguments are allowlisted; trusted application context supplies actor, corpus and any internal object IDs. An untrusted model proposal cannot authorize a write. Bind approval to exact target/arguments/hash and an independent approver, revalidate before execution, and reject replay, stale versions, traversal, unknown IDs and changed parameters. A resolved task either explicitly rejects follow-up or starts a new bound run; it never silently accepts a message with no legal state transition.
+Agent tools are allowlisted by name with validated arguments; trusted application context supplies actor, corpus and any internal object IDs. An untrusted model proposal cannot authorize a write. Bind approval to exact target/arguments/hash and an independent approver, revalidate before execution, and reject replay, stale versions, traversal, unknown IDs and changed parameters. A resolved task either explicitly rejects follow-up or starts a new bound run; it never silently accepts a message with no legal state transition.
 
 Start with local simulated effects. Test bounded steps/timeouts and restart, duplicate action IDs, failed writes and unknown outcomes. Claims about real deployment or side effects need separate observed evidence.
 

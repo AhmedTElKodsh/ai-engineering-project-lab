@@ -32,9 +32,9 @@ def check(root: Path) -> list[str]:
     try:
         route, events, revision = load(root)
         check_views(root, route, events, revision)
-        expected = [f"S{i}" for i in range(9)]
+        expected = [f"S{i}" for i in range(7)]
         if [s["id"] for s in route["stages"]] != expected:
-            errors.append("Workbench route must contain the declared S0–S8 stages")
+            errors.append("Workbench route must contain the declared S0–S6 stages")
         if (
             route["weekly_hours"],
             route["sessions_per_week"],
@@ -51,12 +51,12 @@ def check(root: Path) -> list[str]:
         relative = path.relative_to(root)
         if any(p.startswith(".") for p in relative.parts) and relative.parts[0] != ".agents":
             continue
-        if relative.parts[0] == "archive" or relative.parts[:3] == (
-            "docs",
-            "review",
-            "independent",
+        if (
+            relative.parts[0] == "archive"
+            or relative.parts[:3] == ("docs", "review", "independent")
+            or relative.parts[:2] == ("resources", "from-scratch-lessons")
         ):
-            continue  # Frozen source/report references are historical, not current paths.
+            continue  # Frozen reports and verbatim upstream lessons are not maintained paths.
         text = path.read_text(encoding="utf-8")
         inside = False
         prose = []

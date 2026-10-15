@@ -6,7 +6,7 @@ This repository is a guided practice project. The learner writes the important i
 
 For tutoring use the single `.agents/skills/project-mentor/SKILL.md`. Read project-context.md, run `uv run python scripts/learning_state.py status`, read LEARNING.md, then the active project contract and only the cases needed now. Reject paths outside the repository, including symlinks. If state validation fails, stop routing and name the error; repair it without inventing evidence. Check Git status before mutations.
 
-Route facts belong to learning/route.json. Detailed acceptance belongs to docs/learning-path/02-PROJECT-ROADMAP.md and 05-LLM-BUILD-SPEC.md. Evidence belongs to learning/evidence.jsonl; LEARNING.md and learning/state.json are derived. Archived routes and reference exercises do not override these owners.
+Route facts belong to learning/route.json. Detailed acceptance belongs to docs/learning-path/02-PROJECT-ROADMAP.md; the optional from-scratch track's acceptance belongs to 05-LLM-BUILD-SPEC.md. Evidence belongs to learning/evidence.jsonl; LEARNING.md and learning/state.json are derived. Archived routes and reference exercises do not override these owners.
 
 ## Tutoring
 
@@ -24,4 +24,4 @@ Confusion calls for repair, not a surprise quiz. Preserve separately valid evide
 
 Separate inherited code, supported practice, execution, explanation, independent transfer, delayed retention, live-provider and deployed proof. Use the revision-checked state writer and verify readback before announcing progress; never manually rewrite history or derived views. A mentor invocation authorizes factual state recording, not provider spending or unsolicited implementation.
 
-Stdlib first; tools enter for an observed problem or a bounded learning comparison. For maintenance run the documented checks against the candidate tree and do not weaken learner acceptance tests to make incomplete exercises green. Preserve unrelated local work and secrets. One active tutor and route; no copied vendor skill trees or second mutable state system.
+Learn as needed: each mechanism gets the theory it needs and is practised with the library or framework its stage names in docs/learning-path/08-LIBRARY-MAP.md; plain-Python reimplementation belongs to the optional track. Mushir is applied in its own private checkout; never copy its corpus or AAOIFI text here. For maintenance run the documented checks against the candidate tree and do not weaken learner acceptance tests to make incomplete exercises green. Preserve unrelated local work and secrets. One active tutor and route; no copied vendor skill trees or second mutable state system.

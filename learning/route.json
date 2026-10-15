@@ -11,25 +11,25 @@
   "stages": [
     {
       "id": "S0",
-      "title": "Project framing and Python diagnostic",
+      "title": "Quest framing and one traced Mushir answer",
       "focused_hours": [
         4,
         6
       ],
       "requires": [],
       "requirements": [
-        "diagnostic"
+        "orientation"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Repair the carried-forward configuration/model-call confusion, frame the quest, then try a fresh small document task.",
-      "contract_section": "## S0 \u2014"
+      "next_action": "Repair the carried-forward configuration/model-call confusion, frame the quest, then predict and trace how one question becomes a cited answer.",
+      "contract_section": "## S0 —"
     },
     {
       "id": "S1",
-      "title": "Reliable Python document-search CLI",
+      "title": "Python floor for AI applications",
       "focused_hours": [
-        26,
-        38
+        20,
+        30
       ],
       "requires": [
         "S0"
@@ -39,139 +39,94 @@
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
       "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S1 \u2014"
+      "contract_section": "## S1 —"
     },
     {
       "id": "S2",
-      "title": "Model boundary and evaluated RAG",
+      "title": "LLM calls, structured output and tracing",
       "focused_hours": [
-        36,
-        52
+        20,
+        30
       ],
       "requires": [
         "S1"
+      ],
+      "requirements": [
+        "llm-apps"
+      ],
+      "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
+      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
+      "contract_section": "## S2 —"
+    },
+    {
+      "id": "S3",
+      "title": "RAG core with frameworks",
+      "focused_hours": [
+        30,
+        45
+      ],
+      "requires": [
+        "S2"
       ],
       "requirements": [
         "rag"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
       "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S2 \u2014"
+      "contract_section": "## S3 —"
     },
     {
-      "id": "S3",
-      "title": "Bounded agents and tool contracts",
+      "id": "S4",
+      "title": "RAG depth and evaluation",
       "focused_hours": [
-        20,
-        30
+        35,
+        50
       ],
       "requires": [
-        "S2"
+        "S3"
+      ],
+      "requirements": [
+        "rag-depth",
+        "evaluation"
+      ],
+      "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
+      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
+      "contract_section": "## S4 —"
+    },
+    {
+      "id": "S5",
+      "title": "Tool-using agents with LangGraph",
+      "focused_hours": [
+        35,
+        50
+      ],
+      "requires": [
+        "S3"
       ],
       "requirements": [
         "agents"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
       "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S3 \u2014"
-    },
-    {
-      "id": "S4",
-      "title": "Math, classical learning and count baselines",
-      "focused_hours": [
-        50,
-        70
-      ],
-      "requires": [
-        "S1"
-      ],
-      "requirements": [
-        "math-ml"
-      ],
-      "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S4 \u2014"
-    },
-    {
-      "id": "S5",
-      "title": "Manual backpropagation and small network",
-      "focused_hours": [
-        45,
-        65
-      ],
-      "requires": [
-        "S4"
-      ],
-      "requirements": [
-        "backprop"
-      ],
-      "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S5 \u2014",
-      "additional_contracts": [
-        "docs/learning-path/05-LLM-BUILD-SPEC.md"
-      ]
+      "contract_section": "## S5 —"
     },
     {
       "id": "S6",
-      "title": "Tokenizer and causal transformer",
+      "title": "Agentic engineering: workflows, guardrails and evaluation",
       "focused_hours": [
-        60,
-        85
+        30,
+        45
       ],
       "requires": [
+        "S4",
         "S5"
       ],
       "requirements": [
-        "transformer"
+        "agentic"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
       "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S6 \u2014",
-      "additional_contracts": [
-        "docs/learning-path/05-LLM-BUILD-SPEC.md"
-      ]
-    },
-    {
-      "id": "S7",
-      "title": "Random-weight training, checkpoint and generation",
-      "focused_hours": [
-        45,
-        70
-      ],
-      "requires": [
-        "S6"
-      ],
-      "requirements": [
-        "pretraining"
-      ],
-      "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S7 \u2014",
-      "additional_contracts": [
-        "docs/learning-path/05-LLM-BUILD-SPEC.md"
-      ]
-    },
-    {
-      "id": "S8",
-      "title": "Integration, reliability and tiny adaptation",
-      "focused_hours": [
-        20,
-        30
-      ],
-      "requires": [
-        "S3",
-        "S7"
-      ],
-      "requirements": [
-        "integration"
-      ],
-      "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S8 \u2014",
-      "additional_contracts": [
-        "docs/learning-path/05-LLM-BUILD-SPEC.md"
-      ]
+      "contract_section": "## S6 —"
     }
   ]
 }

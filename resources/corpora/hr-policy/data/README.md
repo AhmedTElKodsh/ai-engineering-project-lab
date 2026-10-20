@@ -1,3 +1,8 @@
+> Current use is governed by the [single Problem-first RAG plan](../../../../docs/learning-path/02-PROJECT-ROADMAP.md).
+> The older M-labels below are historical. The early clean-source teaching slice is
+> permitted; mixed-format parser evaluation still ingests corpus/ and compares to
+> policies/ without indexing both. Existing metadata/source fixtures remain unchanged.
+
 # Dataset (all fictional)
 
 Every company, person, ID, phone number and email address here is invented for a portfolio project. The company, **Nilebyte Solutions**, is fictional. Emails use the reserved `example.com` and `.example` domains. The national ID in `cand_08` is a dummy number. Salary bands are invented.
@@ -8,7 +13,7 @@ Every company, person, ID, phone number and email address here is invented for a
 |---|---|---|
 | `corpus/` | M2 RAG | **What you ingest.** 21 documents in mixed formats (below), built from `policies/` by `scripts/build_corpus.py`. |
 | `corpus_manifest.json` | M2 RAG | Metadata per document: version, effective dates, status, allowed roles, regions, language, format. This is what SharePoint would give you. |
-| `policies/` | M2 parsing QA | Clean authoring sources, **not for ingestion**. Use them as ground truth to check what your parsers extract. |
+| `policies/` | M2 parsing QA | Clean authoring sources: early Markdown teaching input; later parsing ground truth, not a duplicate index. |
 | `leave_rules.json` | M3 agent | Machine-readable leave rules for the deterministic rules engine, each value citing its clause |
 | `hris_seed.json` | M3 agent | Fake HR system: employees, balances, requests and company holidays. `reference_today` = 2026-09-24 makes tests deterministic. |
 | `jobs/` | M4 screening | Job description and scoring rubric (weights, the required-skill rule, excluded fields, flags that are never raised) |

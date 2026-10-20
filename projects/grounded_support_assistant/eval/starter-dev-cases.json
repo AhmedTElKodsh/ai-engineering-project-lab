@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "fixture_id": "problem-first-rag-starter-v1",
+  "classification": "exposed_development_cases_not_independent_assessment",
+  "rubric": "Equivalent supported wording is accepted. Check units, conditions, uncertainty and support; numeric substring matching is insufficient. These rubrics are not an implemented evaluator.",
+  "cases": [
+    {
+      "id": "pf-dev-01",
+      "question": "How many unused annual leave days can I carry over, and when must I use them?",
+      "case_family": "pf-leave-carryover",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-leave-carryover"
+      ],
+      "required_facts": [
+        "Up to 5 unused days may carry into the next calendar year.",
+        "They must be used by 31 March of that year, after which they expire."
+      ],
+      "forbidden_claims": [
+        "10-day carryover",
+        "30 June deadline"
+      ]
+    },
+    {
+      "id": "pf-dev-02",
+      "question": "Does three consecutive working days of sick leave require a medical certificate?",
+      "case_family": "pf-sick-certificate",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-sick-certificate"
+      ],
+      "required_facts": [
+        "Yes: the published threshold is more than 2 consecutive working days."
+      ],
+      "forbidden_claims": [
+        "A certificate is required for every single day",
+        "An employee-specific approval decision"
+      ]
+    },
+    {
+      "id": "pf-dev-03",
+      "question": "What is the normal office attendance rule for a new employee during their first four weeks?",
+      "case_family": "pf-remote-hybrid",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-remote-hybrid"
+      ],
+      "required_facts": [
+        "New employees work from the office every working day during their first 4 weeks."
+      ],
+      "forbidden_claims": [
+        "Every new employee may automatically work remotely 2 days per week",
+        "A personal exception is approved"
+      ]
+    },
+    {
+      "id": "pf-dev-04",
+      "question": "Is there money to help me set up a desk at home?",
+      "case_family": "pf-remote-stipend",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-remote-stipend"
+      ],
+      "required_facts": [
+        "Hybrid and remote employees receive a one-time home-office stipend of USD 300.",
+        "It must be claimed through the expense system within 90 days of joining."
+      ],
+      "forbidden_claims": [
+        "USD 300 every month",
+        "All employees qualify regardless of arrangement"
+      ]
+    },
+    {
+      "id": "pf-dev-05",
+      "question": "For a full-time employee with three years of continuous service who is past probation, what are the annual entitlement and monthly accrual?",
+      "case_family": "pf-leave-annual",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-leave-annual"
+      ],
+      "required_facts": [
+        "21 working days per calendar year.",
+        "1.75 days monthly accrual."
+      ],
+      "forbidden_claims": [
+        "30 days for three years of service",
+        "A statement of the employee current available balance"
+      ]
+    },
+    {
+      "id": "pf-dev-06",
+      "question": "For a full-time employee with exactly ten years of continuous service, what are the annual entitlement and monthly accrual?",
+      "case_family": "pf-leave-annual",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-leave-annual"
+      ],
+      "required_facts": [
+        "30 working days per calendar year for 10 years or more.",
+        "2.5 days monthly accrual."
+      ],
+      "forbidden_claims": [
+        "21 days at exactly 10 years",
+        "2 days monthly accrual",
+        "2 percent accrual"
+      ]
+    },
+    {
+      "id": "pf-dev-07",
+      "question": "What nightly hotel limit does the travel policy list for Tokyo?",
+      "case_family": "pf-expenses-hotels",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-expenses-hotels"
+      ],
+      "required_facts": [
+        "Tokyo is on the high-cost city list.",
+        "The listed limit is USD 250 per night."
+      ],
+      "forbidden_claims": [
+        "USD 180 per night for Tokyo",
+        "A booking or reimbursement is personally approved"
+      ]
+    },
+    {
+      "id": "pf-dev-08",
+      "question": "Is a receipt required for a single USD 25 expense?",
+      "case_family": "pf-expenses-submit",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-expenses-submit"
+      ],
+      "required_facts": [
+        "Yes: a receipt is required for any single expense above USD 20."
+      ],
+      "forbidden_claims": [
+        "Receipts are required only above USD 25",
+        "Approval or payment is guaranteed"
+      ]
+    },
+    {
+      "id": "pf-dev-09",
+      "question": "How many annual leave days do I personally have left today?",
+      "case_family": "personal-state",
+      "expected_status": "abstain",
+      "gold_evidence_ids": [],
+      "required_facts": [
+        "The supplied policy passages cannot establish a personal current balance.",
+        "A trusted HR balance lookup would be needed."
+      ],
+      "forbidden_claims": [
+        "Assume the balance is 21 days",
+        "Invent an employee record"
+      ]
+    },
+    {
+      "id": "pf-dev-10",
+      "question": "May employees work abroad from any country for twenty working days without asking anyone?",
+      "case_family": "pf-remote-abroad",
+      "expected_status": "answer",
+      "gold_evidence_ids": [
+        "pf-remote-abroad"
+      ],
+      "required_facts": [
+        "No: up to 20 working days per calendar year requires direct manager and HR approval requested at least 3 weeks in advance.",
+        "Restricted countries are not permitted; the supplied fixture does not include the restricted-country list.",
+        "Core hours in the home time zone still apply."
+      ],
+      "forbidden_claims": [
+        "All countries are eligible",
+        "Approval is unnecessary",
+        "Invent a restricted-country list"
+      ]
+    },
+    {
+      "id": "pf-dev-11",
+      "question": "I have an expense from 60 days ago. Does this policy definitely guarantee reimbursement?",
+      "case_family": "pf-expenses-submit",
+      "expected_status": "abstain",
+      "gold_evidence_ids": [
+        "pf-expenses-submit"
+      ],
+      "required_facts": [
+        "No definitive reimbursement determination is supported by this excerpt.",
+        "It says submit within 30 days and says more than 90 days will not be reimbursed.",
+        "It does not resolve the 31–90 day interval; do not invent a yes/no rule for that interval."
+      ],
+      "forbidden_claims": [
+        "All claims up to 90 days are guaranteed",
+        "Every claim after 30 days is categorically rejected"
+      ]
+    },
+    {
+      "id": "pf-dev-12",
+      "question": "What is the capital of France?",
+      "case_family": "outside-domain",
+      "expected_status": "abstain",
+      "gold_evidence_ids": [],
+      "required_facts": [
+        "No supported answer is available from this policy fixture."
+      ],
+      "forbidden_claims": [
+        "Answer from general model knowledge",
+        "Cite an unrelated HR passage"
+      ]
+    }
+  ]
+}

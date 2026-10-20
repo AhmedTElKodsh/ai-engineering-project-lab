@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "fixture_id": "problem-first-rag-starter-v1",
+  "classification": "supplied_synthetic_development_fixture",
+  "reference_date": "2026-09-24",
+  "trusted_context": {
+    "role": "employee",
+    "region": "Cairo"
+  },
+  "provenance": "Verbatim selected text from existing Nilebyte Solutions fictional authoring policies. This is a proposed early teaching fixture, not the full corpus catalog.",
+  "records": [
+    {
+      "id": "pf-leave-scope",
+      "doc_key": "leave_policy",
+      "doc_family": "leave_policy",
+      "policy_id": "HR-LV-01",
+      "title": "Leave Policy",
+      "section": "1. Scope",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/leave_policy.md",
+      "source_section": "1. Scope",
+      "source_sha256": "f2ea4d86656af2cda3b35f07aa3f0ed6dff1eccc3340acc2d80b78b6289a8642",
+      "text": "1.1 This policy applies to all full-time and part-time employees. Contractors and interns follow the leave terms in their individual agreements.\n\n1.2 Part-time employees receive leave entitlements pro-rated to their contracted hours. For example, an employee contracted at 50% of full-time hours receives 50% of the full-time entitlement.\n\n1.3 \"Working day\" means a day that is not a weekend day (Friday or Saturday) and not a company public holiday."
+    },
+    {
+      "id": "pf-leave-annual",
+      "doc_key": "leave_policy",
+      "doc_family": "leave_policy",
+      "policy_id": "HR-LV-01",
+      "title": "Leave Policy",
+      "section": "2.1–2.3 Annual leave",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/leave_policy.md",
+      "source_section": "2.1–2.3 Annual leave",
+      "source_sha256": "f2ea4d86656af2cda3b35f07aa3f0ed6dff1eccc3340acc2d80b78b6289a8642",
+      "text": "2.1 Entitlement. Full-time employees receive paid annual leave each calendar year according to their years of continuous service, as shown in Table 1.\n\nTable 1: Annual leave entitlement for full-time employees\n\n| Continuous service | Annual leave per calendar year | Monthly accrual |\n|---|---|---|\n| Less than 10 years | 21 working days | 1.75 days |\n| 10 years or more | 30 working days | 2.5 days |\n\n2.2 Accrual. Annual leave accrues monthly at the rate shown in Table 1. Employees who join or leave during the year receive a pro-rated entitlement.\n\n2.3 Probation. Employees may not take annual leave during their first 3 months of employment (the probation period), although leave continues to accrue during this time. Exceptions require written approval from the HR Business Partner."
+    },
+    {
+      "id": "pf-leave-carryover",
+      "doc_key": "leave_policy",
+      "doc_family": "leave_policy",
+      "policy_id": "HR-LV-01",
+      "title": "Leave Policy",
+      "section": "2.6 Carryover",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/leave_policy.md",
+      "source_section": "2.6 Carryover",
+      "source_sha256": "f2ea4d86656af2cda3b35f07aa3f0ed6dff1eccc3340acc2d80b78b6289a8642",
+      "text": "2.6 Carryover. Up to 5 unused annual leave days may be carried over into the next calendar year. Carried-over days must be used by 31 March of that year, after which they expire. Unused days above the carryover limit are forfeited and are not paid out, except on leaving the company (see 2.8)."
+    },
+    {
+      "id": "pf-sick-certificate",
+      "doc_key": "leave_policy",
+      "doc_family": "leave_policy",
+      "policy_id": "HR-LV-01",
+      "title": "Leave Policy",
+      "section": "3.3 Medical certificate",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/leave_policy.md",
+      "source_section": "3.3 Medical certificate",
+      "source_sha256": "f2ea4d86656af2cda3b35f07aa3f0ed6dff1eccc3340acc2d80b78b6289a8642",
+      "text": "3.3 A medical certificate is required for sick leave of more than 2 consecutive working days."
+    },
+    {
+      "id": "pf-remote-hybrid",
+      "doc_key": "remote_work_policy",
+      "doc_family": "remote_work_policy",
+      "policy_id": "HR-RW-02",
+      "title": "Remote and Hybrid Work Policy",
+      "section": "1 and 2 Scope and hybrid model",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/remote_work_policy.md",
+      "source_section": "1 and 2 Scope and hybrid model",
+      "source_sha256": "5e899b33815e1174184078071d8751e4eae48d12073a9b2c7169004ff4ffc172",
+      "text": "1.1 This policy explains where and when employees may work. It applies to all employees whose role can be performed away from the office.\n\n1.2 Roles that require on-site presence (for example, office operations and IT hardware support) are excluded.\n\n## 2. Hybrid Working Model\n\n2.1 The standard working model is hybrid: employees work from the office at least 3 days per week and may work remotely for up to 2 days per week.\n\n2.2 Tuesday is the company-wide anchor day. All hybrid employees are expected to work from the office every Tuesday.\n\n2.3 Fully remote arrangements are exceptional. They require approval from the department VP and HR and are reviewed every 6 months.\n\n2.4 New employees work from the office every working day during their first 4 weeks, to support onboarding."
+    },
+    {
+      "id": "pf-remote-stipend",
+      "doc_key": "remote_work_policy",
+      "doc_family": "remote_work_policy",
+      "policy_id": "HR-RW-02",
+      "title": "Remote and Hybrid Work Policy",
+      "section": "5.2 Home-office stipend",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/remote_work_policy.md",
+      "source_section": "5.2 Home-office stipend",
+      "source_sha256": "5e899b33815e1174184078071d8751e4eae48d12073a9b2c7169004ff4ffc172",
+      "text": "5.2 Hybrid and remote employees receive a one-time home-office stipend of USD 300. It must be claimed through the expense system within 90 days of joining."
+    },
+    {
+      "id": "pf-remote-abroad",
+      "doc_key": "remote_work_policy",
+      "doc_family": "remote_work_policy",
+      "policy_id": "HR-RW-02",
+      "title": "Remote and Hybrid Work Policy",
+      "section": "4 Working from abroad",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/remote_work_policy.md",
+      "source_section": "4 Working from abroad",
+      "source_sha256": "5e899b33815e1174184078071d8751e4eae48d12073a9b2c7169004ff4ffc172",
+      "text": "4.1 Employees may work from another country for up to 20 working days per calendar year. This requires approval from the direct manager and HR, requested at least 3 weeks in advance.\n\n4.2 Working from abroad is not permitted in countries where the company has legal, tax or sanctions restrictions. HR Legal maintains the list of restricted countries.\n\n4.3 While working from abroad, employees must remain available during core hours in their home time zone."
+    },
+    {
+      "id": "pf-expenses-submit",
+      "doc_key": "expenses_travel_policy",
+      "doc_family": "expenses_travel_policy",
+      "policy_id": "HR-EX-03",
+      "title": "Expenses and Travel Policy",
+      "section": "2 Submitting expenses",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/expenses_travel_policy.md",
+      "source_section": "2 Submitting expenses",
+      "source_sha256": "b5bb154ac23a8c43ae1c6db45740d4fafa46fd08d05ec0fcb93d4d96fbed1675",
+      "text": "2.1 Expenses must be submitted in the expense system within 30 days of being incurred, with itemised receipts attached.\n\n2.2 Expenses submitted more than 90 days after being incurred will not be reimbursed.\n\n2.3 A receipt is required for any single expense above USD 20.\n\n2.4 Approved expenses are reimbursed in the next monthly payroll."
+    },
+    {
+      "id": "pf-expenses-hotels",
+      "doc_key": "expenses_travel_policy",
+      "doc_family": "expenses_travel_policy",
+      "policy_id": "HR-EX-03",
+      "title": "Expenses and Travel Policy",
+      "section": "4.3 and Appendix A Hotel limits",
+      "version": "2026.1",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "status": "active",
+      "allowed_roles": [
+        "employee",
+        "manager",
+        "hr_staff"
+      ],
+      "regions": [
+        "all"
+      ],
+      "language": "en",
+      "source_path": "resources/corpora/hr-policy/data/policies/expenses_travel_policy.md",
+      "source_section": "4.3 and Appendix A Hotel limits",
+      "source_sha256": "b5bb154ac23a8c43ae1c6db45740d4fafa46fd08d05ec0fcb93d4d96fbed1675",
+      "text": "4.3 Hotels. Nightly hotel limits depend on the destination, as shown in Table 1. High-cost cities are listed in Appendix A.\n\nTable 1: Hotel limits per night\n\n| Destination | Limit per night |\n|---|---|\n| Standard city | USD 180 |\n| High-cost city (Appendix A) | USD 250 |\n\nA.1 The following cities are high-cost cities for the hotel limits in section 4.3. All other cities are standard cities.\n\n| City | Country |\n|---|---|\n| London | United Kingdom |\n| Paris | France |\n| Zurich | Switzerland |\n| New York | United States |\n| Tokyo | Japan |\n| Dubai | United Arab Emirates |\n| Riyadh | Saudi Arabia |"
+    }
+  ]
+}

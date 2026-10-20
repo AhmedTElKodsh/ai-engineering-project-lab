@@ -1,5 +1,9 @@
-# One active route
+# One active plan
 
-The machine-readable [route](learning/route.json) owns stage order and prerequisites; the [detailed roadmap](docs/learning-path/02-PROJECT-ROADMAP.md) owns exit behavior. The [start document](docs/learning-path/00-START-HERE.md) summarizes pace and scope. This index introduces no separate schedule or completion system.
+The [Problem-first RAG plan](docs/learning-path/02-PROJECT-ROADMAP.md) owns the
+employee problem, S0–S6 acceptance, library placement, evidence policy and remaining
+maintenance work. [route.json](learning/route.json) owns route facts;
+[LEARNING.md](LEARNING.md) is the derived resume point. This is an index only.
 
-S0 frames the quest and traces one answer; S1 builds the Python floor; S2 adds model calls, structured output and tracing; S3 builds RAG with libraries and frameworks; S4 deepens retrieval and evaluation while S5 builds tool-using agents (either order after S3); S6 combines them into an evaluated agentic system. Deployment/LLMOps, model adaptation and the optional from-scratch track come after the core, only by choice.
+Earlier proposals, alternative routes and reviews are
+[archived](archive/planning/2026-10-20/README.md). No separate release tracker is active.

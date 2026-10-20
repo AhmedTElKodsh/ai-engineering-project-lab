@@ -1,0 +1,177 @@
+[
+  {
+    "original": "docs/learning-path/00-START-HERE.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/00-START-HERE.md",
+    "sha256": "a71e3afebf5b3283e410662ab9370e395d9951554f7f097fe9c18e5008a16fdf"
+  },
+  {
+    "original": "docs/learning-path/01-LEARNING-METHOD.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/01-LEARNING-METHOD.md",
+    "sha256": "7d383c38ceae5f76a1b7cc04141fb383bfe3e7610de96c048e2635c122d2c921"
+  },
+  {
+    "original": "docs/learning-path/02-PROJECT-ROADMAP.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/02-PROJECT-ROADMAP.md",
+    "sha256": "f5dd9305bfc49537d8b8c29a13343e7b99208c1bba8d7c35e9eca7cd75ca8814"
+  },
+  {
+    "original": "docs/learning-path/03-SKILLS-AND-MASTERY.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/03-SKILLS-AND-MASTERY.md",
+    "sha256": "81cf4a96528275222c1db422a12897ec93d02075a8faaecf3b01bcbe80d03428"
+  },
+  {
+    "original": "docs/learning-path/04-FIRST-FOUR-WEEKS.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/04-FIRST-FOUR-WEEKS.md",
+    "sha256": "92845a8a5d8d9fda8322f17f71c055ef3ef94f576d06063506be4cb415a664df"
+  },
+  {
+    "original": "docs/learning-path/05-LLM-BUILD-SPEC.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/05-LLM-BUILD-SPEC.md",
+    "sha256": "00b5302cd46375349a9005790900dbcaa264ee6727136ecffb19000bb52c3825"
+  },
+  {
+    "original": "docs/learning-path/06-CURRICULUM-MAP-AND-STATE.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/06-CURRICULUM-MAP-AND-STATE.md",
+    "sha256": "9fb21a59188df0b37202883edc578fb3a9d8f7e5886300abfd24db5130c8fff5"
+  },
+  {
+    "original": "docs/learning-path/07-ROUND-TABLE-AND-DECISIONS.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/07-ROUND-TABLE-AND-DECISIONS.md",
+    "sha256": "3277ca6c41b4447f8dcf5b55c074dffc105cb9044c046818706afb24c205bd1b"
+  },
+  {
+    "original": "docs/learning-path/08-LIBRARY-MAP.md",
+    "archived": "archive/planning/2026-10-20/docs/learning-path/08-LIBRARY-MAP.md",
+    "sha256": "2ca65e46a307a097c474401a2d0d296b8a44e071cdfb05828f4ee074a5509065"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/01-PROBLEM-BRIEF.md",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/01-PROBLEM-BRIEF.md",
+    "sha256": "497a1e019467b574857a5c73a06fbe7bd27bf9cf62356ec7b3b6ccb5df25f04d"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/02-PROGRESSIVE-RELEASES.md",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/02-PROGRESSIVE-RELEASES.md",
+    "sha256": "fcb4c121fa1935b504dcf5e291f25420cf7c70aa1dd71a699210115f2fdb7a62"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/03-TUTOR-OPERATING-CONTRACT.md",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/03-TUTOR-OPERATING-CONTRACT.md",
+    "sha256": "9919fa9dd9b3c094e24236f1330b3824b4f69ab5495fc235d11ac5ceacbe0d47"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/04-DATA-AND-EVALUATION.md",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/04-DATA-AND-EVALUATION.md",
+    "sha256": "eda7cb990aa77470ae7d06f25691301ba4dd3abdb01bd6fa0e5c50ef42d1c8b9"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/05-COMPARISON-AND-ADOPTION.md",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/05-COMPARISON-AND-ADOPTION.md",
+    "sha256": "f18dbca3236ea45ecff2a0db491a14ac7f6dfcd86167f6dc4913affcc704daac"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/06-AGENT-HANDOFFS.md",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/06-AGENT-HANDOFFS.md",
+    "sha256": "af66beab0e8319202825cb43c0d9941aacf5429c6799c5506935c598e79ee18a"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/07-VERIFICATION.md",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/07-VERIFICATION.md",
+    "sha256": "dc1e14a8d14f6b2b0b8a204111f274c8f98509f200ed055e2fca8c70f3ba1de3"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/README.md",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/README.md",
+    "sha256": "a3753243ad2a71fc0e5fe9dddbfe05ab8d8af2597708b0445c87884d76e8ee62"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/data/dev-cases.json",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/data/dev-cases.json",
+    "sha256": "e10d1a76316e0e64b6c68f4f0cc4adf4396b0706cc42eb2fdee341970d682ff6"
+  },
+  {
+    "original": "docs/proposals/problem-first-rag/data/starter-corpus.json",
+    "archived": "archive/planning/2026-10-20/docs/proposals/problem-first-rag/data/starter-corpus.json",
+    "sha256": "20d99ee2fe3fbb3e0e797d0c3fe7e7bf42ba793b22aa350a510754329d8e199f"
+  },
+  {
+    "original": "docs/review/AI-ENGINEERING-AND-LEARNING-AUDIT-2026-10-19.md",
+    "archived": "archive/planning/2026-10-20/docs/review/AI-ENGINEERING-AND-LEARNING-AUDIT-2026-10-19.md",
+    "sha256": "02669bb54434292390cee5d52baf25e36abaf65e4a703a5b6a308f4feaadde29"
+  },
+  {
+    "original": "docs/review/CONSOLIDATION.md",
+    "archived": "archive/planning/2026-10-20/docs/review/CONSOLIDATION.md",
+    "sha256": "4631f40a84349ccd94ee54516a7e04a7e2537423c4e1d81dc7898f908ff7e30d"
+  },
+  {
+    "original": "docs/review/IMPROVEMENT-PLAN-2026-10-20.md",
+    "archived": "archive/planning/2026-10-20/docs/review/IMPROVEMENT-PLAN-2026-10-20.md",
+    "sha256": "ccd5b6ed0aeb0cbb66058b986f3a5dec183a199227ad807908e7ec0f6c71070d"
+  },
+  {
+    "original": "docs/review/PROVENANCE.json",
+    "archived": "archive/planning/2026-10-20/docs/review/PROVENANCE.json",
+    "sha256": "a7ebb6e2312069df2eabb8fcbc081667af856996f7e5648c678973c4318ee508"
+  },
+  {
+    "original": "docs/review/independent/acceptance-review-extended.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/acceptance-review-extended.md",
+    "sha256": "d4875890c7127b63dfcd2a3bf521c44c6252ec2e59a7468ac9102c98331d1ce6"
+  },
+  {
+    "original": "docs/review/independent/acceptance-review.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/acceptance-review.md",
+    "sha256": "527a94d0a67b692c3a8cb0dda288ffb648feaaaea72c3da3d5119ebf3673d260"
+  },
+  {
+    "original": "docs/review/independent/blind-review-extended.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/blind-review-extended.md",
+    "sha256": "38b1bb4ad5ff47169ddc28837ab5a7b61efbd006c2c6528ef5eabb3295fb6c42"
+  },
+  {
+    "original": "docs/review/independent/blind-review.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/blind-review.md",
+    "sha256": "57c9521fa986cd794c73fc94383e951a455bd8eb86f8259d263f144c1a45aa04"
+  },
+  {
+    "original": "docs/review/independent/candidate-acceptance-recheck.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/candidate-acceptance-recheck.md",
+    "sha256": "8cb62a365096e3bdcab49a38e39291d74f4674f07702e91077293a2ff50ededd"
+  },
+  {
+    "original": "docs/review/independent/candidate-acceptance.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/candidate-acceptance.md",
+    "sha256": "55f13a46e12b257effdb13006e35d53f4196f5c450897b74d7674a1a355f482d"
+  },
+  {
+    "original": "docs/review/independent/candidate-state-recheck.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/candidate-state-recheck.md",
+    "sha256": "c6a9bb9954513829150ebbdb08e6409a60c66663839c1249c311cf9eccfe2c1e"
+  },
+  {
+    "original": "docs/review/independent/candidate-state-review.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/candidate-state-review.md",
+    "sha256": "8f3d8729cc03d7f67d2adb797d50d2b99d3e35e7e757ef7c0e97da9bd407a03d"
+  },
+  {
+    "original": "docs/review/independent/edge-coverage.md",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/edge-coverage.md",
+    "sha256": "06a946b8b9436cff53dcd1d81a0ce3c58756c01ff0a92bff728be3dfe5cb38b8"
+  },
+  {
+    "original": "docs/review/independent/edge-review-extended.json",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/edge-review-extended.json",
+    "sha256": "e21d8a6e3a37308c80d611969004c9dd0362ba0f1a8b2d0a67e34806b73f1741"
+  },
+  {
+    "original": "docs/review/independent/edge-review.json",
+    "archived": "archive/planning/2026-10-20/docs/review/independent/edge-review.json",
+    "sha256": "7da9eb19547f5a16e1f41f2e0b9cbf1d0ea051febaed27c9388c816750ec47e0"
+  },
+  {
+    "original": "docs/research/PROJECT-SOURCE-REVIEW.md",
+    "archived": "archive/planning/2026-10-20/docs/research/PROJECT-SOURCE-REVIEW.md",
+    "sha256": "f398fd2b1ba493e549e107ca7940053c440196bf149114eee1994a65cf12cf1e"
+  }
+]

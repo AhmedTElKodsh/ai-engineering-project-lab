@@ -1,7 +1,15 @@
 # Sources and attribution
 
-The [consolidation report](docs/review/CONSOLIDATION.md) and [provenance manifest](docs/review/PROVENANCE.json) identify the six reviewed project sources and retained components. The source names/revisions are historical evidence; canonical learner instruction now lives in this repository. Mechanism scaffold code keeps its MIT notice under resources and THIRD_PARTY_NOTICES.md.
+Historical source selection, consolidation provenance, audit evidence and older
+teaching research are preserved in the
+[dated archive](archive/planning/2026-10-20/README.md). Its manifest maps original
+paths and hashes; the archive is not current learner instruction.
 
-The [personal source review](docs/research/PROJECT-SOURCE-REVIEW.md) discusses the five originally suggested project links. Learning-method claims cite primary research in docs/learning-path/01-LEARNING-METHOD.md; algorithm/protocol claims cite papers and official specifications in the roadmap/build specification. These sources inform a local design; they do not validate exact timing, learner competence or product quality.
+The [single plan](docs/learning-path/02-PROJECT-ROADMAP.md) defines the current local
+design. It does not claim proven teaching effectiveness or an exact completion time.
+Mechanism scaffold code retains its MIT notices under resources and
+THIRD_PARTY_NOTICES.md. Optional material remains a dormant reference shelf.
 
-Check volatile APIs/model IDs/current protocol versions against official documentation at implementation time. Pinned curriculum links are inspected reference content, not proof that every upstream implementation has run here. Commercial books and unrelated binaries are not redistributed.
+Check current APIs/model IDs in official documentation when their stage starts.
+Pinned references do not establish live behavior, learner competence or product
+readiness. No private client corpus or commercial book text is redistributed.

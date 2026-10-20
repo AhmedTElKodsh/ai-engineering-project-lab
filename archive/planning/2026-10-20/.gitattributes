@@ -1,0 +1,3 @@
+# Preserve original bytes, including original Markdown hard breaks.
+* -text whitespace=cr-at-eol
+*.md -whitespace

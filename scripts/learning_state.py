@@ -51,23 +51,34 @@ def load(root: Path) -> tuple[dict, list[dict], str]:
     return route, events, hashlib.sha256(route_raw + b"\0" + raw + b"\0" + contracts).hexdigest()
 
 
-def contract_hash(root: Path, stage: dict) -> str:
-    content = contained(root, stage["contract"]).read_text(encoding="utf-8")
-    if stage.get("contract_section"):
-        heading = stage["contract_section"]
+def contract_text(root: Path, path: str, heading: str | None = None) -> str:
+    content = contained(root, path).read_text(encoding="utf-8")
+    if heading is not None:
         if not isinstance(heading, str) or not heading:
             raise ValueError("invalid contract section")
         match = re.search(rf"(?ms)^{re.escape(heading)}[^\n]*\n.*?(?=^## |\Z)", content)
         if not match:
             raise ValueError("contract section missing")
         content = match.group(0)
+    return content
+
+
+def contract_hash(root: Path, stage: dict) -> str:
+    content = contract_text(root, stage["contract"], stage.get("contract_section"))
     for extra in stage.get("additional_contracts", []):
-        content += "\0" + contained(root, extra).read_text(encoding="utf-8")
+        if isinstance(extra, str):
+            content += "\0" + contract_text(root, extra)
+        elif isinstance(extra, dict) and set(extra) <= {"path", "section"} and "path" in extra:
+            content += "\0" + contract_text(root, extra["path"], extra.get("section"))
+        else:
+            raise ValueError("invalid additional contract reference")
     facts = {
         "id": stage["id"],
         "requires": stage["requires"],
         "requirements": stage.get("requirements", []),
     }
+    if "capabilities" in stage:
+        facts["capabilities"] = stage["capabilities"]
     return hashlib.sha256(
         content.encode() + b"\0" + json.dumps(facts, sort_keys=True).encode()
     ).hexdigest()
@@ -103,6 +114,27 @@ def validate(root: Path, route: dict, events: list[dict]) -> None:
         if any(type(item) is not int or item < 0 for item in hours) or hours[0] > hours[1]:
             raise ValueError("invalid hour range")
         contained(root, stage["contract"])
+        blockers = stage.get("assessment_blockers", [])
+        if not isinstance(blockers, list) or any(
+            not isinstance(b, str) or not b.strip() for b in blockers
+        ):
+            raise ValueError("invalid assessment blockers")
+        if "capabilities" in stage:
+            capabilities = stage["capabilities"]
+            if (
+                not isinstance(capabilities, list)
+                or not capabilities
+                or any(not isinstance(c, str) or not c.strip() for c in capabilities)
+                or len(set(capabilities)) != len(capabilities)
+            ):
+                raise ValueError("invalid stage capabilities")
+            actions = stage.get("capability_actions", {})
+            if (
+                not isinstance(actions, dict)
+                or set(actions) - set(capabilities)
+                or any(not isinstance(a, str) or not a.strip() for a in actions.values())
+            ):
+                raise ValueError("invalid capability actions")
         ids.add(stage_id)
     route["_contract_hashes"] = {s["id"]: contract_hash(root, s) for s in stages}
     if type(route.get("retention_delay_hours")) is not int or route["retention_delay_hours"] < 24:
@@ -125,7 +157,18 @@ def validate(root: Path, route: dict, events: list[dict]) -> None:
     for event in events:
         if not isinstance(event, dict) or not required.issubset(event):
             raise ValueError("event missing required fields")
-        if set(event) - required - {"target", "tree", "artifact_sha256", "contract_sha256"}:
+        if (
+            set(event)
+            - required
+            - {
+                "target",
+                "tree",
+                "artifact_sha256",
+                "contract_sha256",
+                "capabilities",
+                "exposed",
+            }
+        ):
             raise ValueError("event contains unknown fields")
         for field in required:
             if not isinstance(event[field], str) or not event[field].strip():
@@ -142,6 +185,34 @@ def validate(root: Path, route: dict, events: list[dict]) -> None:
             raise ValueError("invalid actor")
         if event["result"] not in {"pass", "fail", "observed", "invalidated"}:
             raise ValueError("invalid result")
+        if "capabilities" in event:
+            capabilities = event["capabilities"]
+            declared = next(s for s in stages if s["id"] == event["stage"]).get("capabilities", [])
+            if (
+                not isinstance(capabilities, list)
+                or not capabilities
+                or any(not isinstance(c, str) for c in capabilities)
+                or len(set(capabilities)) != len(capabilities)
+                or (
+                    set(capabilities) - set(declared)
+                    and event.get("contract_sha256") == route["_contract_hashes"][event["stage"]]
+                )
+            ):
+                raise ValueError("unknown or invalid event capabilities")
+        if "exposed" in event and (
+            type(event["exposed"]) is not bool
+            or event["kind"] not in {"context", "focus"}
+            or (
+                not event["exposed"]
+                and (
+                    event["actor"] != "maintainer"
+                    or event["assistance"] != "not_applicable"
+                    or not (event["case"] == "migration" or event["case"].startswith("navigation:"))
+                    or "capabilities" in event
+                )
+            )
+        ):
+            raise ValueError("only neutral maintainer navigation may be marked unexposed")
         if event["kind"] not in {"context", "focus", "correction"}:
             if event["actor"] != "learner" or event["result"] not in {"pass", "fail"}:
                 raise ValueError("learning proof requires learner pass/fail")
@@ -151,6 +222,13 @@ def validate(root: Path, route: dict, events: list[dict]) -> None:
                 r"[0-9a-f]{64}", event["contract_sha256"]
             ):
                 raise ValueError("learning proof requires observed contract hash")
+            stage = next(s for s in stages if s["id"] == event["stage"])
+            if (
+                stage.get("capabilities")
+                and event["contract_sha256"] == route["_contract_hashes"][event["stage"]]
+                and "capabilities" not in event
+            ):
+                raise ValueError("current learning proof requires explicit capability scope")
             if not isinstance(event.get("tree"), str) or not event["tree"].strip():
                 raise ValueError("learning proof requires tested tree/config identifier")
         elif event["kind"] in {"context", "focus"} and event["result"] != "observed":
@@ -168,6 +246,8 @@ def validate(root: Path, route: dict, events: list[dict]) -> None:
                 raise ValueError("invalid correction target scope")
             if event["result"] != "invalidated":
                 raise ValueError("correction must invalidate")
+            if event["assistance"] != "not_applicable" or "capabilities" in event:
+                raise ValueError("correction is neutral; record new supplied help as context")
         elif "target" in event:
             raise ValueError("target is only allowed on correction")
         known[event["id"]] = event
@@ -188,19 +268,27 @@ def derive(route: dict, events: list[dict], revision: str) -> dict:
     position = {e["id"]: i for i, e in enumerate(current)}
     history_position = {e["id"]: i for i, e in enumerate(events)}
 
+    def exposes_case(e: dict) -> bool:
+        """True when an earlier event showed the learner this case, so it cannot be fresh."""
+        return e["kind"] in {
+            "execution",
+            "explanation",
+            "transfer",
+            "retention",
+            "context",
+            "focus",
+        } and e.get("exposed", True)
+
     def previously_seen_case(proof: dict) -> bool:
         return any(
             e["stage"] == proof["stage"]
-            and e["kind"] in {"execution", "explanation", "transfer", "retention"}
+            and exposes_case(e)
             and e["case"] == proof["case"]
             and history_position[e["id"]] < history_position[proof["id"]]
             for e in events
         )
 
-    result = {}
-    for stage in route["stages"]:
-        stage_id = stage["id"]
-        scoped = [e for e in current if e["stage"] == stage_id]
+    def qualify(scoped: list[dict]) -> dict:
         proofs = {}
         for kind in ["execution", "explanation", "transfer", "retention"]:
             applicable = [e for e in scoped if e["kind"] == kind]
@@ -248,13 +336,34 @@ def derive(route: dict, events: list[dict], revision: str) -> dict:
             < timedelta(hours=route["retention_delay_hours"])
         ):
             proofs["retention"] = None
-        own_ready = all(proofs[k] for k in ["execution", "explanation", "transfer"])
+        return {
+            "ready": all(proofs[k] for k in ["execution", "explanation", "transfer"]),
+            "retained": all(proofs.values()),
+            "proofs": {kind: e["id"] if e else None for kind, e in proofs.items()},
+        }
+
+    result = {}
+    retention_reviews = []
+    for stage in route["stages"]:
+        stage_id = stage["id"]
+        scoped = [e for e in current if e["stage"] == stage_id]
+        aggregate = qualify(scoped)
+        capabilities = {
+            cap: qualify([e for e in scoped if cap in e.get("capabilities", [])])
+            for cap in stage.get("capabilities", [])
+        }
+        own_ready = (
+            all(c["ready"] for c in capabilities.values()) if capabilities else aggregate["ready"]
+        )
+        own_retained = (
+            all(c["retained"] for c in capabilities.values())
+            if capabilities
+            else aggregate["retained"]
+        )
         prerequisites = all(result[item]["ready"] for item in stage["requires"])
-        ready = bool(own_ready and prerequisites)
+        ready = bool(own_ready and prerequisites and not stage.get("assessment_blockers"))
         retained = bool(
-            ready
-            and proofs["retention"]
-            and all(result[item]["retained"] for item in stage["requires"])
+            ready and own_retained and all(result[item]["retained"] for item in stage["requires"])
         )
         result[stage_id] = {
             "ready": ready,
@@ -266,8 +375,28 @@ def derive(route: dict, events: list[dict], revision: str) -> dict:
             else "practicing"
             if scoped and any(e["kind"] not in {"context", "focus"} for e in scoped)
             else "not_started",
-            "proofs": {kind: e["id"] if e else None for kind, e in proofs.items()},
+            "proofs": aggregate["proofs"],
+            "assessment_blockers": stage.get("assessment_blockers", []),
         }
+        if capabilities:
+            result[stage_id]["capabilities"] = capabilities
+            result[stage_id]["pending_capabilities"] = [
+                cap for cap, data in capabilities.items() if not data["ready"]
+            ]
+            for cap, data in capabilities.items():
+                if data["ready"] and not data["retained"]:
+                    transfer = next(e for e in scoped if e["id"] == data["proofs"]["transfer"])
+                    retention_reviews.append(
+                        {
+                            "stage": stage_id,
+                            "capability": cap,
+                            "transfer": transfer["id"],
+                            "not_before": (
+                                timestamp(transfer["at"])
+                                + timedelta(hours=route["retention_delay_hours"])
+                            ).isoformat(),
+                        }
+                    )
     eligible = [
         s["id"]
         for s in route["stages"]
@@ -276,6 +405,13 @@ def derive(route: dict, events: list[dict], revision: str) -> dict:
     requested = next((e["stage"] for e in reversed(current) if e["kind"] == "focus"), None)
     active = requested if requested in eligible else next(iter(eligible), None)
     notes = [e["note"] for e in current if e["kind"] == "context"]
+    active_stage = next((s for s in route["stages"] if s["id"] == active), None)
+    next_action = "Revisit pending delayed checks, then defend the complete workbench."
+    if active_stage:
+        pending = result[active].get("pending_capabilities", [])
+        next_action = active_stage.get("capability_actions", {}).get(
+            pending[0] if pending else "", active_stage["next_action"]
+        )
     return {
         "schema_version": 1,
         "revision": revision,
@@ -284,10 +420,8 @@ def derive(route: dict, events: list[dict], revision: str) -> dict:
         "route_complete": all(s["retained"] for s in result.values()),
         "stages": result,
         "context": notes,
-        "next_action": next(
-            (s["next_action"] for s in route["stages"] if s["id"] == active),
-            "Revisit pending delayed checks, then defend the complete workbench.",
-        ),
+        "retention_reviews": retention_reviews,
+        "next_action": next_action,
     }
 
 
@@ -308,6 +442,24 @@ def resume_view(route: dict, state: dict) -> str:
     lines += [f"- {note}" for note in state["context"]] or ["No context recorded."]
     lines += ["", "## Stage evidence", "", "| Stage | Status |", "|---|---|"]
     lines += [f"| {stage} | {data['status']} |" for stage, data in state["stages"].items()]
+    lines += ["", "## Capability evidence", ""]
+    for stage, data in state["stages"].items():
+        for blocker in data["assessment_blockers"]:
+            lines.append(f"- {stage} assessment pending: {blocker}")
+        for cap, proof in data.get("capabilities", {}).items():
+            status = (
+                "retained"
+                if proof["retained"]
+                else "ready; retention pending"
+                if proof["ready"]
+                else "unresolved"
+            )
+            lines.append(f"- {stage} / {cap}: {status}")
+    lines += ["", "## Delayed reviews", ""]
+    lines += [
+        f"- {r['stage']} / {r['capability']}: not before {r['not_before']}; fresh case required."
+        for r in state["retention_reviews"]
+    ] or ["No delayed review scheduled yet."]
     lines += [
         "",
         "Repository tests, inherited code and maintainer work do not certify learner competence.",
@@ -373,6 +525,13 @@ def append(root: Path, event: dict, expected_revision: str) -> dict:
         check_views(root, route, events, revision)
         if revision != expected_revision:
             raise ValueError("evidence changed since read; reload before checkpoint")
+        stage = next((s for s in route["stages"] if s["id"] == event.get("stage")), None)
+        if (
+            stage
+            and stage.get("assessment_blockers")
+            and event.get("kind") in {"transfer", "retention"}
+        ):
+            raise ValueError("assessment blocked; complete and verify the maintainer prerequisites")
         validate(root, route, events + [event])
         # Ledger replacement preserves the entire byte prefix and avoids a torn append.
         ledger = root / "learning/evidence.jsonl"
@@ -397,7 +556,9 @@ def main() -> int:
             if args.event is None or not args.expected_revision:
                 raise ValueError("append requires --event and --expected-revision")
             state = append(
-                root, json.loads(args.event.read_text(encoding="utf-8")), args.expected_revision
+                root,
+                json.loads(contained(root, args.event.as_posix()).read_text(encoding="utf-8")),
+                args.expected_revision,
             )
         elif args.command == "refresh":
             with writer(root):

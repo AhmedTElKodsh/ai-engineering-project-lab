@@ -11,9 +11,9 @@
   "stages": [
     {
       "id": "S0",
-      "title": "Quest framing and one traced Mushir answer",
+      "title": "Understand the employee problem and trace evidence",
       "focused_hours": [
-        4,
+        2,
         6
       ],
       "requires": [],
@@ -21,15 +21,38 @@
         "orientation"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Repair the carried-forward configuration/model-call confusion, frame the quest, then predict and trace how one question becomes a cited answer.",
-      "contract_section": "## S0 —"
+      "next_action": "Frame the fictional employee problem, show pf-leave-carryover with source/version/section, and ask what could go wrong if the assistant invents a deadline. Wait for the learner response.",
+      "contract_section": "## S0 —",
+      "capabilities": [
+        "S0.user_problem",
+        "S0.support",
+        "S0.trace"
+      ],
+      "additional_contracts": [
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Shared learning and evidence rules"
+        },
+        "learning/PROTOCOL.md",
+        "AGENTS.md",
+        ".agents/skills/project-mentor/SKILL.md",
+        "projects/grounded_support_assistant/data/starter-corpus.json"
+      ],
+      "capability_actions": {
+        "S0.user_problem": "Frame the fictional employee problem, show pf-leave-carryover with source/version/section, and ask what could go wrong if the assistant invents a deadline. Wait for the learner response.",
+        "S0.support": "Display the one needed approved excerpt; ask for a supported fact and its source, then wait. Teach the evidence boundary before contrasting an unavailable personal fact.",
+        "S0.trace": "Teach one local manual evidence-path boundary, ask for a small prediction/trace with inputs and outputs, then wait. Do not present this as an implemented pipeline."
+      },
+      "assessment_blockers": [
+        "P1-B: actual isolated mentor-host behavioral pilot and review pending; supported S0 practice allowed"
+      ]
     },
     {
       "id": "S1",
-      "title": "Python floor for AI applications",
+      "title": "Find a cited policy passage",
       "focused_hours": [
-        20,
-        30
+        8,
+        16
       ],
       "requires": [
         "S0"
@@ -38,14 +61,36 @@
         "python"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S1 —"
+      "next_action": "Open this stage section of the single plan; select its first unresolved capability, teach the needed mechanism and ask one learner action.",
+      "contract_section": "## S1 —",
+      "capabilities": [
+        "S1.records",
+        "S1.validation",
+        "S1.lexical_search",
+        "S1.tests_git"
+      ],
+      "additional_contracts": [
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Shared learning and evidence rules"
+        },
+        "learning/PROTOCOL.md",
+        "AGENTS.md",
+        ".agents/skills/project-mentor/SKILL.md",
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Data and evaluation rules"
+        }
+      ],
+      "assessment_blockers": [
+        "P1-C: stage assessment/learner-test and mentor-pilot prerequisites remain pending verification before first proof"
+      ]
     },
     {
       "id": "S2",
-      "title": "LLM calls, structured output and tracing",
+      "title": "Answer from retrieved evidence",
       "focused_hours": [
-        20,
+        16,
         30
       ],
       "requires": [
@@ -55,15 +100,37 @@
         "llm-apps"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S2 —"
+      "next_action": "Open this stage section of the single plan; select its first unresolved capability, teach the needed mechanism and ask one learner action.",
+      "contract_section": "## S2 —",
+      "capabilities": [
+        "S2.configuration",
+        "S2.provider_io",
+        "S2.structured_support",
+        "S2.tracing"
+      ],
+      "additional_contracts": [
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Shared learning and evidence rules"
+        },
+        "learning/PROTOCOL.md",
+        "AGENTS.md",
+        ".agents/skills/project-mentor/SKILL.md",
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Data and evaluation rules"
+        }
+      ],
+      "assessment_blockers": [
+        "P1-D/P2-1/P2-2: provider/support checks and clean early-RAG assessment remain pending verification before first proof"
+      ]
     },
     {
       "id": "S3",
-      "title": "RAG core with frameworks",
+      "title": "Handle wording and document boundaries",
       "focused_hours": [
-        30,
-        45
+        35,
+        55
       ],
       "requires": [
         "S2"
@@ -72,15 +139,38 @@
         "rag"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S3 —"
+      "next_action": "Open this stage section of the single plan; select its first unresolved capability, teach the needed mechanism and ask one learner action.",
+      "contract_section": "## S3 —",
+      "capabilities": [
+        "S3.semantic_search",
+        "S3.parsing_chunking",
+        "S3.index_lifecycle",
+        "S3.eligibility",
+        "S3.retrieval_metrics"
+      ],
+      "additional_contracts": [
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Shared learning and evidence rules"
+        },
+        "learning/PROTOCOL.md",
+        "AGENTS.md",
+        ".agents/skills/project-mentor/SKILL.md",
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Data and evaluation rules"
+        }
+      ],
+      "assessment_blockers": [
+        "P2-1/P2-4: full-corpus selectors, bound gates, eligibility and index lifecycle remain pending verification before first proof"
+      ]
     },
     {
       "id": "S4",
-      "title": "RAG depth and evaluation",
+      "title": "Applicable rules, conversation and measured improvements",
       "focused_hours": [
         35,
-        50
+        55
       ],
       "requires": [
         "S3"
@@ -90,12 +180,34 @@
         "evaluation"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S4 —"
+      "next_action": "Open this stage section of the single plan; select its first unresolved capability, teach the needed mechanism and ask one learner action.",
+      "contract_section": "## S4 —",
+      "capabilities": [
+        "S4.applicability_security",
+        "S4.hybrid_rerank",
+        "S4.conversation",
+        "S4.evaluation"
+      ],
+      "additional_contracts": [
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Shared learning and evidence rules"
+        },
+        "learning/PROTOCOL.md",
+        "AGENTS.md",
+        ".agents/skills/project-mentor/SKILL.md",
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Data and evaluation rules"
+        }
+      ],
+      "assessment_blockers": [
+        "Phase 3: calibrated evaluation and applicable gate dependencies remain pending verification before first proof"
+      ]
     },
     {
       "id": "S5",
-      "title": "Tool-using agents with LangGraph",
+      "title": "Authenticated lookups and safe drafts",
       "focused_hours": [
         35,
         50
@@ -107,12 +219,34 @@
         "agents"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S5 —"
+      "next_action": "Open this stage section of the single plan; select its first unresolved capability, teach the needed mechanism and ask one learner action.",
+      "contract_section": "## S5 —",
+      "capabilities": [
+        "S5.tool_authority",
+        "S5.recovery",
+        "S5.workflow_agent",
+        "S5.mcp"
+      ],
+      "additional_contracts": [
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Shared learning and evidence rules"
+        },
+        "learning/PROTOCOL.md",
+        "AGENTS.md",
+        ".agents/skills/project-mentor/SKILL.md",
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Data and evaluation rules"
+        }
+      ],
+      "assessment_blockers": [
+        "Phase 3/U13: tool authorization/recovery gates and dependencies remain pending verification before first proof"
+      ]
     },
     {
       "id": "S6",
-      "title": "Agentic engineering: workflows, guardrails and evaluation",
+      "title": "Reproduce and defend the local release",
       "focused_hours": [
         30,
         45
@@ -125,8 +259,30 @@
         "agentic"
       ],
       "contract": "docs/learning-path/02-PROJECT-ROADMAP.md",
-      "next_action": "Open the stage contract and select its first unresolved acceptance behavior.",
-      "contract_section": "## S6 —"
+      "next_action": "Open this stage section of the single plan; select its first unresolved capability, teach the needed mechanism and ask one learner action.",
+      "contract_section": "## S6 —",
+      "capabilities": [
+        "S6.integration",
+        "S6.memory",
+        "S6.release_defense",
+        "S6.private_transfer"
+      ],
+      "additional_contracts": [
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Shared learning and evidence rules"
+        },
+        "learning/PROTOCOL.md",
+        "AGENTS.md",
+        ".agents/skills/project-mentor/SKILL.md",
+        {
+          "path": "docs/learning-path/02-PROJECT-ROADMAP.md",
+          "section": "## Data and evaluation rules"
+        }
+      ],
+      "assessment_blockers": [
+        "Phase 3: combined gates and local release-defense prerequisites remain pending verification before first proof"
+      ]
     }
   ]
 }

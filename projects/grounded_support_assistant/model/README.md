@@ -1,3 +1,7 @@
-# Reserved: optional from-scratch model laboratory
+# Dormant optional model laboratory
 
-Not part of the core S0–S6 route. If the learner chooses the optional from-scratch track, this directory holds their small decoder-only language model: count baselines, manual gradients, tokenizer, causal transformer, training from random weights, checkpoint and generation. The [model build specification](../../../docs/learning-path/05-LLM-BUILD-SPEC.md) is its contract; the mechanism labs and from-scratch lessons under resources are its preparatory shelf. No trained model or completed transformer is supplied.
+This shelf is not selected in the active S0–S6 route. No trained model or completed
+transformer is supplied. Its [historical specification](../../../archive/planning/2026-10-20/docs/learning-path/05-LLM-BUILD-SPEC.md)
+is reference only; activation and current acceptance would be explicit later work.
+The [single active plan](../../../docs/learning-path/02-PROJECT-ROADMAP.md) owns the
+current project. Existing labs/lessons do not award progress.

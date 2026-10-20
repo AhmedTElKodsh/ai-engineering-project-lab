@@ -22,7 +22,8 @@ def check(root: Path) -> list[str]:
         "TOOLING.md",
         "learning/PROTOCOL.md",
         "docs/teaching/AUTHORING.md",
-        "docs/review/CONSOLIDATION.md",
+        "docs/learning-path/02-PROJECT-ROADMAP.md",
+        "scripts/check_s0_readiness.py",
         ".agents/skills/project-mentor/SKILL.md",
         ".agents/skills/project-mentor/agents/openai.yaml",
     ]
@@ -35,6 +36,12 @@ def check(root: Path) -> list[str]:
         expected = [f"S{i}" for i in range(7)]
         if [s["id"] for s in route["stages"]] != expected:
             errors.append("Workbench route must contain the declared S0–S6 stages")
+        if any(not s.get("capabilities") for s in route["stages"]):
+            errors.append("Every stage must declare its critical capabilities")
+        if list((root / "docs/learning-path").glob("*.md")) != [
+            root / "docs/learning-path/02-PROJECT-ROADMAP.md"
+        ]:
+            errors.append("Exactly one active detailed plan is required")
         if (
             route["weekly_hours"],
             route["sessions_per_week"],

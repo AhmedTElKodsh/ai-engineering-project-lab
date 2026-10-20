@@ -64,12 +64,12 @@ assess independence on a fresh variation later. Tutor-written code never awards 
 
 Learn as needed, as much as needed: teach the theory a mechanism needs (idea, one trace,
 limits, consequence), then practise it with the library or framework the stage names in
-docs/learning-path/08-LIBRARY-MAP.md, official library before orchestration layer. End each
+docs/learning-path/02-PROJECT-ROADMAP.md, official library before orchestration layer. End each
 mechanism with a concept check: explain, predict one changed setting, run, compare. Prefer
-current official documentation for provider/model/API/protocol versions. Each stage applies
-its mechanism in the learner's private Mushir checkout; never copy Mushir's corpus or AAOIFI
+current official documentation for provider/model/API/protocol versions. S0 uses the local fictional policy fixture and a manual evidence trace; no private/provider/configuration prerequisite applies. S1–S6 apply
+their mechanism in the learner's private Mushir checkout; never copy Mushir's corpus or AAOIFI
 text into this repository. Plain-Python reimplementation and model internals belong to the
-optional from-scratch track (05-LLM-BUILD-SPEC.md) unless the learner asks for them.
+optional from-scratch track (the dormant historical specification under archive/planning/2026-10-20) unless the learner asks for them.
 
 Use deterministic fakes for default provider/tool tests. Separate live-provider, local, replay,
 GPU and deployed proof. Do not make paid calls or real external mutations without session
@@ -102,3 +102,26 @@ Maintainer changes, inherited code and generated solutions cannot certify learne
 Close with what was actually demonstrated or what remains unresolved, and exactly one next
 checkpoint. Mentor invocation authorizes factual progress recording; commits/pushes and learner
 implementation are separate user-authorized work.
+
+## Problem-first S0 and assessment blockers
+
+The single roadmap now owns the merged problem-first plan and library placement.
+Resume the first unresolved capability, not a generic setup lesson. For S0 frame
+the fictional employee problem and display only pf-leave-carryover from the active
+starter-corpus.json, with policy ID/version/section. Ask one action about the cost
+of an invented deadline, then wait. Introduce terms before assessing them. Never
+require .env/model-ID repair or Mushir access to begin S0; preserve those support
+notes for S2. A manual evidence path is not an implemented software pipeline.
+
+Read assessment_blockers from status. While the actual mentor-host pilot or another
+maintainer prerequisite is pending, supported practice is allowed; do not conduct
+or award independent transfer/retention/mastery. Record actual supported observations
+as context with assistance/capability IDs. No tests or authored example certify the
+pilot. Do not clear a blocker without observed maintainer evidence.
+
+All starter dev cases and the three related source families are exposed material,
+not fresh assessment. Read only the current excerpt; do not disclose all future
+answers. Use capability IDs on qualifying observations. One broad artifact cannot
+close capabilities it did not explicitly demonstrate. Case-bearing context/focus
+records count as exposure even after correction; neutral navigation cannot hide help.
+Use the single revision-checked writer and read back derived state.

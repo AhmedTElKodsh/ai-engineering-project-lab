@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "revision": "d47a29c5f6abb00dbf4ba2e802a69736f8fe9440c7b76aa571c90177c450b31c",
+  "revision": "7a7e2f2eab100b36ae62c5990ca683d4caba4dfa36c6f50dcc1550d1e08627ab",
   "contract_hashes": {
-    "S0": "0f5a18495371081f61419bb2c67a5bea53db39384b5d6ca75d64433d0e6ffd10",
-    "S1": "8fbfdba01bc1b9e0410c668fea55890127c587ac4f6af8c0e97a3c54413aee35",
-    "S2": "108d5b207e920e3b1849833e64e659fc754c8761befef17b73c7b4106e889e26",
-    "S3": "df2000e00b7e97afe28a895fca3110ef4f4aab69ddf5ddfbeb5790124094c037",
-    "S4": "2c05d2183f9a0c5f6ebef15ace453027da0c38e2ee9371a9b79a2c082e2c233e",
-    "S5": "fa3d772763c2d06214af248fff08b203e9aa4f8a95c55152f945d7eed4386192",
-    "S6": "bd4f076f45e6f3bc2e4ed087fd212fdb493b25286b2dec5cb30c765fbdf8a006"
+    "S0": "68d9550e6c84f353b526535f7fc066eaa78744383ca484f02c9173d418d501c7",
+    "S1": "f073b9d2e7fed4a0b2f9f2b3cd1e3329430958f81581b370d658325e00b6c229",
+    "S2": "0d2064def281bc7293006af806156ffff3878e9dd78fcda1810bed66c32933ca",
+    "S3": "3633ef9346043c63c67ee6ee77b0804435b87227ab60b3a870661730928a6cb4",
+    "S4": "af51eece4ebbb104c91c8b08c5e081bb5bdbe6a0ecb5bba1e98e6ef5d2c849bb",
+    "S5": "a92d7d662d5d989c89dd8dd805b604fda4b86ffb9ebd2fbbaf542d9ca8e342c3",
+    "S6": "2c337b515274137b966d43cecac0274e6324c49e219fe12f04d96754b8d270bd"
   },
   "active_stage": "S0",
   "route_complete": false,
@@ -22,7 +22,47 @@
         "explanation": null,
         "transfer": null,
         "retention": null
-      }
+      },
+      "assessment_blockers": [
+        "P1-B: actual isolated mentor-host behavioral pilot and review pending; supported S0 practice allowed"
+      ],
+      "capabilities": {
+        "S0.user_problem": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S0.support": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S0.trace": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        }
+      },
+      "pending_capabilities": [
+        "S0.user_problem",
+        "S0.support",
+        "S0.trace"
+      ]
     },
     "S1": {
       "ready": false,
@@ -33,7 +73,58 @@
         "explanation": null,
         "transfer": null,
         "retention": null
-      }
+      },
+      "assessment_blockers": [
+        "P1-C: stage assessment/learner-test and mentor-pilot prerequisites remain pending verification before first proof"
+      ],
+      "capabilities": {
+        "S1.records": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S1.validation": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S1.lexical_search": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S1.tests_git": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        }
+      },
+      "pending_capabilities": [
+        "S1.records",
+        "S1.validation",
+        "S1.lexical_search",
+        "S1.tests_git"
+      ]
     },
     "S2": {
       "ready": false,
@@ -44,7 +135,58 @@
         "explanation": null,
         "transfer": null,
         "retention": null
-      }
+      },
+      "assessment_blockers": [
+        "P1-D/P2-1/P2-2: provider/support checks and clean early-RAG assessment remain pending verification before first proof"
+      ],
+      "capabilities": {
+        "S2.configuration": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S2.provider_io": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S2.structured_support": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S2.tracing": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        }
+      },
+      "pending_capabilities": [
+        "S2.configuration",
+        "S2.provider_io",
+        "S2.structured_support",
+        "S2.tracing"
+      ]
     },
     "S3": {
       "ready": false,
@@ -55,7 +197,69 @@
         "explanation": null,
         "transfer": null,
         "retention": null
-      }
+      },
+      "assessment_blockers": [
+        "P2-1/P2-4: full-corpus selectors, bound gates, eligibility and index lifecycle remain pending verification before first proof"
+      ],
+      "capabilities": {
+        "S3.semantic_search": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S3.parsing_chunking": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S3.index_lifecycle": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S3.eligibility": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S3.retrieval_metrics": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        }
+      },
+      "pending_capabilities": [
+        "S3.semantic_search",
+        "S3.parsing_chunking",
+        "S3.index_lifecycle",
+        "S3.eligibility",
+        "S3.retrieval_metrics"
+      ]
     },
     "S4": {
       "ready": false,
@@ -66,7 +270,58 @@
         "explanation": null,
         "transfer": null,
         "retention": null
-      }
+      },
+      "assessment_blockers": [
+        "Phase 3: calibrated evaluation and applicable gate dependencies remain pending verification before first proof"
+      ],
+      "capabilities": {
+        "S4.applicability_security": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S4.hybrid_rerank": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S4.conversation": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S4.evaluation": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        }
+      },
+      "pending_capabilities": [
+        "S4.applicability_security",
+        "S4.hybrid_rerank",
+        "S4.conversation",
+        "S4.evaluation"
+      ]
     },
     "S5": {
       "ready": false,
@@ -77,7 +332,58 @@
         "explanation": null,
         "transfer": null,
         "retention": null
-      }
+      },
+      "assessment_blockers": [
+        "Phase 3/U13: tool authorization/recovery gates and dependencies remain pending verification before first proof"
+      ],
+      "capabilities": {
+        "S5.tool_authority": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S5.recovery": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S5.workflow_agent": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S5.mcp": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        }
+      },
+      "pending_capabilities": [
+        "S5.tool_authority",
+        "S5.recovery",
+        "S5.workflow_agent",
+        "S5.mcp"
+      ]
     },
     "S6": {
       "ready": false,
@@ -88,11 +394,63 @@
         "explanation": null,
         "transfer": null,
         "retention": null
-      }
+      },
+      "assessment_blockers": [
+        "Phase 3: combined gates and local release-defense prerequisites remain pending verification before first proof"
+      ],
+      "capabilities": {
+        "S6.integration": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S6.memory": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S6.release_defense": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        },
+        "S6.private_transfer": {
+          "ready": false,
+          "retained": false,
+          "proofs": {
+            "execution": null,
+            "explanation": null,
+            "transfer": null,
+            "retention": null
+          }
+        }
+      },
+      "pending_capabilities": [
+        "S6.integration",
+        "S6.memory",
+        "S6.release_defense",
+        "S6.private_transfer"
+      ]
     }
   },
   "context": [
     "In the configuration-test detour, distinguish exact Python/Pydantic identifiers and case-sensitive text: _env_file, not _get_file; \"Field required\" differs from \"field required\". In model-call work distinguish a client library from provider-owned model IDs, verify IDs before rebuilding, and distinguish .env files from process environment; load configuration before reading GROQ_API_KEY. These are support notes, not verified capability failures or completed skills."
   ],
-  "next_action": "Repair the carried-forward configuration/model-call confusion, frame the quest, then predict and trace how one question becomes a cited answer."
+  "retention_reviews": [],
+  "next_action": "Frame the fictional employee problem, show pf-leave-carryover with source/version/section, and ask what could go wrong if the assistant invents a deadline. Wait for the learner response."
 }

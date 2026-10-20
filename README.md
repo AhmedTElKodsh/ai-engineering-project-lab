@@ -1,63 +1,47 @@
-# AI Engineering Workbench
+# Problem-first RAG Workbench
 
-One cumulative, learner-owned project for learning AI engineering: grow a grounded assistant from a typed, tested Python program into evaluated RAG and tool-using agents, with each mechanism learned through existing frameworks and applied to a real product.
+Build one employee-policy assistant as its users' problems grow. You write the
+important implementation; the AI tutors one meaningful action at a time.
 
-**Pace:** two hours/day, five days/week, CPU first. **Depth:** RAG systems, then AI agents and agentic engineering. **Floor:** Python, evaluation, observability, cost, security. **Current learner state:** S0 unresolved; no competence is awarded by repository maintenance.
+Start with the [single project plan](docs/learning-path/02-PROJECT-ROADMAP.md),
+[current checkpoint](LEARNING.md), and [project briefing](projects/grounded_support_assistant/README.md).
+Use `$project-mentor` to resume. S0 needs no provider account, model download or
+private checkout. It begins with an employee question and one approved policy excerpt.
 
-Start with the [project plan](docs/learning-path/00-START-HERE.md), [current checkpoint](LEARNING.md) and [project quest](projects/grounded_support_assistant/README.md). Ask `$project-mentor` to resume one meaningful action at a time.
+## Progression
 
-## The route
+S0 understand the problem/source boundary → S1 find a cited passage → S2 answer from
+retrieved evidence → S3 handle different wording and document formats → S4 applicable
+rules, conversation and measured improvements → S5 authenticated tools and safe drafts
+→ S6 reproduce and defend the integrated local release.
 
-| Stage | Cumulative outcome | Focused hours |
-|---|---|---:|
-| S0 | Frame the quest; trace one Mushir answer from question to citation | 4–6 |
-| S1 | Python floor for AI apps: typed records, Pydantic, tests, HTTP, configuration | 20–30 |
-| S2 | LLM calls, structured output and tracing (SDK, then LangChain; LangSmith) | 20–30 |
-| S3 | RAG core: parsing, chunking, embeddings, Chroma, citations; LangChain and LlamaIndex rebuilds | 30–45 |
-| S4 | RAG depth: hybrid search, re-ranking, filters, injection defense, evaluation with statistics | 35–50 |
-| S5 | Tool-using agents: tool calling, LangGraph, approval, MCP | 35–50 |
-| S6 | Agentic engineering: multi-agent patterns, memory, guardrails, agent evaluation | 30–45 |
-
-The plan totals 174–256 focused hours; with a 20% reserve, about 21–31 study weeks at ten hours/week. These are estimates, not measured timings. The [roadmap](docs/learning-path/02-PROJECT-ROADMAP.md) owns acceptance behavior; [route.json](learning/route.json) owns stage IDs and dependencies; the [library map](docs/learning-path/08-LIBRARY-MAP.md) says which libraries each stage teaches and why.
-
-After the core: deployment/LLMOps and model adaptation as later branches, and an optional from-scratch track (manual gradients, transformer, training from random weights) defined by the [model build specification](docs/learning-path/05-LLM-BUILD-SPEC.md).
-
-## Where things live
-
-| Path | What it is |
-|---|---|
-| `projects/grounded_support_assistant/` | The learner's code. Inherited lexical baseline to improve, not finished work |
-| `resources/corpora/hr-policy/` | Fictional HR corpus and eval sets used from S3 on |
-| `resources/labs/`, `resources/from-scratch-lessons/` | Optional from-scratch track material |
-| `explorations/` | Side quests and tutorial follow-alongs; no stage credit |
-| `learning/` | Route, append-only evidence log, derived state |
-| `docs/learning-path/` | The plan; `docs/review/` the consolidation record |
-| `archive/` | Historical state and retired routes, never current instruction |
-
-**Mushir** (the client's Islamic-finance RAG assistant) lives in its own private repository. Each stage applies its mechanism there; nothing from Mushir's corpus is copied into this public repository.
-
-## Run the inherited baseline
+The [route](learning/route.json) owns IDs, dependencies, capability IDs, effort and
+assessment blockers. Five two-hour sessions weekly, CPU first. Stage ranges are
+provisional, not demonstrated pace. Learner progress remains unresolved until actual
+observations qualify. Preparation, passing maintenance tests and supplied fixtures
+never award competence. S0 supported practice can begin; the actual mentor-host
+behavioral pilot remains required before its first mastery decision.
 
 ```powershell
 uv sync --locked --all-groups
 uv run python scripts/learning_state.py status
-uv run python projects/grounded_support_assistant/app.py "How long is an export link valid?"
-uv run pytest -rxX -q
+uv run python scripts/check_s0_readiness.py
 ```
 
-No API key, GPU, model download or network call is needed to run the baseline after environment setup. It retrieves English handbook sections by token overlap. Its evaluation has twenty cases with a declared paraphrase failure, plus four challenge cases tracked as strict expected failures. This is inherited reference code to inspect and improve, not a reliable assistant or learner achievement.
+## Working surfaces
 
-## Find the right document
+- `projects/grounded_support_assistant/`: learner-owned project; the existing lexical
+  handbook app remains an inherited reference, not the newly implemented HR system.
+- `projects/grounded_support_assistant/data/starter-corpus.json`: nine supplied policy
+  passages; development-only cases are under `eval/starter-dev-cases.json`.
+- `resources/corpora/hr-policy/`: full synthetic HR data for later expansion.
+- `learning/`: one append-only evidence history and derived views.
+- `archive/planning/2026-10-20/`: superseded proposals, route documents and reviews,
+  preserved with original-path hashes. They never override the current plan.
+- `resources/labs/`, `resources/from-scratch-lessons/`, `explorations/`: optional
+  references/side quests with no automatic stage credit.
 
-| Need | Owner |
-|---|---|
-| Session method and gradual help | [Learning method](docs/learning-path/01-LEARNING-METHOD.md), [mentor skill](.agents/skills/project-mentor/SKILL.md) |
-| Skills and mastery gates | [Skills and mastery](docs/learning-path/03-SKILLS-AND-MASTERY.md) |
-| First twenty sessions | [First four weeks](docs/learning-path/04-FIRST-FOUR-WEEKS.md) |
-| Libraries by stage and tier | [Library map](docs/learning-path/08-LIBRARY-MAP.md) |
-| Why the plan looks like this | [Round tables and decisions](docs/learning-path/07-ROUND-TABLE-AND-DECISIONS.md) |
-| Safe factual progress recording | [Evidence protocol](learning/PROTOCOL.md) |
-| How earlier repositories were merged | [Consolidation report](docs/review/CONSOLIDATION.md) |
-| Versions, validation and contributor rules | [Project context](project-context.md), [tooling policy](TOOLING.md) |
-
-Only this route, one installed mentor and one factual event log are active.
+Mushir stays private. S1–S6 apply relevant mechanisms in its own authorized checkout;
+no private corpus/AAOIFI text enters this public repository. S0 uses a local fallback.
+See [AGENTS.md](AGENTS.md), [project context](project-context.md),
+[evidence protocol](learning/PROTOCOL.md) and [tooling](TOOLING.md).

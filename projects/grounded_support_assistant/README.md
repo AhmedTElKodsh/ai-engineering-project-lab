@@ -1,34 +1,56 @@
-# Grounded Support Assistant
+# Employee policy assistant: learner-owned project
 
-## Quest briefing
+## S0 briefing
 
-You join a support team with an approved handbook. Your job is to build software that finds useful passages, answers only what the sources support, and refuses or asks for clarification when necessary. Wrong account/billing guidance creates rework and user harm. Start with a small local corpus; no AI vocabulary or provider account is assumed.
+You are the junior AI engineer helping the employee help desk at the fictional
+Nilebyte Solutions. An employee needs the right published rule and a source they
+can check. A wrong deadline can cause lost leave or an invalid request. Your first
+job is to explain the problem and identify what evidence supports an answer.
 
-The inherited prototype is a starting observation. The learner has not yet demonstrated its purpose or implementation. First explain the refusal risk, then use a displayed [handbook excerpt](data/handbook.md) to identify a supported fact and its source. Actual clear evidence can satisfy these ideas across as many turns as needed; existing code or a mentor explanation does not satisfy them.
+The [single plan](../../docs/learning-path/02-PROJECT-ROADMAP.md) owns acceptance.
+Read S0 and the first unresolved capability from [the state](../../LEARNING.md).
+No provider, new dependency, model download, private codebase or implementation task
+is needed to start. Configuration support notes are preserved for S2, not an S0 gate.
 
-## Current behavior and limitations
+Use passage `pf-leave-carryover` in [the starter fixture](data/starter-corpus.json):
+Leave Policy HR-LV-01, version 2026.1, section 2.6, at fixture date 2026-09-24.
+The tutor shows its approved excerpt, frames the employee's risk and asks one action,
+then waits. Later S0 traces a manual source-based answer path and distinguishes it
+from software execution. Do not open every development answer to begin tutoring.
 
-The app ranks English sections by exact non-stopword overlap and returns one whole section when at least two terms match. JSON contains question, answer, citations and abstained. The [original evaluation asset](eval/cases.json) has twenty cases: nineteen currently pass and one paraphrase is a strict expected failure. The [new challenge set](eval/challenges.json) captures unsupported overlap, multiple intents and injection-like phrasing found by independent review. Those failures are deliberate visible improvement work, not proof of reliable supported answers.
+## What exists and what remains learner work
 
-A source citation indicates the returned passage's origin; it does not establish that it answers every requested fact. This baseline has no semantic model, authority-bearing tool, provider or full RAG generation. Its corpus language is English; nonmatching language input should produce abstention, and multilingual retrieval is later scope. Do not call lexical search a trained LLM.
+Nine supplied English passages from three policy families and twelve exposed
+[development cases](eval/starter-dev-cases.json) support the initial releases.
+They are not unseen assessment or evidence of learner authorship. The HR retrieval,
+model boundary and later ingestion/agent modules remain learner implementation work.
+No complete active solution is supplied by this preparation.
+
+`app.py` and `data/handbook.md` are the older inherited lexical reference: token-overlap
+ranking with source citations/abstention. Its twenty original cases include a known
+paraphrase failure; four challenge cases are also strict expected failures. It is
+not the new HR pipeline or evidence that the learner built a RAG system. A returned
+section/citation cannot establish support for every requested claim.
 
 ```powershell
-uv run python projects/grounded_support_assistant/app.py "How long is an export link valid?"
-uv run pytest projects/grounded_support_assistant -rxX -q
+uv run python scripts/check_s0_readiness.py
+uv run python scripts/learning_state.py status
 ```
 
-## Cumulative learner-owned releases
+If explicitly inspecting the reference: run `uv run python
+projects/grounded_support_assistant/app.py "How long is an export link valid?"`.
+Label the domain and inherited status; do not make this a private/provider prerequisite.
 
-The single [S0–S6 roadmap](../../docs/learning-path/02-PROJECT-ROADMAP.md) owns the sequence. S1 makes this program typed, tested and configurable; S2 puts a real model behind it with structured output and tracing; S3 turns it into a RAG assistant over the [HR policy corpus](../../resources/corpora/hr-policy/README.md), built with libraries and then with LangChain and LlamaIndex; S4 deepens retrieval and evaluation; S5 adds tools and a LangGraph agent; S6 combines them into an evaluated agentic system. Each stage is also applied to Mushir in its own private checkout.
+## Growth and trust
 
-The `model/` directory is reserved for the optional from-scratch track and is not part of the core route.
+S1 integrates library-based lexical search; S2 connects retrieved evidence to a
+validated fake/live model boundary; S3 adds semantic retrieval and real ingestion;
+S4 tests applicability, security, conversation and measured improvement; S5 adds
+fake authenticated lookups/drafts; S6 defends a reproducible integrated local release.
+Full-route completion still includes S5/S6 even though useful RAG arrives earlier.
 
-## Tool-authority requirements at S5
-
-Agent tools are allowlisted by name with validated arguments; trusted application context supplies actor, corpus and any internal object IDs. An untrusted model proposal cannot authorize a write. Bind approval to exact target/arguments/hash and an independent approver, revalidate before execution, and reject replay, stale versions, traversal, unknown IDs and changed parameters. A resolved task either explicitly rejects follow-up or starts a new bound run; it never silently accepts a message with no legal state transition.
-
-Start with local simulated effects. Test bounded steps/timeouts and restart, duplicate action IDs, failed writes and unknown outcomes. Claims about real deployment or side effects need separate observed evidence.
-
-## Evaluation hygiene
-
-Keep development cases separate from unseen transfer and final held-out data. Split by source/document before generating related examples, fit vocab/statistics on training only, and compare against a frozen baseline. Report supported/unsupported and multilingual limitations, raw errors, latency and cost. Test a meaningful mutation or counterexample; a green suite that also accepts a broken guard does not protect that guard.
+Use the starter safe allowlist until expanded eligibility is implemented before
+ranking/top-k. A model cannot grant permissions or approve a request. Later actions
+separate draft, employee confirmation and manager approval bound to exact arguments;
+replay, changed targets and unknown outcomes must be handled. Real integrations and
+private Mushir changes remain separately scoped. model/ is a dormant optional shelf.

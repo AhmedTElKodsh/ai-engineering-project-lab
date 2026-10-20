@@ -22,4 +22,4 @@ testpaths = ["projects", "tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-extend-exclude = ["resources/from-scratch-lessons", "explorations"]
+extend-exclude = ["resources/from-scratch-lessons", "explorations", "_bmad"]

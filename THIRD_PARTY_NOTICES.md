@@ -1,6 +1,6 @@
 # Source and license notices
 
-The mechanism exercise scaffolds under resources/labs originate from AhmedTElKodsh/ai-engineering-library at the revision recorded in docs/review/PROVENANCE.json. They remain incomplete exercises. The source MIT notice is preserved in resources/LICENSE.ai-engineering-library.
+The mechanism exercise scaffolds under resources/labs originate from AhmedTElKodsh/ai-engineering-library at the revision recorded in archive/planning/2026-10-20/docs/review/PROVENANCE.json. They remain incomplete exercises. The source MIT notice is preserved in resources/LICENSE.ai-engineering-library.
 
 Files under resources/from-scratch-lessons derive from rohitg00/ai-engineering-from-scratch (upstream commit 7157ca74) and remain under its MIT license, reproduced in resources/from-scratch-lessons/NOTICE.
 

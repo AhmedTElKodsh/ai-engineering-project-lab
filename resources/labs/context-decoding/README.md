@@ -1,6 +1,6 @@
 # context-decoding mechanism practice
 
-Mapped stage: S2/S7. These are retained TODO scaffolds and tests from the reviewed library, not finished learner work or an alternative route. Use them only for a focused mechanism selected by the mentor, then transfer that mechanism into the same assistant/model laboratory. Source and license are recorded in [provenance](../../../docs/review/PROVENANCE.json) and [third-party notices](../../../THIRD_PARTY_NOTICES.md).
+Dormant optional from-scratch reference; no active S-stage assignment. These are retained TODO scaffolds and tests from the reviewed library, not finished learner work or an alternative route. Use them only for a focused mechanism selected by the mentor, then transfer that mechanism into the same assistant/model laboratory. Source and license are recorded in [provenance](../../../archive/planning/2026-10-20/docs/review/PROVENANCE.json) and [third-party notices](../../../THIRD_PARTY_NOTICES.md).
 
 ```powershell
 uv run pytest resources/labs/context-decoding/tests -q

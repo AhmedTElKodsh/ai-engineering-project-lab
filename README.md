@@ -3,6 +3,8 @@
 Build one employee-policy assistant as its users' problems grow. You write the
 important implementation; the AI tutors one meaningful action at a time.
 
+For the reviewed, learner-first opening, see the [problem-first S0 guide](docs/problem-first-rag/README.md).
+
 Start with the [single project plan](docs/learning-path/02-PROJECT-ROADMAP.md),
 [current checkpoint](LEARNING.md), and [project briefing](projects/grounded_support_assistant/README.md).
 Use `$project-mentor` to resume. S0 needs no provider account, model download or
